@@ -1,0 +1,466 @@
+{
+  "Oracle CREATE TABLE with SEQUENCE": {
+    "prefix": "ora-create-table",
+    "body": [
+      "CREATE TABLE ${1:TableName} (",
+      "    ${2:id} NUMBER PRIMARY KEY,",
+      "    ${3:column_name} VARCHAR2(${4:100}) ${5:NOT NULL},",
+      "    ${6:created_at} DATE DEFAULT SYSDATE,",
+      "    ${7:updated_at} DATE DEFAULT SYSDATE",
+      ");",
+      "",
+      "-- Create sequence",
+      "CREATE SEQUENCE ${1/(.*)/${1:/downcase}/}_seq",
+      "START WITH 1",
+      "INCREMENT BY 1",
+      "NOCACHE",
+      "NOCYCLE;",
+      "",
+      "-- Create trigger for auto-increment",
+      "CREATE OR REPLACE TRIGGER ${1/(.*)/${1:/downcase}/}_bi",
+      "BEFORE INSERT ON ${1:TableName}",
+      "FOR EACH ROW",
+      "BEGIN",
+      "    IF :NEW.${2:id} IS NULL THEN",
+      "        :NEW.${2:id} := ${1/(.*)/${1:/downcase}/}_seq.NEXTVAL;",
+      "    END IF;",
+      "END;",
+      "/",
+      "",
+      "-- Create trigger for updated_at",
+      "CREATE OR REPLACE TRIGGER ${1/(.*)/${1:/downcase}/}_bu",
+      "BEFORE UPDATE ON ${1:TableName}",
+      "FOR EACH ROW",
+      "BEGIN",
+      "    :NEW.${7:updated_at} := SYSDATE;",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle table with sequence and triggers"
+  },
+
+  "Oracle SEQUENCE": {
+    "prefix": "ora-sequence",
+    "body": [
+      "CREATE SEQUENCE ${1:sequence_name}",
+      "START WITH ${2:1}",
+      "INCREMENT BY ${3:1}",
+      "MAXVALUE ${4:999999999}",
+      "NOCACHE",
+      "NOCYCLE;",
+      "$0"
+    ],
+    "description": "CREATE SEQUENCE (Oracle)"
+  },
+
+  "Oracle Data Types": {
+    "prefix": "ora-types",
+    "body": [
+      "NUMBER(${1:10},${2:2})     -- Numeric with precision",
+      "VARCHAR2(${3:100})         -- Variable length string",
+      "CHAR(${4:10})              -- Fixed length string",
+      "DATE                       -- Date and time",
+      "TIMESTAMP                  -- Timestamp with fractional seconds",
+      "CLOB                       -- Character large object",
+      "BLOB                       -- Binary large object",
+      "$0"
+    ],
+    "description": "Common Oracle data types"
+  },
+
+  "Oracle Trigger (BEFORE INSERT)": {
+    "prefix": "ora-trigger-bi",
+    "body": [
+      "CREATE OR REPLACE TRIGGER ${1:trigger_name}",
+      "BEFORE INSERT ON ${2:TableName}",
+      "FOR EACH ROW",
+      "BEGIN",
+      "    ${3:-- Auto-increment primary key}",
+      "    IF :NEW.${4:id} IS NULL THEN",
+      "        SELECT ${5:sequence_name}.NEXTVAL INTO :NEW.${4:id} FROM DUAL;",
+      "    END IF;",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "BEFORE INSERT trigger (Oracle)"
+  },
+
+  "Oracle Trigger (BEFORE UPDATE)": {
+    "prefix": "ora-trigger-bu",
+    "body": [
+      "CREATE OR REPLACE TRIGGER ${1:trigger_name}",
+      "BEFORE UPDATE ON ${2:TableName}",
+      "FOR EACH ROW",
+      "BEGIN",
+      "    ${3:-- Update timestamp}",
+      "    :NEW.${4:updated_at} := SYSDATE;",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "BEFORE UPDATE trigger (Oracle)"
+  },
+
+  "Oracle Procedure": {
+    "prefix": "ora-procedure",
+    "body": [
+      "CREATE OR REPLACE PROCEDURE ${1:procedure_name} (",
+      "    ${2:param_name} IN ${3:data_type},",
+      "    ${4:out_param} OUT ${5:data_type}",
+      ")",
+      "IS",
+      "    ${6:-- Variable declarations}",
+      "    ${7:v_variable} ${8:data_type};",
+      "BEGIN",
+      "    ${9:-- Procedure logic}",
+      "    ",
+      "EXCEPTION",
+      "    WHEN OTHERS THEN",
+      "        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);",
+      "        RAISE;",
+      "END ${1:procedure_name};",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle stored procedure"
+  },
+
+  "Oracle Function": {
+    "prefix": "ora-function",
+    "body": [
+      "CREATE OR REPLACE FUNCTION ${1:function_name} (",
+      "    ${2:param_name} IN ${3:data_type}",
+      ")",
+      "RETURN ${4:return_type}",
+      "IS",
+      "    ${5:-- Variable declarations}",
+      "    ${6:v_result} ${4:return_type};",
+      "BEGIN",
+      "    ${7:-- Function logic}",
+      "    ",
+      "    RETURN ${6:v_result};",
+      "EXCEPTION",
+      "    WHEN OTHERS THEN",
+      "        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);",
+      "        RAISE;",
+      "END ${1:function_name};",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle function"
+  },
+
+  "Oracle Package Specification": {
+    "prefix": "ora-package-spec",
+    "body": [
+      "CREATE OR REPLACE PACKAGE ${1:package_name} AS",
+      "    -- Public type declarations",
+      "    ${2:-- TYPE type_name IS ...}",
+      "    ",
+      "    -- Public constant declarations",
+      "    ${3:-- constant_name CONSTANT datatype := value;}",
+      "    ",
+      "    -- Public procedure declarations",
+      "    PROCEDURE ${4:procedure_name}(${5:params});",
+      "    ",
+      "    -- Public function declarations",
+      "    FUNCTION ${6:function_name}(${7:params}) RETURN ${8:return_type};",
+      "    ",
+      "END ${1:package_name};",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle package specification"
+  },
+
+  "Oracle Package Body": {
+    "prefix": "ora-package-body",
+    "body": [
+      "CREATE OR REPLACE PACKAGE BODY ${1:package_name} AS",
+      "    -- Private declarations",
+      "    ",
+      "    PROCEDURE ${2:procedure_name}(${3:params}) IS",
+      "    BEGIN",
+      "        ${4:-- Implementation}",
+      "    END ${2:procedure_name};",
+      "    ",
+      "    FUNCTION ${5:function_name}(${6:params}) RETURN ${7:return_type} IS",
+      "        ${8:v_result} ${7:return_type};",
+      "    BEGIN",
+      "        ${9:-- Implementation}",
+      "        RETURN ${8:v_result};",
+      "    END ${5:function_name};",
+      "    ",
+      "END ${1:package_name};",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle package body"
+  },
+
+  "Oracle Cursor": {
+    "prefix": "ora-cursor",
+    "body": [
+      "DECLARE",
+      "    CURSOR ${1:cursor_name} IS",
+      "        SELECT ${2:columns}",
+      "        FROM ${3:TableName}",
+      "        WHERE ${4:condition};",
+      "    ",
+      "    ${5:v_record} ${1:cursor_name}%ROWTYPE;",
+      "BEGIN",
+      "    OPEN ${1:cursor_name};",
+      "    LOOP",
+      "        FETCH ${1:cursor_name} INTO ${5:v_record};",
+      "        EXIT WHEN ${1:cursor_name}%NOTFOUND;",
+      "        ",
+      "        ${6:-- Process record}",
+      "    END LOOP;",
+      "    CLOSE ${1:cursor_name};",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle cursor with loop"
+  },
+
+  "Oracle FOR LOOP Cursor": {
+    "prefix": "ora-for-cursor",
+    "body": [
+      "FOR ${1:record} IN (",
+      "    SELECT ${2:columns}",
+      "    FROM ${3:TableName}",
+      "    WHERE ${4:condition}",
+      ") LOOP",
+      "    ${5:-- Process record using ${1:record}.column_name}",
+      "END LOOP;",
+      "$0"
+    ],
+    "description": "Oracle FOR loop with implicit cursor"
+  },
+
+  "Oracle BULK COLLECT": {
+    "prefix": "ora-bulk",
+    "body": [
+      "DECLARE",
+      "    TYPE ${1:type_name} IS TABLE OF ${2:TableName}%ROWTYPE;",
+      "    ${3:v_data} ${1:type_name};",
+      "BEGIN",
+      "    SELECT *",
+      "    BULK COLLECT INTO ${3:v_data}",
+      "    FROM ${2:TableName}",
+      "    WHERE ${4:condition};",
+      "    ",
+      "    FOR i IN 1..${3:v_data}.COUNT LOOP",
+      "        ${5:-- Process ${3:v_data}(i)}",
+      "    END LOOP;",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle BULK COLLECT for performance"
+  },
+
+  "Oracle MERGE Statement": {
+    "prefix": "ora-merge",
+    "body": [
+      "MERGE INTO ${1:target_table} ${2:t}",
+      "USING ${3:source_table} ${4:s}",
+      "ON (${2:t}.${5:key} = ${4:s}.${5:key})",
+      "WHEN MATCHED THEN",
+      "    UPDATE SET",
+      "        ${2:t}.${6:column} = ${4:s}.${6:column}",
+      "WHEN NOT MATCHED THEN",
+      "    INSERT (${7:columns})",
+      "    VALUES (${4:s}.${7:columns});",
+      "$0"
+    ],
+    "description": "Oracle MERGE statement (UPSERT)"
+  },
+
+  "Oracle Hierarchical Query": {
+    "prefix": "ora-hierarchy",
+    "body": [
+      "SELECT ",
+      "    ${1:LEVEL},",
+      "    ${2:LPAD(' ', 2 * (LEVEL - 1)) || column_name} AS ${3:hierarchy}",
+      "FROM ${4:TableName}",
+      "START WITH ${5:parent_id IS NULL}",
+      "CONNECT BY PRIOR ${6:id} = ${7:parent_id}",
+      "ORDER SIBLINGS BY ${8:sort_column};",
+      "$0"
+    ],
+    "description": "Oracle hierarchical query (tree structure)"
+  },
+
+  "Oracle Analytic Function": {
+    "prefix": "ora-analytic",
+    "body": [
+      "${1:ROW_NUMBER}() OVER (",
+      "    PARTITION BY ${2:partition_column}",
+      "    ORDER BY ${3:order_column} ${4|ASC,DESC|}",
+      ") AS ${5:analytic_result}$0"
+    ],
+    "description": "Oracle analytic (window) function"
+  },
+
+  "Oracle WITH (CTE)": {
+    "prefix": "ora-with",
+    "body": [
+      "WITH ${1:cte_name} AS (",
+      "    SELECT ",
+      "        ${2:columns}",
+      "    FROM ${3:TableName}",
+      "    WHERE ${4:condition}",
+      ")",
+      "SELECT ${5:*}",
+      "FROM ${1:cte_name}",
+      "WHERE ${6:condition};",
+      "$0"
+    ],
+    "description": "Oracle WITH clause (CTE)"
+  },
+
+  "Oracle Exception Block": {
+    "prefix": "ora-exception",
+    "body": [
+      "BEGIN",
+      "    ${1:-- Code that might raise exceptions}",
+      "EXCEPTION",
+      "    WHEN NO_DATA_FOUND THEN",
+      "        ${2:-- Handle no data}",
+      "    WHEN TOO_MANY_ROWS THEN",
+      "        ${3:-- Handle multiple rows}",
+      "    WHEN OTHERS THEN",
+      "        ${4:-- Handle other exceptions}",
+      "        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);",
+      "        RAISE;",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle exception handling block"
+  },
+
+  "Oracle DBMS_OUTPUT": {
+    "prefix": "ora-dbms-output",
+    "body": [
+      "SET SERVEROUTPUT ON;",
+      "BEGIN",
+      "    DBMS_OUTPUT.PUT_LINE('${1:message}');",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle DBMS_OUTPUT for debugging"
+  },
+
+  "Oracle Autonomous Transaction": {
+    "prefix": "ora-autonomous",
+    "body": [
+      "CREATE OR REPLACE PROCEDURE ${1:procedure_name}",
+      "AS",
+      "    PRAGMA AUTONOMOUS_TRANSACTION;",
+      "BEGIN",
+      "    ${2:-- Independent transaction}",
+      "    ",
+      "    COMMIT; -- Must commit or rollback",
+      "EXCEPTION",
+      "    WHEN OTHERS THEN",
+      "        ROLLBACK;",
+      "        RAISE;",
+      "END ${1:procedure_name};",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle autonomous transaction"
+  },
+
+  "Oracle Dynamic SQL": {
+    "prefix": "ora-dynamic-sql",
+    "body": [
+      "DECLARE",
+      "    ${1:v_sql} VARCHAR2(4000);",
+      "    ${2:v_result} ${3:data_type};",
+      "BEGIN",
+      "    ${1:v_sql} := 'SELECT ${4:column} FROM ${5:table} WHERE ${6:condition}';",
+      "    EXECUTE IMMEDIATE ${1:v_sql} INTO ${2:v_result};",
+      "    ",
+      "    ${7:-- Use ${2:v_result}}",
+      "END;",
+      "/",
+      "$0"
+    ],
+    "description": "Oracle dynamic SQL with EXECUTE IMMEDIATE"
+  },
+
+  "Oracle EXPLAIN PLAN": {
+    "prefix": "ora-explain",
+    "body": [
+      "EXPLAIN PLAN FOR",
+      "${1:SELECT statement};",
+      "",
+      "SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);",
+      "$0"
+    ],
+    "description": "Oracle EXPLAIN PLAN for query analysis"
+  },
+
+  "Oracle Index (BTREE)": {
+    "prefix": "ora-idx-btree",
+    "body": [
+      "CREATE INDEX idx_${1:table}_${2:column}",
+      "ON ${1:TableName}(${2:column_name});",
+      "$0"
+    ],
+    "description": "BTREE index (Oracle default)"
+  },
+
+  "Oracle Index (BITMAP)": {
+    "prefix": "ora-idx-bitmap",
+    "body": [
+      "CREATE BITMAP INDEX idx_${1:table}_${2:column}",
+      "ON ${1:TableName}(${2:column_name});",
+      "$0"
+    ],
+    "description": "BITMAP index for low-cardinality columns (Oracle)"
+  },
+
+  "Oracle Materialized View": {
+    "prefix": "ora-matview",
+    "body": [
+      "CREATE MATERIALIZED VIEW ${1:mv_name}",
+      "BUILD IMMEDIATE",
+      "REFRESH ${2|COMPLETE,FAST|} ON ${3|DEMAND,COMMIT|}",
+      "AS",
+      "SELECT ",
+      "    ${4:columns}",
+      "FROM ${5:TableName}",
+      "WHERE ${6:condition};",
+      "",
+      "-- Refresh materialized view",
+      "-- EXEC DBMS_MVIEW.REFRESH('${1:mv_name}');",
+      "$0"
+    ],
+    "description": "Oracle materialized view"
+  },
+
+  "Oracle Partitioned Table (Range)": {
+    "prefix": "ora-partition-range",
+    "body": [
+      "CREATE TABLE ${1:TableName} (",
+      "    ${2:id} NUMBER PRIMARY KEY,",
+      "    ${3:date_column} DATE NOT NULL,",
+      "    ${4:data} VARCHAR2(100)",
+      ")",
+      "PARTITION BY RANGE (${3:date_column}) (",
+      "    PARTITION ${5:p2024} VALUES LESS THAN (TO_DATE('${6:2025-01-01}', 'YYYY-MM-DD')),",
+      "    PARTITION ${7:p2025} VALUES LESS THAN (TO_DATE('${8:2026-01-01}', 'YYYY-MM-DD'))",
+      ");",
+      "$0"
+    ],
+    "description": "Oracle range partitioned table"
+  }
+}

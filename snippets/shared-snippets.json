@@ -1,0 +1,333 @@
+{
+  "Star Schema Complete": {
+    "prefix": "star-schema",
+    "body": [
+      "-- ═══════════════════════════════════════════════════════",
+      "-- STAR SCHEMA: ${1:BusinessDomain}",
+      "-- Created: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+      "-- ═══════════════════════════════════════════════════════",
+      "",
+      "-- DIMENSION TABLES",
+      "-- -----------------------------------------------------------",
+      "",
+      "CREATE TABLE DIM_${2:Time} (",
+      "    ${2/(.*)/${1:/downcase}/}_key INTEGER PRIMARY KEY,",
+      "    date DATE NOT NULL,",
+      "    day_of_week VARCHAR(10),",
+      "    month VARCHAR(10),",
+      "    quarter INTEGER,",
+      "    year INTEGER",
+      ");",
+      "",
+      "CREATE TABLE DIM_${3:Customer} (",
+      "    ${3/(.*)/${1:/downcase}/}_key INTEGER PRIMARY KEY,",
+      "    customer_id INTEGER UNIQUE NOT NULL,",
+      "    name VARCHAR(100),",
+      "    type VARCHAR(50),",
+      "    region VARCHAR(50),",
+      "    -- SCD Type 2 columns",
+      "    valid_from DATE NOT NULL,",
+      "    valid_to DATE,",
+      "    is_current BOOLEAN DEFAULT TRUE",
+      ");",
+      "",
+      "-- FACT TABLE",
+      "-- -----------------------------------------------------------",
+      "",
+      "CREATE TABLE FACT_${4:Sales} (",
+      "    fact_key INTEGER PRIMARY KEY,",
+      "    time_key INTEGER NOT NULL,",
+      "    ${3/(.*)/${1:/downcase}/}_key INTEGER NOT NULL,",
+      "    -- Measures",
+      "    amount DECIMAL(15,2),",
+      "    quantity INTEGER,",
+      "    -- Foreign Keys",
+      "    FOREIGN KEY (time_key) REFERENCES DIM_${2:Time}(${2/(.*)/${1:/downcase}/}_key),",
+      "    FOREIGN KEY (${3/(.*)/${1:/downcase}/}_key) REFERENCES DIM_${3:Customer}(${3/(.*)/${1:/downcase}/}_key)",
+      ");",
+      "",
+      "-- INDEXES",
+      "CREATE INDEX idx_fact_time ON FACT_${4:Sales}(time_key);",
+      "CREATE INDEX idx_fact_customer ON FACT_${4:Sales}(${3/(.*)/${1:/downcase}/}_key);",
+      "$0"
+    ],
+    "description": "Complete Star Schema with dimensions and fact table"
+  },
+
+  "Dimension Table": {
+    "prefix": "dim-table",
+    "body": [
+      "CREATE TABLE DIM_${1:TableName} (",
+      "    ${1/(.*)/${1:/downcase}/}_key INTEGER PRIMARY KEY,",
+      "    ${1/(.*)/${1:/downcase}/}_id INTEGER UNIQUE NOT NULL,",
+      "    ${2:attribute_name} VARCHAR(${3:100}),",
+      "    ${4:attribute_name2} VARCHAR(${5:50}),",
+      "    -- SCD Type 2 columns (optional)",
+      "    valid_from DATE NOT NULL,",
+      "    valid_to DATE,",
+      "    is_current BOOLEAN DEFAULT TRUE",
+      ");",
+      "$0"
+    ],
+    "description": "Dimension table with SCD Type 2 support"
+  },
+
+  "Fact Table": {
+    "prefix": "fact-table",
+    "body": [
+      "CREATE TABLE FACT_${1:TableName} (",
+      "    fact_key INTEGER PRIMARY KEY,",
+      "    -- Dimension Keys",
+      "    time_key INTEGER NOT NULL,",
+      "    ${2:dim_name}_key INTEGER NOT NULL,",
+      "    -- Measures (additive)",
+      "    ${3:amount} DECIMAL(15,2),",
+      "    ${4:quantity} INTEGER,",
+      "    -- Foreign Keys",
+      "    FOREIGN KEY (time_key) REFERENCES DIM_Time(time_key),",
+      "    FOREIGN KEY (${2:dim_name}_key) REFERENCES DIM_${2/(.*)/${1:/capitalize}/}(${2:dim_name}_key)",
+      ");",
+      "",
+      "-- Performance Indexes",
+      "CREATE INDEX idx_fact_time ON FACT_${1:TableName}(time_key);",
+      "CREATE INDEX idx_fact_${2:dim_name} ON FACT_${1:TableName}(${2:dim_name}_key);",
+      "$0"
+    ],
+    "description": "Fact table with measures and FK references"
+  },
+
+  "Time Dimension": {
+    "prefix": "dim-time",
+    "body": [
+      "CREATE TABLE DIM_Time (",
+      "    time_key INTEGER PRIMARY KEY,",
+      "    date DATE NOT NULL UNIQUE,",
+      "    day_of_week VARCHAR(10),",
+      "    day_of_month INTEGER,",
+      "    day_of_year INTEGER,",
+      "    week_of_year INTEGER,",
+      "    month INTEGER,",
+      "    month_name VARCHAR(10),",
+      "    quarter INTEGER,",
+      "    year INTEGER,",
+      "    is_weekend BOOLEAN,",
+      "    is_holiday BOOLEAN",
+      ");",
+      "$0"
+    ],
+    "description": "Standard time dimension table"
+  },
+
+  "CREATE TABLE with constraints": {
+    "prefix": "create-table",
+    "body": [
+      "CREATE TABLE ${1:TableName} (",
+      "    ${2:id} INTEGER PRIMARY KEY,",
+      "    ${3:column_name} ${4:VARCHAR(100)} ${5:NOT NULL},",
+      "    ${6:column_name2} ${7:INTEGER},",
+      "    ${8:created_at} ${9:TIMESTAMP} DEFAULT ${10:CURRENT_TIMESTAMP},",
+      "    CONSTRAINT ${11:unique_constraint} UNIQUE(${3:column_name}),",
+      "    CONSTRAINT ${12:check_constraint} CHECK(${13:condition})",
+      ");",
+      "$0"
+    ],
+    "description": "CREATE TABLE with common constraints"
+  },
+
+  "Foreign Key": {
+    "prefix": "fk",
+    "body": [
+      "FOREIGN KEY (${1:column_name}) REFERENCES ${2:TableName}(${3:referenced_column})${4: ON DELETE CASCADE}$0"
+    ],
+    "description": "Foreign key constraint"
+  },
+
+  "View for Analytics": {
+    "prefix": "view-analytics",
+    "body": [
+      "CREATE VIEW ${1:ViewName} AS",
+      "SELECT ",
+      "    ${2:d.dimension_column},",
+      "    ${3:SUM(f.measure)} AS total_${3/SUM\\(f\\.(\\w+)\\)/${1}/},",
+      "    ${4:COUNT(*)} AS count",
+      "FROM FACT_${5:FactTable} f",
+      "JOIN DIM_${6:Dimension} d ON f.${6/(.*)/${1:/downcase}/}_key = d.${6/(.*)/${1:/downcase}/}_key",
+      "WHERE ${7:condition}",
+      "GROUP BY ${2:d.dimension_column};",
+      "$0"
+    ],
+    "description": "Analytical view with aggregations"
+  },
+
+  "Index on Foreign Key": {
+    "prefix": "idx-fk",
+    "body": [
+      "CREATE INDEX idx_${1:table}_${2:column} ON ${1:TableName}(${2:column_name});$0"
+    ],
+    "description": "Index on foreign key column for performance"
+  },
+
+  "Simple SELECT": {
+    "prefix": "sel",
+    "body": [
+      "SELECT ${1:*}",
+      "FROM ${2:TableName}",
+      "WHERE ${3:condition};",
+      "$0"
+    ],
+    "description": "Simple SELECT statement"
+  },
+
+  "JOIN Query": {
+    "prefix": "sel-join",
+    "body": [
+      "SELECT ",
+      "    ${1:a.column1},",
+      "    ${2:b.column2}",
+      "FROM ${3:TableA} ${4:a}",
+      "JOIN ${5:TableB} ${6:b} ON ${4:a}.${7:id} = ${6:b}.${8:foreign_key}",
+      "WHERE ${9:condition};",
+      "$0"
+    ],
+    "description": "JOIN query with aliases"
+  },
+
+  "Aggregate Query": {
+    "prefix": "sel-agg",
+    "body": [
+      "SELECT ",
+      "    ${1:column_name},",
+      "    ${2:COUNT(*)} AS count,",
+      "    ${3:SUM(value)} AS total,",
+      "    ${4:AVG(value)} AS average",
+      "FROM ${5:TableName}",
+      "WHERE ${6:condition}",
+      "GROUP BY ${1:column_name}",
+      "HAVING ${7:aggregate_condition}",
+      "ORDER BY ${8:count} DESC;",
+      "$0"
+    ],
+    "description": "Aggregate query with GROUP BY and HAVING"
+  },
+
+  "Subquery": {
+    "prefix": "sel-sub",
+    "body": [
+      "SELECT ${1:*}",
+      "FROM ${2:TableName}",
+      "WHERE ${3:column} IN (",
+      "    SELECT ${4:column}",
+      "    FROM ${5:OtherTable}",
+      "    WHERE ${6:condition}",
+      ");",
+      "$0"
+    ],
+    "description": "SELECT with subquery"
+  },
+
+  "Window Function": {
+    "prefix": "sel-window",
+    "body": [
+      "SELECT ",
+      "    ${1:column_name},",
+      "    ${2:value},",
+      "    ${3:ROW_NUMBER()} OVER (",
+      "        PARTITION BY ${4:partition_column}",
+      "        ORDER BY ${5:order_column} ${6:DESC}",
+      "    ) AS ${7:row_num}",
+      "FROM ${8:TableName};",
+      "$0"
+    ],
+    "description": "Query with window function"
+  },
+
+  "CASE Statement": {
+    "prefix": "case",
+    "body": [
+      "CASE ",
+      "    WHEN ${1:condition1} THEN ${2:result1}",
+      "    WHEN ${3:condition2} THEN ${4:result2}",
+      "    ELSE ${5:default_result}",
+      "END AS ${6:alias}$0"
+    ],
+    "description": "CASE statement"
+  },
+
+  "Common Table Expression (CTE)": {
+    "prefix": "with-cte",
+    "body": [
+      "WITH ${1:cte_name} AS (",
+      "    SELECT ",
+      "        ${2:column_name},",
+      "        ${3:aggregate}",
+      "    FROM ${4:TableName}",
+      "    WHERE ${5:condition}",
+      "    GROUP BY ${2:column_name}",
+      ")",
+      "SELECT ${6:*}",
+      "FROM ${1:cte_name}",
+      "WHERE ${7:condition};",
+      "$0"
+    ],
+    "description": "Common Table Expression (WITH clause)"
+  },
+
+  "INSERT Statement": {
+    "prefix": "ins",
+    "body": [
+      "INSERT INTO ${1:TableName} (${2:column1}, ${3:column2})",
+      "VALUES (${4:value1}, ${5:value2});",
+      "$0"
+    ],
+    "description": "INSERT statement"
+  },
+
+  "UPDATE Statement": {
+    "prefix": "upd",
+    "body": [
+      "UPDATE ${1:TableName}",
+      "SET ${2:column_name} = ${3:new_value}",
+      "WHERE ${4:condition};",
+      "$0"
+    ],
+    "description": "UPDATE statement"
+  },
+
+  "DELETE Statement": {
+    "prefix": "del",
+    "body": [
+      "DELETE FROM ${1:TableName}",
+      "WHERE ${2:condition};",
+      "$0"
+    ],
+    "description": "DELETE statement"
+  },
+
+  "Transaction Block": {
+    "prefix": "trans",
+    "body": [
+      "BEGIN TRANSACTION;",
+      "",
+      "${1:-- SQL statements here}",
+      "",
+      "COMMIT;",
+      "-- ROLLBACK; -- Use this if error occurs",
+      "$0"
+    ],
+    "description": "Transaction block with COMMIT/ROLLBACK"
+  },
+
+  "Comment Block": {
+    "prefix": "comment-block",
+    "body": [
+      "-- ═══════════════════════════════════════════════════════",
+      "-- ${1:Section Title}",
+      "-- ${2:Description}",
+      "-- Author: ${3:Your Name}",
+      "-- Date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+      "-- ═══════════════════════════════════════════════════════",
+      "$0"
+    ],
+    "description": "Formatted comment block"
+  }
+}

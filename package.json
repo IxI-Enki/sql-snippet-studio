@@ -1,0 +1,147 @@
+{
+  "name": "dbi-test-survival-kit",
+  "displayName": "DBI Test Survival Kit",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
+  "version": "1.0.0",
+  "publisher": "dbi-team",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Snippets",
+    "Programming Languages",
+    "Education"
+  ],
+  "keywords": [
+    "sql",
+    "postgresql",
+    "oracle",
+    "plsql",
+    "database",
+    "snippets",
+    "dbi",
+    "offline",
+    "education"
+  ],
+  "activationEvents": [
+    "onLanguage:sql",
+    "onLanguage:plsql"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "sql",
+        "aliases": ["SQL", "sql"],
+        "extensions": [".sql", ".ddl", ".dml"],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "plsql",
+        "aliases": ["PL/SQL", "plsql"],
+        "extensions": [".pls", ".plsql"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "sql",
+        "path": "./snippets/postgres-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/shared-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/shared-snippets.json"
+      }
+    ],
+    "configuration": {
+      "title": "DBI Test Survival Kit",
+      "properties": {
+        "dbiSurvivalKit.enableAutoCompletion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic completion suggestions"
+        },
+        "dbiSurvivalKit.enableStarSchemaTemplates": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Star-Schema templates and patterns"
+        },
+        "dbiSurvivalKit.databaseDialect": {
+          "type": "string",
+          "enum": ["postgres", "oracle", "both"],
+          "default": "both",
+          "description": "Select database dialect for snippets"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "dbiSurvivalKit.insertStarSchema",
+        "title": "DBI: Insert Star Schema Template"
+      },
+      {
+        "command": "dbiSurvivalKit.insertDimensionTable",
+        "title": "DBI: Insert Dimension Table"
+      },
+      {
+        "command": "dbiSurvivalKit.insertFactTable",
+        "title": "DBI: Insert Fact Table"
+      },
+      {
+        "command": "dbiSurvivalKit.shareSnippets",
+        "title": "DBI: Export Snippets for Kollegen"
+      },
+      {
+        "command": "dbiSurvivalKit.importSnippets",
+        "title": "DBI: Import Snippets from Kollegen"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "dbiSurvivalKit.insertStarSchema",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "dbiSurvivalKit.insertDimensionTable",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d",
+        "when": "editorTextFocus && editorLangId == sql"
+      },
+      {
+        "command": "dbiSurvivalKit.insertFactTable",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
+        "when": "editorTextFocus && editorLangId == sql"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node ./test/runTest.js",
+    "package": "vsce package",
+    "install-local": "code --install-extension dbi-test-survival-kit-1.0.0.vsix"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IxI-Enki/dbi-test-survival-kit"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,320 @@
+{
+  "PostgreSQL CREATE TABLE with SERIAL": {
+    "prefix": "pg-create-table",
+    "body": [
+      "CREATE TABLE ${1:TableName} (",
+      "    ${2:id} SERIAL PRIMARY KEY,",
+      "    ${3:column_name} ${4:VARCHAR(100)} ${5:NOT NULL},",
+      "    ${6:created_at} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,",
+      "    ${7:updated_at} TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+      ");",
+      "",
+      "-- Auto-update trigger for updated_at",
+      "CREATE OR REPLACE FUNCTION update_${1/(.*)/${1:/downcase}/}_timestamp()",
+      "RETURNS TRIGGER AS $$",
+      "BEGIN",
+      "    NEW.${7:updated_at} = CURRENT_TIMESTAMP;",
+      "    RETURN NEW;",
+      "END;",
+      "$$ LANGUAGE plpgsql;",
+      "",
+      "CREATE TRIGGER trigger_${1/(.*)/${1:/downcase}/}_timestamp",
+      "BEFORE UPDATE ON ${1:TableName}",
+      "FOR EACH ROW",
+      "EXECUTE FUNCTION update_${1/(.*)/${1:/downcase}/}_timestamp();",
+      "$0"
+    ],
+    "description": "PostgreSQL table with SERIAL PK and update trigger"
+  },
+
+  "PostgreSQL SERIAL Primary Key": {
+    "prefix": "pg-serial",
+    "body": [
+      "${1:id} SERIAL PRIMARY KEY$0"
+    ],
+    "description": "SERIAL primary key column (PostgreSQL)"
+  },
+
+  "PostgreSQL BIGSERIAL Primary Key": {
+    "prefix": "pg-bigserial",
+    "body": [
+      "${1:id} BIGSERIAL PRIMARY KEY$0"
+    ],
+    "description": "BIGSERIAL primary key column (PostgreSQL)"
+  },
+
+  "PostgreSQL JSONB Column": {
+    "prefix": "pg-jsonb",
+    "body": [
+      "${1:column_name} JSONB${2: NOT NULL DEFAULT '{\\}'}$0"
+    ],
+    "description": "JSONB column for flexible data (PostgreSQL)"
+  },
+
+  "PostgreSQL Array Column": {
+    "prefix": "pg-array",
+    "body": [
+      "${1:column_name} ${2:VARCHAR(50)}[]${3: DEFAULT ARRAY[]::${2:VARCHAR(50)}[]}$0"
+    ],
+    "description": "Array column (PostgreSQL)"
+  },
+
+  "PostgreSQL ENUM Type": {
+    "prefix": "pg-enum",
+    "body": [
+      "CREATE TYPE ${1:type_name} AS ENUM (",
+      "    '${2:value1}',",
+      "    '${3:value2}',",
+      "    '${4:value3}'",
+      ");",
+      "$0"
+    ],
+    "description": "CREATE ENUM type (PostgreSQL)"
+  },
+
+  "PostgreSQL Materialized View": {
+    "prefix": "pg-matview",
+    "body": [
+      "CREATE MATERIALIZED VIEW ${1:ViewName} AS",
+      "SELECT ",
+      "    ${2:column_name},",
+      "    ${3:aggregate}",
+      "FROM ${4:TableName}",
+      "WHERE ${5:condition}",
+      "GROUP BY ${2:column_name};",
+      "",
+      "-- Create index on materialized view",
+      "CREATE INDEX idx_${1/(.*)/${1:/downcase}/}_${2:column_name} ON ${1:ViewName}(${2:column_name});",
+      "",
+      "-- Refresh materialized view",
+      "-- REFRESH MATERIALIZED VIEW ${1:ViewName};",
+      "$0"
+    ],
+    "description": "Materialized view with index (PostgreSQL)"
+  },
+
+  "PostgreSQL Function": {
+    "prefix": "pg-function",
+    "body": [
+      "CREATE OR REPLACE FUNCTION ${1:function_name}(",
+      "    ${2:param_name} ${3:data_type}",
+      ")",
+      "RETURNS ${4:return_type} AS $$",
+      "BEGIN",
+      "    ${5:-- Function logic here}",
+      "    RETURN ${6:result};",
+      "END;",
+      "$$ LANGUAGE plpgsql;",
+      "$0"
+    ],
+    "description": "PostgreSQL function (plpgsql)"
+  },
+
+  "PostgreSQL Trigger": {
+    "prefix": "pg-trigger",
+    "body": [
+      "CREATE OR REPLACE FUNCTION ${1:trigger_function}()",
+      "RETURNS TRIGGER AS $$",
+      "BEGIN",
+      "    ${2:-- Trigger logic}",
+      "    ${3:-- Use NEW for INSERT/UPDATE, OLD for DELETE}",
+      "    RETURN NEW;",
+      "END;",
+      "$$ LANGUAGE plpgsql;",
+      "",
+      "CREATE TRIGGER ${4:trigger_name}",
+      "${5|BEFORE,AFTER|} ${6|INSERT,UPDATE,DELETE|} ON ${7:TableName}",
+      "FOR EACH ROW",
+      "EXECUTE FUNCTION ${1:trigger_function}();",
+      "$0"
+    ],
+    "description": "PostgreSQL trigger with function"
+  },
+
+  "PostgreSQL Window Function ROW_NUMBER": {
+    "prefix": "pg-row-number",
+    "body": [
+      "ROW_NUMBER() OVER (",
+      "    PARTITION BY ${1:partition_column}",
+      "    ORDER BY ${2:order_column} ${3|ASC,DESC|}",
+      ") AS ${4:row_num}$0"
+    ],
+    "description": "ROW_NUMBER window function (PostgreSQL)"
+  },
+
+  "PostgreSQL Window Function RANK": {
+    "prefix": "pg-rank",
+    "body": [
+      "RANK() OVER (",
+      "    PARTITION BY ${1:partition_column}",
+      "    ORDER BY ${2:order_column} ${3|ASC,DESC|}",
+      ") AS ${4:rank}$0"
+    ],
+    "description": "RANK window function (PostgreSQL)"
+  },
+
+  "PostgreSQL UPSERT (ON CONFLICT)": {
+    "prefix": "pg-upsert",
+    "body": [
+      "INSERT INTO ${1:TableName} (${2:column1}, ${3:column2})",
+      "VALUES (${4:value1}, ${5:value2})",
+      "ON CONFLICT (${6:unique_column}) DO UPDATE",
+      "SET ${3:column2} = EXCLUDED.${3:column2};",
+      "$0"
+    ],
+    "description": "UPSERT using ON CONFLICT (PostgreSQL)"
+  },
+
+  "PostgreSQL Generate Series": {
+    "prefix": "pg-series",
+    "body": [
+      "SELECT generate_series(",
+      "    ${1:1},",
+      "    ${2:100},",
+      "    ${3:1}",
+      ") AS ${4:number};",
+      "$0"
+    ],
+    "description": "Generate series of numbers (PostgreSQL)"
+  },
+
+  "PostgreSQL Date Series": {
+    "prefix": "pg-date-series",
+    "body": [
+      "SELECT generate_series(",
+      "    '${1:2024-01-01}'::DATE,",
+      "    '${2:2024-12-31}'::DATE,",
+      "    '${3:1 day}'::INTERVAL",
+      ") AS ${4:date};",
+      "$0"
+    ],
+    "description": "Generate date series (PostgreSQL)"
+  },
+
+  "PostgreSQL Recursive CTE": {
+    "prefix": "pg-recursive",
+    "body": [
+      "WITH RECURSIVE ${1:cte_name} AS (",
+      "    -- Base case",
+      "    SELECT ",
+      "        ${2:column_name},",
+      "        ${3:1} AS ${4:level}",
+      "    FROM ${5:TableName}",
+      "    WHERE ${6:base_condition}",
+      "    ",
+      "    UNION ALL",
+      "    ",
+      "    -- Recursive case",
+      "    SELECT ",
+      "        ${7:t.column_name},",
+      "        ${8:c.${4:level} + 1}",
+      "    FROM ${5:TableName} ${9:t}",
+      "    JOIN ${1:cte_name} ${10:c} ON ${11:join_condition}",
+      "    WHERE ${12:recursive_condition}",
+      ")",
+      "SELECT * FROM ${1:cte_name};",
+      "$0"
+    ],
+    "description": "Recursive CTE (PostgreSQL)"
+  },
+
+  "PostgreSQL Full Text Search": {
+    "prefix": "pg-fts",
+    "body": [
+      "-- Add tsvector column",
+      "ALTER TABLE ${1:TableName}",
+      "ADD COLUMN ${2:search_vector} tsvector;",
+      "",
+      "-- Update search vector",
+      "UPDATE ${1:TableName}",
+      "SET ${2:search_vector} = to_tsvector('english', ${3:column_name});",
+      "",
+      "-- Create GIN index",
+      "CREATE INDEX idx_${1/(.*)/${1:/downcase}/}_${2:search_vector} ",
+      "ON ${1:TableName} USING gin(${2:search_vector});",
+      "",
+      "-- Search query",
+      "SELECT * FROM ${1:TableName}",
+      "WHERE ${2:search_vector} @@ to_tsquery('english', '${4:search_term}');",
+      "$0"
+    ],
+    "description": "Full-text search setup (PostgreSQL)"
+  },
+
+  "PostgreSQL EXPLAIN ANALYZE": {
+    "prefix": "pg-explain",
+    "body": [
+      "EXPLAIN ANALYZE",
+      "${1:SELECT statement};",
+      "$0"
+    ],
+    "description": "EXPLAIN ANALYZE for query performance (PostgreSQL)"
+  },
+
+  "PostgreSQL Transaction with Savepoint": {
+    "prefix": "pg-savepoint",
+    "body": [
+      "BEGIN;",
+      "",
+      "${1:-- First operation}",
+      "",
+      "SAVEPOINT ${2:sp1};",
+      "",
+      "${3:-- Second operation}",
+      "",
+      "-- If error: ROLLBACK TO SAVEPOINT ${2:sp1};",
+      "",
+      "COMMIT;",
+      "$0"
+    ],
+    "description": "Transaction with savepoint (PostgreSQL)"
+  },
+
+  "PostgreSQL Index (BTREE)": {
+    "prefix": "pg-idx-btree",
+    "body": [
+      "CREATE INDEX idx_${1:table}_${2:column} ",
+      "ON ${1:TableName} USING btree(${2:column_name});",
+      "$0"
+    ],
+    "description": "BTREE index (PostgreSQL)"
+  },
+
+  "PostgreSQL Index (HASH)": {
+    "prefix": "pg-idx-hash",
+    "body": [
+      "CREATE INDEX idx_${1:table}_${2:column} ",
+      "ON ${1:TableName} USING hash(${2:column_name});",
+      "$0"
+    ],
+    "description": "HASH index (PostgreSQL)"
+  },
+
+  "PostgreSQL Index (GIN)": {
+    "prefix": "pg-idx-gin",
+    "body": [
+      "CREATE INDEX idx_${1:table}_${2:column} ",
+      "ON ${1:TableName} USING gin(${2:column_name});",
+      "$0"
+    ],
+    "description": "GIN index for arrays/JSONB (PostgreSQL)"
+  },
+
+  "PostgreSQL Partition Table (Range)": {
+    "prefix": "pg-partition-range",
+    "body": [
+      "-- Create partitioned table",
+      "CREATE TABLE ${1:TableName} (",
+      "    ${2:id} SERIAL,",
+      "    ${3:date} DATE NOT NULL,",
+      "    ${4:data} TEXT",
+      ") PARTITION BY RANGE (${3:date});",
+      "",
+      "-- Create partitions",
+      "CREATE TABLE ${1:TableName}_${5:2024} PARTITION OF ${1:TableName}",
+      "FOR VALUES FROM ('${6:2024-01-01}') TO ('${7:2025-01-01}');",
+      "$0"
+    ],
+    "description": "Range partitioned table (PostgreSQL)"
+  }
+}
