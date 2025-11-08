@@ -7,6 +7,8 @@
 -- Test Coverage: Window Functions (RANK, DENSE_RANK, ROW_NUMBER), ROLLUP, LAG
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Sales Performance Data Warehouse
 -- ============================================================================

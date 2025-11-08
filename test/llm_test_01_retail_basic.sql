@@ -7,6 +7,8 @@
 -- Test Coverage: Star-Schema Basics, Simple Aggregations, JOINs
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Retail Sales Data Warehouse
 -- ============================================================================
@@ -56,6 +58,7 @@ CREATE TABLE FACT_Sales (
 -- ============================================================================
 
 -- Aufgabe 1: Zeige alle Verkäufe mit Produktnamen und Kundennamen
+
 
 
 -- Aufgabe 2: Berechne den Gesamtumsatz pro Kunde (sortiert nach Umsatz absteigend)

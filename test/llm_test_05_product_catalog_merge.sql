@@ -7,6 +7,8 @@
 -- Test Coverage: MERGE (INSERT, UPDATE, DELETE), ETL Patterns
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Product Master Data & Staging
 -- ============================================================================

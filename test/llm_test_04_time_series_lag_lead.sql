@@ -7,6 +7,8 @@
 -- Test Coverage: Navigation Functions, Aggregate Window Functions, Frames
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Time Series Sales Data
 -- ============================================================================

@@ -7,6 +7,8 @@
 -- Test Coverage: Advanced Star-Schema, MERGE, ETL, ROLLUP-ready Hierarchies
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Logistics & Warehouse Data Warehouse
 -- ============================================================================

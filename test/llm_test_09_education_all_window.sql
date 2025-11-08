@@ -7,6 +7,8 @@
 -- Test Coverage: Complete Window Function Suite, NTILE, ROLLUP, Rankings
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Education System Data Warehouse
 -- ============================================================================

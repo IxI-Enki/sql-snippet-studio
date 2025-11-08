@@ -7,6 +7,8 @@
 -- Test Coverage: SCD Type 2, Temporal Queries, ETL with Historization
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Healthcare Data Warehouse with SCD Type 2
 -- ============================================================================

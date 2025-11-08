@@ -7,6 +7,8 @@
 -- Test Coverage: COMPLETE - All Topics Combined in Real-World Scenarios
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Integrated Business Intelligence Data Warehouse
 -- ============================================================================

@@ -7,6 +7,8 @@
 -- Test Coverage: Normalized Dimensions, Deep Hierarchies, Complex Analytics
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: E-Commerce Snowflake Schema (Normalized Dimensions)
 -- ============================================================================

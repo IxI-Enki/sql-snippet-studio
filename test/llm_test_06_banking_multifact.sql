@@ -7,6 +7,8 @@
 -- Test Coverage: Multi-Fact Schema, Advanced Analytics, Financial Calculations
 -- ============================================================================
 
+-- Dieser Test wurde mit dem Modell [MODEL_NAME] getestet.
+
 -- ============================================================================
 -- SCHEMA: Banking Data Warehouse (Multi-Fact)
 -- ============================================================================
