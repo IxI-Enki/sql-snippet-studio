@@ -126,14 +126,17 @@ async function executeLLMQuery() {
         // Check if LLM is enabled
         const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
         const isEnabled = config.get('enabled', false);
+        const showNotifications = config.get('showNotifications', false);
         
         if (!isEnabled) {
             vscode.window.showWarningMessage('🤖 LLM is disabled! Enable it in settings: dbiSurvivalKit.llm.enabled');
             return;
         }
 
-        // Show immediate feedback
-        vscode.window.showInformationMessage('🤖 Querying LLM...');
+        // Show immediate feedback (only if notifications enabled)
+        if (showNotifications) {
+            vscode.window.showInformationMessage('🤖 Querying LLM...');
+        }
         
         if (debugHelper) {
             debugHelper.updateStatusBar('requesting');
@@ -149,7 +152,9 @@ async function executeLLMQuery() {
         const context = contextBuilder.buildContext(documentText, position.line);
         
         if (!context || !context.task) {
-            vscode.window.showWarningMessage('❌ No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Aufgabe 1: ...');
+            if (showNotifications) {
+                vscode.window.showWarningMessage('❌ No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Aufgabe 1: ...');
+            }
             if (debugHelper) {
                 debugHelper.log('[COMMAND] No task found');
                 debugHelper.updateStatusBar('idle');
@@ -167,7 +172,9 @@ async function executeLLMQuery() {
         const sqlQuery = await llmProvider.query(context.prompt, context);
 
         if (!sqlQuery) {
-            vscode.window.showErrorMessage('❌ LLM returned empty response!\n\nCheck:\n- LM Studio is running\n- Model is loaded\n- Server is on port 1234');
+            if (showNotifications) {
+                vscode.window.showErrorMessage('❌ LLM returned empty response!\n\nCheck:\n- LM Studio is running\n- Model is loaded\n- Server is on port 1234');
+            }
             if (debugHelper) {
                 debugHelper.log('[COMMAND] LLM returned empty query');
                 debugHelper.updateStatusBar('error');
@@ -185,10 +192,14 @@ async function executeLLMQuery() {
             editBuilder.insert(position, '\n' + sqlQuery + '\n');
         });
 
-        vscode.window.showInformationMessage(`✅ LLM Query inserted! (${sqlQuery.length} chars)`);
+        if (showNotifications) {
+            vscode.window.showInformationMessage(`✅ LLM Query inserted! (${sqlQuery.length} chars)`);
+        }
 
     } catch (error) {
-        vscode.window.showErrorMessage(`❌ LLM Error: ${error.message}`);
+        if (showNotifications) {
+            vscode.window.showErrorMessage(`❌ LLM Error: ${error.message}`);
+        }
         if (debugHelper) {
             debugHelper.log(`[COMMAND] Error: ${error.message}`);
             debugHelper.logError(error);

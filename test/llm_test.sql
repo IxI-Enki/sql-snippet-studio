@@ -1,5 +1,4 @@
--- ════════════════════════════════════════════════════════
--- DBI Test: LLM-Assisted Completion Demo
+-- Demo
 -- ════════════════════════════════════════════════════════
 -- Lehrer-Angabe: Bibliotheksverwaltung
 -- ════════════════════════════════════════════════════════
@@ -47,17 +46,42 @@ CREATE TABLE loans (
 
 -- Aufgabe 2: Zeige alle Autoren mit ihren Büchern (auch Autoren ohne Bücher)
 
--- Autoren ohne Bücher:
+-- Aufgabe: Autoren ohne Bücher:
 
--- Autoren mit Büchern: SELECT
+-- Aufgabe: Autoren mit Büchern:
+
+SELECT a.first_name, a.last_name, b.title 
+FROM authors a 
+JOIN books b ON a.author_id = b.author_id;
 
 -- Aufgabe 3: Finde alle Mitglieder die aktuell Bücher ausgeliehen haben
+
+SELECT m.first_name, m.last_name 
+FROM members m 
+JOIN loans l ON m.member_id = l.member_id 
+WHERE l.return_date IS NULL;
 
 -- Aufgabe 4: erstelle eine abfrage die die anzahl der bücher pro autor zeigt
 
 -- Aufgabe 5: finde das meistgeliehene buch
 
+SELECT b.title AS book_title
+FROM books b
+JOIN loans l ON b.book_id = l.book_id
+GROUP BY b.book_id
+ORDER BY COUNT(l.loan_id) DESC
+LIMIT 1;
+
+
 -- Aufgabe 6: Zeige alle überfälligen Ausleihen (return_date < heute und noch nicht zurückgegeben)
+
+
+
+
+
+
+
+
 
 -- ════════════════════════════════════════════════════════
 -- USAGE INSTRUCTIONS:
