@@ -13,11 +13,28 @@ class QueryCache {
 
     /**
      * Generiert Cache-Key aus Context
+     * FIXED: Verwendet jetzt den KOMPLETTEN Task-Text + Schema-Definitionen
+     * um falsche Cache-Hits zu vermeiden!
      */
     generateKey(context) {
+        // Erstelle einen eindeutigen Key aus:
+        // 1. Kompletten Schema-Definitionen (nicht nur Namen!)
+        // 2. Kompletten Task-Text (nicht nur lowercase/trim!)
+        // 3. Sortierte Tabellennamen als Fallback
         const keyData = JSON.stringify({
-            schemas: context.schemas.map(s => s.tableName).sort(),
-            task: context.task.toLowerCase().trim()
+            // Vollständige Schema-Definitionen für maximale Spezifität
+            schemas: context.schemas.map(s => ({
+                name: s.tableName,
+                columns: s.columns.map(c => `${c.name}:${c.type}`).join(',')
+            })).sort((a, b) => a.name.localeCompare(b.name)),
+            
+            // KRITISCH: Kompletter Task-Text, nicht gekürzt!
+            taskFull: context.task.trim(),
+            
+            // Hash des kompletten Prompts als zusätzliche Absicherung
+            promptHash: crypto.createHash('md5')
+                .update(context.task + JSON.stringify(context.schemas))
+                .digest('hex')
         });
         
         return crypto
@@ -117,4 +134,3 @@ class QueryCache {
 }
 
 module.exports = QueryCache;
-
