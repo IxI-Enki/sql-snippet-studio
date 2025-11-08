@@ -2,7 +2,7 @@
   "name": "dbi-test-survival-kit",
   "displayName": "DBI Test Survival Kit",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
-  "version": "1.0.0",
+  "version": "1.6.2",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {
@@ -84,6 +84,58 @@
           "enum": ["postgres", "oracle", "both"],
           "default": "both",
           "description": "Select database dialect for snippets"
+        },
+        "dbiSurvivalKit.llm.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable AI-powered query suggestions (requires local LLM or API)"
+        },
+        "dbiSurvivalKit.llm.endpoint": {
+          "type": "string",
+          "default": "http://localhost:1234/v1/chat/completions",
+          "description": "LLM API endpoint (OpenAI-compatible format)"
+        },
+        "dbiSurvivalKit.llm.model": {
+          "type": "string",
+          "default": "qwen2.5-coder",
+          "description": "Model name to use for completions"
+        },
+        "dbiSurvivalKit.llm.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for LLM service (leave empty for local LLMs)"
+        },
+        "dbiSurvivalKit.llm.maxTokens": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum tokens for LLM response"
+        },
+        "dbiSurvivalKit.llm.temperature": {
+          "type": "number",
+          "default": 0.1,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Temperature for LLM sampling (lower = more deterministic)"
+        },
+        "dbiSurvivalKit.llm.timeout": {
+          "type": "number",
+          "default": 10000,
+          "description": "Request timeout in milliseconds"
+        },
+        "dbiSurvivalKit.llm.showDebugInfo": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show debug information (status bar, labels in completions)"
+        },
+        "dbiSurvivalKit.llm.showNotifications": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show toast notifications for LLM requests"
+        },
+        "dbiSurvivalKit.llm.verboseLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging to output channel"
         }
       }
     },
@@ -102,38 +154,62 @@
       },
       {
         "command": "dbiSurvivalKit.shareSnippets",
-        "title": "DBI: Export Snippets for Kollegen"
+        "title": "DBI: Export Snippets for Colleagues"
       },
       {
         "command": "dbiSurvivalKit.importSnippets",
-        "title": "DBI: Import Snippets from Kollegen"
-      }
+        "title": "DBI: Import Snippets from Colleagues"
+      },
+      {
+        "command": "dbiSurvivalKit.showLLMStats",
+        "title": "DBI: Show LLM Statistics"
+      },
+            {
+              "command": "dbiSurvivalKit.clearCache",
+              "title": "DBI: Clear LLM Cache"
+            },
+            {
+              "command": "dbiSurvivalKit.queryLLM",
+              "title": "DBI: Query LLM for SQL Solution"
+            }
     ],
     "keybindings": [
       {
         "command": "dbiSurvivalKit.insertStarSchema",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s",
-        "when": "editorTextFocus && editorLangId == sql"
+        "key": "ctrl+alt+shift+s",
+        "mac": "cmd+alt+shift+s",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       },
       {
         "command": "dbiSurvivalKit.insertDimensionTable",
-        "key": "ctrl+shift+d",
-        "mac": "cmd+shift+d",
-        "when": "editorTextFocus && editorLangId == sql"
+        "key": "ctrl+alt+shift+d",
+        "mac": "cmd+alt+shift+d",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       },
       {
         "command": "dbiSurvivalKit.insertFactTable",
-        "key": "ctrl+shift+f",
-        "mac": "cmd+shift+f",
-        "when": "editorTextFocus && editorLangId == sql"
-      }
+        "key": "ctrl+alt+shift+f",
+        "mac": "cmd+alt+shift+f",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+      },
+            {
+              "command": "dbiSurvivalKit.showLLMStats",
+              "key": "ctrl+alt+shift+l",
+              "mac": "cmd+alt+shift+l",
+              "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+            },
+            {
+              "command": "dbiSurvivalKit.queryLLM",
+              "key": "ctrl+alt+shift+q",
+              "mac": "cmd+alt+shift+q",
+              "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+            }
     ]
   },
   "scripts": {
     "test": "node ./test/runTest.js",
     "package": "vsce package",
-    "install-local": "code --install-extension dbi-test-survival-kit-1.0.0.vsix"
+    "install-local": "code --install-extension dbi-test-survival-kit-1.6.2.vsix"
   },
   "devDependencies": {
     "@types/vscode": "^1.80.0",
