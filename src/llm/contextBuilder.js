@@ -150,7 +150,7 @@ ${schemaText}
 6. Use correct table alias when referencing columns
 `;
 
-        // 🔥 PHASE 1.1: MERGE Statement Instructions
+        // 🔥 PHASE 1.1 + 2.1: MERGE Statement Instructions (Enhanced with PostgreSQL Dialect Specifics)
         if (isMergeQuery) {
             prompt += `
 ⚠️ MERGE/UPSERT STATEMENT DETECTED! CRITICAL INSTRUCTIONS:
@@ -178,6 +178,35 @@ COMPLETE STRUCTURE REQUIRED:
 4. Add WHEN MATCHED and/or WHEN NOT MATCHED clauses
 5. End with semicolon
 6. Do NOT generate only fragments - COMPLETE statement required!
+
+🚨 POSTGRESQL DIALECT LIMITATIONS (CRITICAL!):
+
+1. ❌ "WHEN NOT MATCHED BY SOURCE THEN DELETE" → NOT SUPPORTED in PostgreSQL!
+   ✅ Alternative: Use separate DELETE statement:
+   DELETE FROM target WHERE key NOT IN (SELECT key FROM source);
+
+2. ❌ MERGE in CTE (WITH clause) → NOT SUPPORTED in PostgreSQL!
+   ✅ Alternative: Execute MERGE outside of WITH, use separate statements
+   WRONG: WITH updated AS (MERGE INTO ...) SELECT * FROM updated;
+   CORRECT: 
+   -- Step 1: CTE for data prep
+   WITH prep AS (SELECT ... FROM source)
+   SELECT * FROM prep;
+   -- Step 2: MERGE outside of CTE
+   MERGE INTO target USING (SELECT ... FROM source) s ON (...);
+
+3. ❌ OUTPUT clause → NOT SUPPORTED in PostgreSQL!
+   ✅ Alternative: Use RETURNING clause or separate INSERT for logging
+   WRONG: MERGE INTO ... OUTPUT inserted.*, deleted.* INTO log_table;
+   CORRECT: 
+   MERGE INTO target ... ;
+   INSERT INTO log_table SELECT ... FROM target JOIN source ...;
+
+4. ⚠️ Logic Validation - Check WHERE clause on CORRECT table!
+   WRONG: WHERE product_id IN (SELECT id FROM staging WHERE stock < 10)
+   → This checks stock in STAGING, not in TARGET!
+   CORRECT: WHERE product_id IN (SELECT id FROM target WHERE stock < 10)
+   → This checks stock in TARGET table!
 
 EXAMPLE:
 MERGE INTO products p
@@ -283,6 +312,53 @@ Output: MERGE INTO products p USING (SELECT product_id, name, price FROM stg_pro
             prompt += `
 Task: Top 3 products per category by sales
 Output: WITH ranked AS (SELECT c.category, p.product_name, SUM(s.amount) AS total_sales, ROW_NUMBER() OVER (PARTITION BY c.category ORDER BY SUM(s.amount) DESC) AS rn FROM products p JOIN sales s ON p.product_id = s.product_id JOIN categories c ON p.category_id = c.category_id GROUP BY c.category, p.product_name) SELECT category, product_name, total_sales FROM ranked WHERE rn <= 3;
+`;
+        }
+        
+        // 🔥 PHASE 2.2: UPDATE/DELETE Logic Validation (Detect UPDATE/DELETE patterns)
+        const isUpdateOrDelete = /UPDATE|DELETE|aktualisier|lösch|entfern|update.*where|delete.*where/i.test(task);
+        if (isUpdateOrDelete) {
+            prompt += `
+⚠️ UPDATE/DELETE LOGIC VALIDATION:
+
+1. Check WHERE clause on CORRECT table:
+   WRONG: UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Staging WHERE stock < 10);
+   → This checks stock in STAGING, not in Products!
+   
+   CORRECT: UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Products WHERE stock < 10);
+   → This checks stock in TARGET table!
+
+2. Use FROM clause for complex conditions:
+   CORRECT: UPDATE Products p SET stock = s.new_stock FROM Staging s WHERE p.product_id = s.product_id AND p.stock < 10;
+
+3. RETURNING clause for logging (PostgreSQL):
+   UPDATE Products SET stock = stock - 1 WHERE stock < 10 RETURNING product_id, stock, last_updated;
+`;
+        }
+        
+        // 🔥 PHASE 2.3: Multi-Stage ETL Hints (Detect complex/multi-stage patterns)
+        const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\)\s*.*(\d+)\)/i.test(task);
+        if (isComplexETL) {
+            prompt += `
+⚠️ MULTI-STAGE ETL DETECTED:
+
+For complex multi-step processes:
+1. Use separate statements, NOT nested CTEs with MERGE
+2. PostgreSQL does NOT support MERGE in CTE (WITH clause)
+3. Structure: CTE for data prep → Execute MERGE separately → Separate logging
+
+CORRECT APPROACH:
+-- Step 1: Insert new entities (CTE allowed)
+WITH new_entities AS (
+    INSERT INTO target SELECT ... RETURNING id
+)
+SELECT * FROM new_entities;
+
+-- Step 2: MERGE main data (outside CTE!)
+MERGE INTO target USING source ON (...) WHEN MATCHED THEN UPDATE ... WHEN NOT MATCHED THEN INSERT ...;
+
+-- Step 3: Log changes (separate statement)
+INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 `;
         }
         
