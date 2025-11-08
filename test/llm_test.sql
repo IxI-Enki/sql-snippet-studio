@@ -66,6 +66,7 @@ SELECT books.book_id, COUNT(loans.loan_id) AS loan_count FROM books LEFT JOIN lo
 
 -- Aufgabe 6: Zeige alle überfälligen Ausleihen (return_date < heute und noch nicht zurückgegeben)
 
+SELECT * FROM loans WHERE return_date < CURRENT_DATE AND return_date IS NOT NULL;
 SELECT * FROM loans WHERE return_date < CURRENT_DATE AND return_date IS NULL;
 
 -- ════════════════════════════════════════════════════════

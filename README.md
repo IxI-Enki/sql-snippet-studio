@@ -55,7 +55,7 @@ code --install-extension .
 
 2. **From VSIX** (Production):
 ```bash
-code --install-extension dbi-test-survival-kit-1.1.0.vsix
+code --install-extension dbi-test-survival-kit-1.1.2.vsix
 ```
 
 ### Usage
