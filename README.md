@@ -16,7 +16,7 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 - **Real-World Scenarios** - Retail, Banking, E-Commerce, Healthcare, Education, etc.
 - **All Complexity Levels** - Beginner 🟢 to Expert 🔴
 - **Complete Coverage** - Star-Schema, Window Functions, MERGE, ROLLUP, SCD Type 2, ETL
-- **See:** `test/README_TESTS.md` for testing guide
+- **See:** [`test/README_TESTS.md`](test/README_TESTS.md) for testing guide
 
 ### 🚀 **300+ Professional SQL Snippets**
 
@@ -251,7 +251,12 @@ Enable visual feedback during development:
 | `DBI: Show LLM Statistics` | View request count, cache hits, etc. |
 | `DBI: Clear LLM Cache`     | Clear cached responses               |
 
-See [LLM_FEATURE.md](LLM_FEATURE.md) for detailed documentation!
+See [`LLM_FEATURE.md`](LLM_FEATURE.md) for detailed LLM setup!
+
+**Advanced Features:**
+
+- [`docs/SMART_LLM_FEATURES.md`](docs/SMART_LLM_FEATURES.md) - v1.6.0 features
+- [`docs/TESTING_GUIDE.md`](docs/TESTING_GUIDE.md) - Quick testing guide
 
 ---
 
