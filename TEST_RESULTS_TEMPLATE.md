@@ -11,25 +11,25 @@
 
 ## **Models Tested**
 
-| Model Name | Version | Parameters | Context Length | Notes |
-|------------|---------|------------|----------------|-------|
-| qwen2.5-7b-instruct | latest | 7B | 32K | - |
-| qwen2.5-vl-7b | latest | 7B | 32K | - |
-| osmosis-mcp-4b | latest | 4B | 8K | Uses `<think>` blocks |
-| llama3-8b | latest | 8B | 8K | - |
-| codellama-7b | latest | 7B | 16K | - |
+| Model Name          | Version | Parameters | Context Length | Notes                 |
+| ------------------- | ------- | ---------- | -------------- | --------------------- |
+| qwen2.5-7b-instruct | latest  | 7B         | 32K            | -                     |
+| qwen2.5-vl-7b       | latest  | 7B         | 32K            | -                     |
+| osmosis-mcp-4b      | latest  | 4B         | 8K             | Uses `<think>` blocks |
+| llama3-8b           | latest  | 8B         | 8K             | -                     |
+| codellama-7b        | latest  | 7B         | 16K            | -                     |
 
 ---
 
 ## **Test Results Summary**
 
-| Model | Avg Score | Success Rate | Parser Effectiveness | Avg Response Time | Status |
-|-------|-----------|--------------|---------------------|-------------------|--------|
-| qwen2.5-7b-instruct | - | - | - | - | ⏳ Pending |
-| qwen2.5-vl-7b | - | - | - | - | ⏳ Pending |
-| osmosis-mcp-4b | - | - | - | - | ⏳ Pending |
-| llama3-8b | - | - | - | - | ⏳ Pending |
-| codellama-7b | - | - | - | - | ⏳ Pending |
+| Model               | Avg Score | Success Rate | Parser Effectiveness | Avg Response Time | Status     |
+| ------------------- | --------- | ------------ | -------------------- | ----------------- | ---------- |
+| qwen2.5-7b-instruct | -         | -            | -                    | -                 | ⏳ Pending |
+| qwen2.5-vl-7b       | -         | -            | -                    | -                 | ⏳ Pending |
+| osmosis-mcp-4b      | -         | -            | -                    | -                 | ⏳ Pending |
+| llama3-8b           | -         | -            | -                    | -                 | ⏳ Pending |
+| codellama-7b        | -         | -            | -                    | -                 | ⏳ Pending |
 
 ---
 
@@ -38,7 +38,8 @@
 ### **Model: [Model Name]**
 
 #### **Test 1: Retail Basic (🟢 Beginner)**
-```
+
+```markdown
 Tasks Completed: X/8
 Average Validation Score: XX/100
 Issues:
@@ -50,7 +51,8 @@ Notes:
 ```
 
 #### **Test 2: Logistics Advanced (🟡 Intermediate)**
-```
+
+```markdown
 Tasks Completed: X/8
 Average Validation Score: XX/100
 Issues:
@@ -61,7 +63,8 @@ Notes:
 ```
 
 #### **Test 3: Sales Analytics Window (🟡 Intermediate)**
-```
+
+```markdown
 Tasks Completed: X/8
 Average Validation Score: XX/100
 Issues:
@@ -72,7 +75,8 @@ Notes:
 ```
 
 #### **Test 4: Time Series LAG/LEAD (🟡 Intermediate)**
-```
+
+```markdown
 Tasks Completed: X/12
 Average Validation Score: XX/100
 Issues:
@@ -83,7 +87,8 @@ Notes:
 ```
 
 #### **Test 5: Product Catalog MERGE (🟢 Beginner)**
-```
+
+```markdown
 Tasks Completed: X/8
 Average Validation Score: XX/100
 Issues:
@@ -94,7 +99,8 @@ Notes:
 ```
 
 #### **Test 6: Banking Multi-Fact (🔴 Advanced)**
-```
+
+```markdown
 Tasks Completed: X/12
 Average Validation Score: XX/100
 Issues:
@@ -105,7 +111,8 @@ Notes:
 ```
 
 #### **Test 7: E-Commerce Snowflake (🔴 Advanced)**
-```
+
+```markdown
 Tasks Completed: X/13
 Average Validation Score: XX/100
 Issues:
@@ -116,7 +123,8 @@ Notes:
 ```
 
 #### **Test 8: Healthcare SCD2 (🟡 Intermediate)**
-```
+
+```markdown
 Tasks Completed: X/13
 Average Validation Score: XX/100
 Issues:
@@ -127,7 +135,8 @@ Notes:
 ```
 
 #### **Test 9: Education All Window (🔴 Advanced)**
-```
+
+```markdown
 Tasks Completed: X/21
 Average Validation Score: XX/100
 Issues:
@@ -138,7 +147,8 @@ Notes:
 ```
 
 #### **Test 10: Mixed Expert (🔴 EXPERT)**
-```
+
+```markdown
 Tasks Completed: X/18
 Average Validation Score: XX/100
 Issues:
@@ -153,15 +163,18 @@ Notes:
 ## **Parser Performance**
 
 ### **`<think>` Block Removal:**
+
 - ✅ Successfully removed: XX/XX
 - ❌ Failed to remove: XX/XX
 - Notes: [Any patterns observed]
 
 ### **Markdown Code Block Extraction:**
+
 - ✅ Successfully extracted: XX/XX
 - ❌ Failed to extract: XX/XX
 
 ### **Response Cleaning:**
+
 - ✅ Clean SQL generated: XX/XX
 - ⚠️ Manual cleanup needed: XX/XX
 
@@ -170,17 +183,20 @@ Notes:
 ## **Validator Performance**
 
 ### **Validation Accuracy:**
+
 - ✅ Correctly identified valid SQL: XX/XX
 - ✅ Correctly identified invalid SQL: XX/XX
 - ⚠️ False positives: XX/XX
 - ⚠️ False negatives: XX/XX
 
 ### **Most Common Warnings:**
+
 1. [Warning 1] - XX occurrences
 2. [Warning 2] - XX occurrences
 3. [Warning 3] - XX occurrences
 
 ### **Most Common Errors:**
+
 1. [Error 1] - XX occurrences
 2. [Error 2] - XX occurrences
 3. [Error 3] - XX occurrences
@@ -190,16 +206,19 @@ Notes:
 ## **Observations & Insights**
 
 ### **Strengths:**
+
 - [Strength 1]
 - [Strength 2]
 - [Strength 3]
 
 ### **Weaknesses:**
+
 - [Weakness 1]
 - [Weakness 2]
 - [Weakness 3]
 
 ### **Surprising Findings:**
+
 - [Finding 1]
 - [Finding 2]
 
@@ -208,22 +227,27 @@ Notes:
 ## **Model Recommendations**
 
 ### **Best for Beginners (Tests 1-2):**
+
 - **Winner:** [Model Name]
 - **Reason:** [Why]
 
 ### **Best for Window Functions (Tests 3-4, 9):**
+
 - **Winner:** [Model Name]
 - **Reason:** [Why]
 
 ### **Best for MERGE/ETL (Tests 2, 5, 8):**
+
 - **Winner:** [Model Name]
 - **Reason:** [Why]
 
 ### **Best for Advanced Queries (Tests 6-10):**
+
 - **Winner:** [Model Name]
 - **Reason:** [Why]
 
 ### **Best Overall:**
+
 - **Winner:** [Model Name]
 - **Average Score:** XX/100
 - **Success Rate:** XX%
@@ -234,18 +258,21 @@ Notes:
 ## **Issues & Bug Reports**
 
 ### **Extension Issues:**
+
 1. [Issue 1]
    - **Severity:** High/Medium/Low
    - **Description:** [Details]
    - **Reproduction:** [Steps]
 
 ### **Parser Issues:**
+
 1. [Issue 1]
    - **Model:** [Model Name]
    - **Description:** [Details]
    - **Example:** [SQL snippet]
 
 ### **Validator Issues:**
+
 1. [Issue 1]
    - **Description:** [Details]
    - **Example:** [SQL snippet]
@@ -270,6 +297,7 @@ Notes:
 [Model Name] because [reasons]
 
 **Next Steps:**
+
 - [ ] [Action 1]
 - [ ] [Action 2]
 - [ ] [Action 3]
