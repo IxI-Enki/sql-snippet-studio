@@ -37,10 +37,12 @@ Ein **subtiles AI-Feature**, das SQL-Queries **automatisch vorschlägt** – so 
 ### **2. Extension-Settings aktivieren**
 
 **VS Code / Cursor:**
+
 1. `Ctrl + ,` (Settings öffnen)
 2. Suche: `DBI Survival Kit`
 3. ✅ Enable `Llm: Enabled`
 4. Configure:
+
    ```json
    {
      "dbiSurvivalKit.llm.enabled": true,
@@ -71,6 +73,7 @@ CREATE TABLE students (
 ```
 
 **Resultat:**
+
 ```sql
 -- Aufgabe 1: Finde alle Studenten mit Note über 80
 SELECT * FROM students WHERE grade > 80;
@@ -82,7 +85,7 @@ SELECT * FROM students WHERE grade > 80;
 
 ### **Architektur**
 
-```
+```markdown
 ┌────────────────────────────────────────────┐
 │  1. Cursor bewegt sich nach Aufgabe        │
 └────────────┬───────────────────────────────┘
@@ -111,11 +114,11 @@ SELECT * FROM students WHERE grade > 80;
 
 ### **Komponenten**
 
-| Datei | Beschreibung |
-|-------|-------------|
-| `contextBuilder.js` | Parst Schema und Aufgaben aus SQL-File |
-| `llmProvider.js` | HTTP-Client für LLM-API (OpenAI-kompatibel) |
-| `extension.js` | Integriert LLM in CompletionProvider |
+| Datei               | Beschreibung                                |
+| ------------------- | ------------------------------------------- |
+| `contextBuilder.js` | Parst Schema und Aufgaben aus SQL-File      |
+| `llmProvider.js`    | HTTP-Client für LLM-API (OpenAI-kompatibel) |
+| `extension.js`      | Integriert LLM in CompletionProvider        |
 
 ### **Erkannte Aufgaben-Formate**
 
@@ -161,11 +164,11 @@ Alle diese Formate werden automatisch erkannt!
 
 ### **Empfohlene Modelle**
 
-| Modell | Größe | Qualität | Speed | Verwendung |
-|--------|-------|----------|-------|------------|
-| `qwen2.5-coder-7b` | 7B | ⭐⭐⭐⭐⭐ | 🚀🚀🚀 | **Empfohlen** |
-| `codellama-13b` | 13B | ⭐⭐⭐⭐ | 🚀🚀 | Gut für komplexe Queries |
-| `deepseek-coder-6.7b` | 6.7B | ⭐⭐⭐⭐ | 🚀🚀🚀 | Schnell & kompakt |
+| Modell                | Größe | Qualität    | Speed   | Verwendung               |
+| --------------------- | ----- | ----------- | ------- | ------------------------ |
+| `qwen2.5-coder-7b`    | 7B    | ⭐⭐⭐⭐⭐ | 🚀🚀🚀 | **Empfohlen**            |
+| `codellama-13b`       | 13B   | ⭐⭐⭐⭐   | 🚀🚀   | Gut für komplexe Queries |
+| `deepseek-coder-6.7b` | 6.7B  | ⭐⭐⭐⭐   | 🚀🚀🚀 | Schnell & kompakt        |
 
 ---
 
@@ -246,5 +249,5 @@ Dann sieht's **wirklich** aus wie normale Tab-Completion! 😉
 
 ---
 
+<!-- markdownlint-disable-next-line MD036 -->
 **Built with 🤓🤜🏻🤛🏻🤖 for HTL Leonding DBI Students**
-
