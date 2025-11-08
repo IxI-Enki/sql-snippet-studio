@@ -49,7 +49,7 @@ vsce package
 code --install-extension dbi-test-survival-kit-1.0.0.vsix
 ```
 
-4. **Share with Kollegen:**
+4. **Share with colleagues:**
 - Send them the `.vsix` file
 - They run: `code --install-extension dbi-test-survival-kit-1.0.0.vsix`
 
@@ -210,18 +210,18 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 
 ---
 
-## 🤝 Sharing with Kollegen
+## 🤝 Sharing with colleagues
 
 ### Method 1: Share VSIX File
 
 1. Package extension: `vsce package`
-2. Send `.vsix` file to Kollegen
+2. Send `.vsix` file to colleagues
 3. They install: `code --install-extension <file>.vsix`
 
 ### Method 2: Share Snippets Only
 
 1. Export snippets: `Ctrl+Shift+P` → `DBI: Export Snippets`
-2. Send folder to Kollegen
+2. Send folder to colleagues
 3. They import: `Ctrl+Shift+P` → `DBI: Import Snippets`
 
 ### Method 3: Git Repository
@@ -236,7 +236,7 @@ git remote add origin <your-repo-url>
 git push -u origin main
 ```
 
-2. Kollegen clone and install:
+2. colleagues clone and install:
 ```bash
 git clone <repo-url>
 cd dbi-test-survival-kit

@@ -41,7 +41,7 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
    - `Ctrl+Shift+S` → Star Schema
    - `Ctrl+Shift+D` → Dimension Table
    - `Ctrl+Shift+F` → Fact Table
-   - Export/Import für Kollegen
+   - Export/Import für colleagues
 
 ✅ **100% Offline**
    - Keine Internet-Verbindung nötig
@@ -141,7 +141,7 @@ Dann hast du: `dbi-test-survival-kit-1.0.0.vsix` zum Teilen!
 
 ---
 
-## 🤝 Mit Kollegen Teilen
+## 🤝 Mit colleagues Teilen
 
 ### Methode 1: GitHub
 
@@ -154,7 +154,7 @@ git remote add origin <your-repo-url>
 git push -u origin main
 ```
 
-Dann können Kollegen:
+Dann können colleagues:
 ```bash
 git clone <repo-url>
 cd dbi-test-survival-kit
@@ -168,7 +168,7 @@ vsce package
 # Teile: dbi-test-survival-kit-1.0.0.vsix
 ```
 
-Kollegen installieren:
+colleagues installieren:
 ```powershell
 code --install-extension dbi-test-survival-kit-1.0.0.vsix
 ```
@@ -177,7 +177,7 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 
 ```powershell
 # Teile den snippets/ Ordner
-# Kollegen kopieren nach:
+# colleagues kopieren nach:
 # %USERPROFILE%\.vscode\extensions\dbi-test-survival-kit\snippets\
 ```
 
@@ -260,7 +260,7 @@ Verbinde Extension mit deinem lokalen LLM:
 2. Extension mit `F5` starten
 3. Mehr Snippets hinzufügen
 4. Features erweitern
-5. Mit Kollegen teilen
+5. Mit colleagues teilen
 
 ### Option C: Beides
 

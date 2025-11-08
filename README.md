@@ -285,7 +285,7 @@ Want to add more snippets?
 1. Edit JSON files in `snippets/`
 2. Follow existing pattern
 3. Test with `F5` in VS Code
-4. Share with Kollegen!
+4. Share with colleagues!
 
 ### Snippet Format
 
@@ -327,7 +327,7 @@ MIT License - Use and share freely!
 - 📊 **NEW:** Debug Mode with Status Bar & Notifications
 - ⚡ **NEW:** Smart Caching for LLM Responses
 - ⌨️ **IMPROVED:** Better Keyboard Shortcuts (Ctrl+Alt+Shift)
-- 🌍 **IMPROVED:** Full English terminology ("Colleagues" instead of "Kollegen")
+- 🌍 **IMPROVED:** Full English terminology ("Colleagues" instead of "colleagues")
 - 🐛 **FIXED:** Error handling & timeout feedback
 - 📚 **DOCS:** Added LLM_FEATURE.md
 

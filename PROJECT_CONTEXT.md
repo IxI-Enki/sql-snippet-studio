@@ -63,7 +63,7 @@ Based on GitHub repos:
 ### Design Principles
 1. **100% Offline** - No network calls, all data local
 2. **Lightweight** - Minimal dependencies, fast startup
-3. **Shareable** - Easy export/import for Kollegen
+3. **Shareable** - Easy export/import for colleagues
 4. **Extensible** - Simple JSON format for adding patterns
 5. **Context-Aware** - Smart suggestions based on current file
 
@@ -86,7 +86,7 @@ Based on GitHub repos:
 
 #### 4. Share System
 - Export snippets as JSON
-- Import from Kollegen
+- Import from colleagues
 - Merge & update patterns
 
 ## 📋 Implementation Plan
@@ -108,7 +108,7 @@ Based on GitHub repos:
 - [ ] Export command
 - [ ] Import command
 - [ ] Snippet marketplace JSON format
-- [ ] Documentation for Kollegen
+- [ ] Documentation for colleagues
 
 ### Phase 4: Testing & Polish
 - [ ] Test with real DBI exercises
@@ -127,8 +127,8 @@ Based on GitHub repos:
 ### For Sharing
 1. Developer creates/improves snippets
 2. Export via command: `DBI: Export Snippets`
-3. Share JSON file with Kollegen
-4. Kollegen import via: `DBI: Import Snippets`
+3. Share JSON file with colleagues
+4. colleagues import via: `DBI: Import Snippets`
 5. Merge & iterate
 
 ## 🔑 Key Design Decisions
@@ -144,7 +144,7 @@ Based on GitHub repos:
 - Must work without internet
 - Must be installable quickly before test
 - Must not slow down editor
-- Must be simple enough for Kollegen to extend
+- Must be simple enough for colleagues to extend
 
 ### Why Separate DB Dialects?
 - Different syntax (e.g., SERIAL vs SEQUENCE)
@@ -162,7 +162,7 @@ When you open this project in Cursor:
    - Common patterns from course
 3. Test with real scenarios
 4. Add more patterns iteratively
-5. Share with Kollegen for feedback
+5. Share with colleagues for feedback
 
 ## 💡 Future Ideas
 - [ ] AI-assisted snippet generation (offline)
@@ -174,7 +174,7 @@ When you open this project in Cursor:
 
 ## 🤓 Team
 - Creator: You (IxI-Enki)
-- Contributors: Your Kollegen
+- Contributors: Your colleagues
 - Target: HTL Leonding DBI students
 
 ---

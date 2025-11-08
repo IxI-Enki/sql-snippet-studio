@@ -2,7 +2,7 @@
   "name": "dbi-test-survival-kit",
   "displayName": "DBI Test Survival Kit",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {

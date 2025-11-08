@@ -183,7 +183,7 @@ Alle diese Formate werden automatisch erkannt!
 ✅ **Lösung:** Nutze OpenAI API oder Anthropic Claude  
 ✅ **Ergebnis:** Gleiche Experience, etwas langsamer
 
-### **Szenario 3: Übung mit Kollegen**
+### **Szenario 3: Übung mit colleagues**
 
 ✅ **Problem:** Schema + Aufgaben vom Lehrer  
 ✅ **Lösung:** Kopiere Schema ins File, LLM erkennt automatisch  

@@ -101,17 +101,17 @@ ora-sequence → CREATE SEQUENCE
 
 ---
 
-## 🤝 Share with Kollegen
+## 🤝 Share with colleagues
 
 ### Export Your Snippets
 ```powershell
 # Press Ctrl+Shift+P
 # Type: DBI: Export Snippets
 # Select save location
-# Share folder with Kollegen
+# Share folder with colleagues
 ```
 
-### Import from Kollegen
+### Import from colleagues
 ```powershell
 # Press Ctrl+Shift+P
 # Type: DBI: Import Snippets
