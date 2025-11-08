@@ -3,12 +3,14 @@
 ## **🎯 Quick Testing Guide**
 
 ### **Step 1: Install Extension**
+
 ```bash
 # Drag & Drop dbi-test-survival-kit-1.6.0.vsix into Cursor
 # Reload Window: Ctrl+Shift+P → "Developer: Reload Window"
 ```
 
 ### **Step 2: Configure LLM**
+
 ```bash
 # Open Settings: Ctrl+,
 # Search: "DBI Survival Kit"
@@ -19,6 +21,7 @@
 ```
 
 ### **Step 3: Start LM Studio**
+
 ```bash
 # 1. Open LM Studio
 # 2. Load a model (e.g., qwen2.5-7b-instruct)
@@ -26,6 +29,7 @@
 ```
 
 ### **Step 4: Test**
+
 ```bash
 # 1. Open: test/llm_test_01_retail_basic.sql
 # 2. Place cursor after: -- Aufgabe 1: ...
@@ -39,6 +43,7 @@
 ## **🔍 What to Check**
 
 ### **✅ Success Indicators:**
+
 - ✅ Status bar shows: "$(database) LLM Ready"
 - ✅ Hover shows: Model name & endpoint
 - ✅ Toast notification: "🤖 Querying LLM..." (if enabled)
@@ -47,11 +52,13 @@
 - ✅ Validation score: 85-100
 
 ### **⚠️ Warning Signs:**
+
 - ⚠️ Validation score: 70-84
 - ⚠️ Warnings in Output Channel
 - ⚠️ Minor syntax issues (easily fixable)
 
 ### **❌ Failure Indicators:**
+
 - ❌ No response after 10+ seconds
 - ❌ Error message: "LLM returned empty response"
 - ❌ `<think>` blocks still present
@@ -64,18 +71,18 @@
 
 ### **Test Each File:**
 
-```bash
+```file-tree
 test/
-├── llm_test_01_retail_basic.sql          (8 tasks)  🟢 START HERE
-├── llm_test_02_logistics_advanced.sql    (8 tasks)  🟡
-├── llm_test_03_sales_analytics_window.sql (8 tasks)  🟡
-├── llm_test_04_time_series_lag_lead.sql  (12 tasks) 🟡
-├── llm_test_05_product_catalog_merge.sql (8 tasks)  🟢
-├── llm_test_06_banking_multifact.sql     (12 tasks) 🔴
-├── llm_test_07_ecommerce_snowflake.sql   (13 tasks) 🔴
-├── llm_test_08_healthcare_scd2.sql       (13 tasks) 🟡
-├── llm_test_09_education_all_window.sql  (21 tasks) 🔴
-└── llm_test_10_mixed_expert.sql          (18 tasks) 🔴 ULTIMATE TEST
+├── llm_test_01_retail_basic.sql               8 tasks  🟢 START HERE
+├── llm_test_02_logistics_advanced.sql         8 tasks  🟡
+├── llm_test_03_sales_analytics_window.sql     8 tasks  🟡
+├── llm_test_04_time_series_lag_lead.sql      12 tasks  🟡
+├── llm_test_05_product_catalog_merge.sql      8 tasks  🟢
+├── llm_test_06_banking_multifact.sql         12 tasks  🔴
+├── llm_test_07_ecommerce_snowflake.sql       13 tasks  🔴
+├── llm_test_08_healthcare_scd2.sql           13 tasks  🟡
+├── llm_test_09_education_all_window.sql      21 tasks  🔴
+└── llm_test_10_mixed_expert.sql              18 tasks  🔴 ULTIMATE TEST
 ```
 
 ### **For Each Task:**
@@ -106,12 +113,14 @@ test/
 ### **Problem: "No response"**
 
 **Check:**
-1. LM Studio running? (http://localhost:1234)
+
+1. LM Studio running? (`http://localhost:1234`)
 2. Model loaded?
 3. Extension settings correct?
 4. Check Output Channel: `Ctrl+Shift+U` → "DBI Survival Kit - LLM"
 
 **Fix:**
+
 ```bash
 # Test LM Studio connection:
 curl http://localhost:1234/v1/chat/completions \
@@ -125,11 +134,13 @@ curl http://localhost:1234/v1/chat/completions \
 ### **Problem: "`<think>` blocks still present"**
 
 **Check:**
+
 1. Extension version 1.6.0+?
 2. Parser enabled?
 3. Model using `<think>` tags?
 
 **Fix:**
+
 - Update to v1.6.0+
 - Parser should auto-remove
 - Check Output Channel for parser logs
@@ -137,11 +148,13 @@ curl http://localhost:1234/v1/chat/completions \
 ### **Problem: "Syntax errors"**
 
 **Check:**
+
 1. Model appropriate for task?
 2. Validation score?
 3. Specific error in Output Channel?
 
 **Fix:**
+
 - Try simpler test first (Test 1)
 - Check if model supports SQL
 - Consider trying different model
@@ -153,30 +166,32 @@ curl http://localhost:1234/v1/chat/completions \
 ### **Expected Response Times:**
 
 | Model Size | Simple Queries | Complex Queries | Expert Queries |
-|------------|----------------|-----------------|----------------|
-| **4B** | <3s | <5s | <10s |
-| **7B** | <2s | <4s | <8s |
-| **13B+** | <2s | <3s | <6s |
+| ---------- | -------------- | --------------- | -------------- |
+| **4B**     | <3s            | <5s             | <10s           |
+| **7B**     | <2s            | <4s             | <8s            |
+| **13B+**   | <2s            | <3s             | <6s            |
 
 ### **Expected Success Rates:**
 
-| Test Difficulty | 4B Models | 7B Models | 13B+ Models |
-|-----------------|-----------|-----------|-------------|
-| **🟢 Beginner** | 80%+ | 90%+ | 95%+ |
-| **🟡 Intermediate** | 60%+ | 80%+ | 90%+ |
-| **🔴 Advanced** | 40%+ | 70%+ | 85%+ |
-| **🔴 Expert** | 20%+ | 60%+ | 75%+ |
+| Test Difficulty     | 4B Models | 7B Models | 13B+ Models |
+| ------------------- | --------- | --------- | ----------- |
+| **🟢 Beginner**     | 80%+      | 90%+      | 95%+        |
+| **🟡 Intermediate** | 60%+      | 80%+      | 90%+        |
+| **🔴 Advanced**     | 40%+      | 70%+      | 85%+        |
+| **🔴 Expert**       | 20%+      | 60%+      | 75%+        |
 
 ---
 
 ## **💡 Tips for Best Results**
 
 ### **Model Selection:**
+
 - **Small (4B):** Tests 1-2, 5
 - **Medium (7B):** Tests 1-8
 - **Large (13B+):** Tests 1-10
 
 ### **Temperature Settings:**
+
 - **Low (0.1-0.3):** More consistent, less creative
 - **Medium (0.4-0.6):** Balanced
 - **High (0.7-1.0):** More creative, less consistent
@@ -184,6 +199,7 @@ curl http://localhost:1234/v1/chat/completions \
 **Recommendation:** `0.1-0.2` for SQL queries
 
 ### **Max Tokens:**
+
 - **Simple:** 200-300 tokens
 - **Complex:** 400-600 tokens
 - **Expert:** 600-1000 tokens
@@ -233,6 +249,8 @@ curl http://localhost:1234/v1/chat/completions \
 
 ---
 
+<!-- markdownlint-disable-next-line MD036 -->
 **Happy Testing! 🤓🤜🏻🤛🏻🤖**
+<!-- markdownlint-enable-next-line MD036 -->
 
 **Questions? Check the documentation or open an issue!**
