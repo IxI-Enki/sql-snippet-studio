@@ -14,13 +14,14 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 - ✅ **Oracle PL/SQL Specific** - Sequences, Triggers, Packages, Procedures
 - ✅ **Common Patterns** - JOINs, CTEs, Aggregations, Transactions
 
-### 🤖 **AI-Powered Query Suggestions (NEW in v1.1.0!)**
-- **LLM-Assisted Tab-Completion** - Generates SQL queries from task descriptions
+### 🤖 **AI-Powered Query Suggestions (ENHANCED in v1.6.0!)**
+- **Smart Response Cleaning** - Multi-stage parser removes `<think>` blocks & explanations
+- **SQL Validation** - Automatic syntax checking with quality scoring (0-100)
+- **Enhanced Prompts** - Stop-sequences & few-shot examples for better results
 - **Context-Aware** - Automatically reads schema and task from your file
-- **Subtle & Invisible** - Appears as normal IntelliSense
-- **Offline-Ready** - Works with local LLMs (LM Studio, Ollama)
-- **Smart Caching** - Caches responses for faster repeated queries
-- **Debug Mode** - Visual feedback for development & testing
+- **Offline-Ready** - Works with ANY local LLM (LM Studio, Ollama, etc.)
+- **Smart Caching** - Caches validated responses for instant retrieval
+- **Debug Mode** - Visual feedback with validation scores
 
 ### 🧠 **Intelligent Tab-Completion**
 - Context-aware suggestions
@@ -55,7 +56,8 @@ code --install-extension .
 
 2. **From VSIX** (Production):
 ```bash
-code --install-extension dbi-test-survival-kit-1.1.2.vsix
+# Drag & Drop dbi-test-survival-kit-1.6.0.vsix into Cursor/VS Code
+# OR use: code --install-extension dbi-test-survival-kit-1.6.0.vsix
 ```
 
 ### Usage
@@ -323,14 +325,30 @@ MIT License - Use and share freely!
 
 ## 🎯 Version History
 
-### 1.1.0 (2025-11-08)
+### 1.6.0 (2025-11-08) 🚀 **MAJOR UPDATE**
+- 🧠 **NEW:** Smart Response Cleaning Pipeline (Multi-Stage Parser)
+- ✅ **NEW:** SQL Validation Engine with Quality Scoring (0-100)
+- 🎯 **NEW:** Enhanced Prompt Engineering with Stop-Sequences
+- 📚 **NEW:** Few-Shot Examples in Prompts
+- 🔧 **IMPROVED:** Works with ANY LLM (handles `<think>` blocks, explanations, etc.)
+- 📊 **IMPROVED:** Validation-aware feedback notifications
+- 🎨 **IMPROVED:** Model & endpoint display in status bar tooltip
+- 📚 **DOCS:** Added SMART_LLM_FEATURES.md
+
+### 1.5.0 (2025-11-08)
+- 📊 **NEW:** Model name in status bar tooltip
+- 🔧 **IMPROVED:** Better configuration display
+
+### 1.4.0 (2025-11-08)
+- ⌨️ **NEW:** Command-based LLM query (Ctrl+Alt+Shift+Q)
+- 🐛 **FIXED:** Reliable LLM triggering mechanism
+
+### 1.1.0 - 1.3.0 (2025-11-08)
 - 🤖 **NEW:** AI-Powered Query Suggestions
 - 📊 **NEW:** Debug Mode with Status Bar & Notifications
 - ⚡ **NEW:** Smart Caching for LLM Responses
 - ⌨️ **IMPROVED:** Better Keyboard Shortcuts (Ctrl+Alt+Shift)
-- 🌍 **IMPROVED:** Full English terminology ("Colleagues" instead of "colleagues")
-- 🐛 **FIXED:** Error handling & timeout feedback
-- 📚 **DOCS:** Added LLM_FEATURE.md
+- 🐛 **FIXED:** Installation & caching issues
 
 ### 1.0.0 (2025-11-07)
 - ✅ Initial release

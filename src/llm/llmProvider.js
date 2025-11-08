@@ -5,12 +5,16 @@
 const vscode = require('vscode');
 const https = require('https');
 const http = require('http');
+const ResponseParser = require('./responseParser');
+const SQLValidator = require('./sqlValidator');
 
 class LLMProvider {
     constructor(debugHelper = null, queryCache = null) {
         this.config = null;
         this.debugHelper = debugHelper;
         this.queryCache = queryCache;
+        this.responseParser = new ResponseParser(debugHelper);
+        this.sqlValidator = new SQLValidator(debugHelper);
         this.updateConfig();
     }
 
@@ -35,7 +39,7 @@ class LLMProvider {
      * Sendet Query an LLM
      * @param {string} prompt - Der Prompt für das LLM
      * @param {Object} context - Context für Caching
-     * @returns {Promise<string>} Die generierte SQL-Query
+     * @returns {Promise<Object>} Object mit { sql, validation }
      */
     async query(prompt, context = null) {
         if (!this.config.enabled) {
@@ -61,13 +65,39 @@ class LLMProvider {
                 this.debugHelper.logRequestStart(context.task, context.schemas);
             }
 
-            // Query LLM
-            const response = await this.sendRequest(prompt);
-            const sqlQuery = this.extractSQL(response);
+            // Query LLM with stop sequences
+            const stopSequences = context?.stopSequences || [];
+            const response = await this.sendRequest(prompt, stopSequences);
+            
+            if (this.debugHelper) {
+                this.debugHelper.log(`[LLM] Raw response length: ${response.length} chars`);
+            }
 
-            // Cache result
-            if (this.queryCache && context && sqlQuery) {
-                this.queryCache.set(context, sqlQuery);
+            // Parse response with advanced parser
+            const sqlQuery = this.responseParser.parse(response);
+            
+            if (!sqlQuery) {
+                throw new Error('Failed to extract SQL from LLM response');
+            }
+
+            // Validate SQL
+            const validation = this.sqlValidator.validate(sqlQuery);
+            
+            if (this.debugHelper) {
+                this.debugHelper.log(`[LLM] Validation score: ${validation.score}/100`);
+                if (!validation.isValid) {
+                    this.debugHelper.log(`[LLM] Validation errors: ${validation.errors.join(', ')}`);
+                }
+            }
+
+            const result = {
+                sql: sqlQuery,
+                validation: validation
+            };
+
+            // Cache result (only if validation passes)
+            if (this.queryCache && context && validation.isValid) {
+                this.queryCache.set(context, result);
             }
 
             // Log success
@@ -76,7 +106,7 @@ class LLMProvider {
                 this.debugHelper.logRequestSuccess(sqlQuery, duration);
             }
 
-            return sqlQuery;
+            return result;
 
         } catch (error) {
             console.error('[DBI Survival Kit] LLM query failed:', error.message);
@@ -92,20 +122,29 @@ class LLMProvider {
     /**
      * Sendet HTTP-Request an LLM-Endpoint
      * @param {string} prompt - Der Prompt
+     * @param {Array} stopSequences - Optional stop sequences
      * @returns {Promise<string>} Die Antwort vom LLM
      */
-    async sendRequest(prompt) {
+    async sendRequest(prompt, stopSequences = []) {
         return new Promise((resolve, reject) => {
             const url = new URL(this.config.endpoint);
             const isHttps = url.protocol === 'https:';
             const client = isHttps ? https : http;
 
-            const requestData = JSON.stringify({
+            // Enhanced system message with strict instructions
+            const systemMessage = `You are an expert SQL code generator. Generate ONLY valid SQL queries.
+RULES: 
+- No explanations, no markdown, no comments
+- No <think> tags or reasoning
+- Start directly with SQL keywords (SELECT/INSERT/UPDATE/DELETE/CREATE)
+- End with semicolon (;)`;
+
+            const requestBody = {
                 model: this.config.model,
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a SQL expert. Provide only SQL queries without explanations.'
+                        content: systemMessage
                     },
                     {
                         role: 'user',
@@ -115,7 +154,14 @@ class LLMProvider {
                 max_tokens: this.config.maxTokens,
                 temperature: this.config.temperature,
                 stream: false
-            });
+            };
+
+            // Add stop sequences if provided
+            if (stopSequences && stopSequences.length > 0) {
+                requestBody.stop = stopSequences;
+            }
+
+            const requestData = JSON.stringify(requestBody);
 
             const options = {
                 hostname: url.hostname,
@@ -171,28 +217,11 @@ class LLMProvider {
     }
 
     /**
-     * Extrahiert saubere SQL-Query aus LLM-Response
-     * @param {string} response - Die LLM-Antwort
-     * @returns {string} Die extrahierte SQL-Query
+     * DEPRECATED: Use responseParser.parse() instead
+     * Kept for backward compatibility
      */
     extractSQL(response) {
-        if (!response) {
-            return null;
-        }
-
-        // Entferne Markdown Code-Blocks
-        let sql = response.replace(/```sql\n?/gi, '').replace(/```\n?/g, '');
-        
-        // Entferne führende/trailing Whitespace
-        sql = sql.trim();
-        
-        // Entferne Erklärungen (alles nach dem ersten Semikolon und Leerzeile)
-        const firstQuery = sql.split(/;\s*\n\s*\n/)[0];
-        if (firstQuery) {
-            sql = firstQuery + (firstQuery.endsWith(';') ? '' : ';');
-        }
-
-        return sql;
+        return this.responseParser.parse(response);
     }
 
     /**
@@ -210,4 +239,3 @@ class LLMProvider {
 }
 
 module.exports = LLMProvider;
-

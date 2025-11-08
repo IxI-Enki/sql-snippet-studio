@@ -121,14 +121,49 @@ class ContextBuilder {
     buildPrompt(schemas, task) {
         const schemaText = schemas.map(s => s.raw).join('\n\n');
         
-        return `You are a SQL expert assistant. Given the following database schema and task, provide ONLY the SQL query without any explanation.
+        // Enhanced prompt with strict instructions and few-shot examples
+        return `You are an expert SQL code generator. Your task is to generate ONLY valid SQL queries.
 
-Database Schema:
+CRITICAL RULES:
+1. Return ONLY the SQL query - no explanations, no markdown, no comments
+2. Do NOT use <think> tags or reasoning blocks
+3. Do NOT add text before or after the query
+4. Start directly with SELECT/INSERT/UPDATE/DELETE/CREATE/etc.
+5. End with a semicolon (;)
+6. Use proper SQL syntax for PostgreSQL/Oracle
+
+DATABASE SCHEMA:
 ${schemaText}
 
-Task: ${task}
+EXAMPLES:
+Task: Find all books published after 2000
+Output: SELECT * FROM books WHERE publish_year > 2000;
 
-Provide only the SQL query (no explanations, no markdown, just the query):`;
+Task: Count books per author
+Output: SELECT a.first_name, a.last_name, COUNT(b.book_id) AS book_count FROM authors a LEFT JOIN books b ON a.author_id = b.author_id GROUP BY a.author_id, a.first_name, a.last_name;
+
+YOUR TASK: ${task}
+
+SQL QUERY:`;
+    }
+
+    /**
+     * Get stop sequences for LLM (to prevent over-generation)
+     * @returns {Array} Array of stop sequences
+     */
+    getStopSequences() {
+        return [
+            '<think>',
+            '<reasoning>',
+            'Explanation:',
+            'Note:',
+            'This query',
+            'This will',
+            '\n\n\n',  // Stop at triple newline
+            'Here is',
+            'Here\'s',
+            '```'       // Stop at code block markers
+        ];
     }
 
     /**

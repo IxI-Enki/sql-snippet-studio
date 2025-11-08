@@ -167,11 +167,14 @@ async function executeLLMQuery() {
             debugHelper.log(`[COMMAND] Schemas found: ${context.schemas.length}`);
         }
 
-        // Query LLM
-        const llmProvider = new LLMProvider(debugHelper, queryCache);
-        const sqlQuery = await llmProvider.query(context.prompt, context);
+        // Add stop sequences to context
+        context.stopSequences = contextBuilder.getStopSequences();
 
-        if (!sqlQuery) {
+        // Query LLM (returns { sql, validation })
+        const llmProvider = new LLMProvider(debugHelper, queryCache);
+        const result = await llmProvider.query(context.prompt, context);
+
+        if (!result || !result.sql) {
             if (showNotifications) {
                 vscode.window.showErrorMessage('❌ LLM returned empty response!\n\nCheck:\n- LM Studio is running\n- Model is loaded\n- Server is on port 1234');
             }
@@ -182,8 +185,12 @@ async function executeLLMQuery() {
             return;
         }
 
+        const sqlQuery = result.sql;
+        const validation = result.validation;
+
         if (debugHelper) {
             debugHelper.log(`[COMMAND] LLM returned query: ${sqlQuery.substring(0, 200)}...`);
+            debugHelper.log(`[COMMAND] Validation score: ${validation.score}/100`);
             debugHelper.updateStatusBar('idle');
         }
 
@@ -192,8 +199,23 @@ async function executeLLMQuery() {
             editBuilder.insert(position, '\n' + sqlQuery + '\n');
         });
 
+        // Show appropriate feedback based on validation
         if (showNotifications) {
-            vscode.window.showInformationMessage(`✅ LLM Query inserted! (${sqlQuery.length} chars)`);
+            if (validation.isValid) {
+                if (validation.warnings.length > 0) {
+                    vscode.window.showWarningMessage(
+                        `⚠️ Query inserted with warnings (Score: ${validation.score}/100)\n${validation.warnings[0]}`
+                    );
+                } else {
+                    vscode.window.showInformationMessage(
+                        `✅ Perfect query inserted! (Score: ${validation.score}/100)`
+                    );
+                }
+            } else {
+                vscode.window.showWarningMessage(
+                    `⚠️ Query may have issues (Score: ${validation.score}/100)\n${validation.errors[0]}`
+                );
+            }
         }
 
     } catch (error) {

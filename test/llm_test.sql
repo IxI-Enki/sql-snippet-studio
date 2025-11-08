@@ -44,25 +44,48 @@ CREATE TABLE loans (
 
 -- Aufgabe 1: finde alle bücher die nach dem jahr 2000 veröffentlicht wurden
 
+SELECT * FROM books WHERE publication_year > 2000;
+
 -- Aufgabe 2: Zeige alle Autoren mit ihren Büchern (auch Autoren ohne Bücher)
+
+SELECT a.first_name, a.last_name, b.title
+FROM authors a
+LEFT JOIN books b ON a.author_id = b.author_id;
 
 -- Aufgabe: Autoren ohne Bücher:
 
+SELECT * FROM authors WHERE author_id NOT IN (SELECT DISTINCT author_id FROM books);
+
+
 -- Aufgabe: Autoren mit Büchern:
 
-SELECT a.first_name, a.last_name, b.title 
-FROM authors a 
+SELECT a.first_name, a.last_name
+FROM authors a
 JOIN books b ON a.author_id = b.author_id;
 
 -- Aufgabe 3: Finde alle Mitglieder die aktuell Bücher ausgeliehen haben
 
-SELECT m.first_name, m.last_name 
-FROM members m 
-JOIN loans l ON m.member_id = l.member_id 
+SELECT m.member_id, m.first_name, m.last_name
+FROM members m
+JOIN loans l ON m.member_id = l.member_id
 WHERE l.return_date IS NULL;
 
+
+--------------------------------------------------------------------------------
+
+Getestet mit "qwen2.5-7b-instruct" --->  Überprüfe es bitte
 -- Aufgabe 4: erstelle eine abfrage die die anzahl der bücher pro autor zeigt
 
+SELECT a.first_name, a.last_name, COUNT(b.book_id) AS number_of_books
+FROM authors a
+LEFT JOIN books b ON a.author_id = b.author_id
+GROUP BY a.author_id, a.first_name, a.last_name;
+
+
+
+--------------------------------------------------------------------------------
+
+Getestet mit "qwen/qwen2.5-vl-7b" ---> Überprüfe es bitte
 -- Aufgabe 5: finde das meistgeliehene buch
 
 SELECT b.title AS book_title
@@ -72,10 +95,19 @@ GROUP BY b.book_id
 ORDER BY COUNT(l.loan_id) DESC
 LIMIT 1;
 
+--------------------------------------------------------------------------------
 
+Getestet mit "mistralai/magistral-small-2509"
 -- Aufgabe 6: Zeige alle überfälligen Ausleihen (return_date < heute und noch nicht zurückgegeben)
 
+SELECT * FROM loans WHERE return_date < CURRENT_DATE AND return_date IS NULL;
 
+
+
+
+
+
+--------------------------------------------------------------------------------
 
 
 

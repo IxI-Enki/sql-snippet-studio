@@ -54,20 +54,30 @@ class DebugHelper {
         }
         
         // ALWAYS show status bar (not just when debug is enabled)
+        // Get current model from settings
+        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
+        const currentModel = config.get('model', 'Not configured');
+        const endpoint = config.get('endpoint', 'Not configured');
 
         switch (state) {
             case 'idle':
                 this.statusBarItem.text = `$(database) LLM Ready`;
-                this.statusBarItem.tooltip = `LLM-Assisted Completion\n` +
-                    `Requests: ${this.requestCount}\n` +
-                    `Cache Hits: ${this.cacheHits}\n` +
-                    `Status: Idle`;
+                this.statusBarItem.tooltip = `LLM-Assisted Completion\n\n` +
+                    `📊 Statistics:\n` +
+                    `  Requests: ${this.requestCount}\n` +
+                    `  Cache Hits: ${this.cacheHits}\n` +
+                    `  Status: Idle\n\n` +
+                    `🤖 Configuration:\n` +
+                    `  Model: ${currentModel}\n` +
+                    `  Endpoint: ${endpoint}`;
                 this.statusBarItem.backgroundColor = undefined;
                 break;
 
             case 'thinking':
                 this.statusBarItem.text = `$(sync~spin) LLM Thinking...`;
-                this.statusBarItem.tooltip = `Querying LLM...\n${message}`;
+                this.statusBarItem.tooltip = `Querying LLM...\n` +
+                    `Model: ${currentModel}\n` +
+                    `${message}`;
                 this.statusBarItem.backgroundColor = new vscode.ThemeColor(
                     'statusBarItem.warningBackground'
                 );
@@ -75,7 +85,9 @@ class DebugHelper {
 
             case 'success':
                 this.statusBarItem.text = `$(check) LLM Success`;
-                this.statusBarItem.tooltip = `Query successful!\n${message}`;
+                this.statusBarItem.tooltip = `Query successful!\n` +
+                    `Model: ${currentModel}\n` +
+                    `${message}`;
                 this.statusBarItem.backgroundColor = new vscode.ThemeColor(
                     'statusBarItem.prominentBackground'
                 );
@@ -84,7 +96,8 @@ class DebugHelper {
 
             case 'error':
                 this.statusBarItem.text = `$(error) LLM Error`;
-                this.statusBarItem.tooltip = `Error: ${message}`;
+                this.statusBarItem.tooltip = `Error: ${message}\n` +
+                    `Model: ${currentModel}`;
                 this.statusBarItem.backgroundColor = new vscode.ThemeColor(
                     'statusBarItem.errorBackground'
                 );
@@ -93,9 +106,21 @@ class DebugHelper {
 
             case 'cache':
                 this.statusBarItem.text = `$(zap) LLM Cache Hit`;
-                this.statusBarItem.tooltip = `Response from cache\n${message}`;
+                this.statusBarItem.tooltip = `Response from cache\n` +
+                    `Model: ${currentModel}\n` +
+                    `${message}`;
                 this.statusBarItem.backgroundColor = undefined;
                 setTimeout(() => this.updateStatusBar('idle'), 2000);
+                break;
+
+            case 'requesting':
+                this.statusBarItem.text = `$(sync~spin) Querying LLM...`;
+                this.statusBarItem.tooltip = `Connecting to LLM...\n` +
+                    `Model: ${currentModel}\n` +
+                    `${message}`;
+                this.statusBarItem.backgroundColor = new vscode.ThemeColor(
+                    'statusBarItem.warningBackground'
+                );
                 break;
         }
 
