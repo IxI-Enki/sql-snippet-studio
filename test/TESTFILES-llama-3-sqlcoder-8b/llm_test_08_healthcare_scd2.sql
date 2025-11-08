@@ -92,14 +92,22 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 1: Zeige alle aktuellen Patientendaten (is_current = TRUE)
 
+SELECT p.patient_key, p.patient_id, p.patient_name, p.date_of_birth, p.address, p.city, p.postal_code, p.insurance_type FROM DIM_Patient p WHERE p.is_current = TRUE;
+
 
 -- Aufgabe 2: Zeige die vollständige Historie eines bestimmten Patienten (patient_id = 'P001') mit allen historischen Adressen
+
+SELECT p.patient_key, p.valid_from, s.address FROM DIM_Patient p JOIN STG_Patient_Updates s ON p.patient_id = s.patient_id WHERE p.patient_id = 'P001' ORDER BY p.valid_from NULLS LAST;
 
 
 -- Aufgabe 3: Finde alle Patienten die ihre Adresse in den letzten 6 Monaten geändert haben
 
+SELECT p.patient_name, s.address FROM DIM_Patient p JOIN STG_Patient_Updates s ON p.patient_id = s.patient_id WHERE s.effective_date > CURRENT_DATE - INTERVAL '6 months';
+
 
 -- Aufgabe 4: Zeige für jeden Patienten wie oft sich sein Versicherungstyp geändert hat
+
+SELECT p.patient_key, COUNT(DISTINCT s.insurance_type) AS insurance_type_changes FROM DIM_Patient p JOIN STG_Patient_Updates s ON p.patient_id = s.patient_id WHERE s.effective_date IS NOT NULL GROUP BY p.patient_key ORDER BY p.patient_key;
 
 
 -- ============================================================================
@@ -108,8 +116,12 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 5: Zeige die Patientendaten so wie sie am 1. Januar 2024 gültig waren
 
+SELECT p.patient_id, p.patient_name, p.date_of_birth, p.address, p.city, p.postal_code, p.insurance_type FROM DIM_Patient p WHERE p.valid_to >= '2024-01-01' AND (p.valid_from <= '2024-01-01' OR p.valid_from IS NULL);
+
 
 -- Aufgabe 6: Berechne die Anzahl der Patienten pro Stadt basierend auf den Daten vom 1. Juli 2023
+
+SELECT d.city, COUNT(DISTINCT f.patient_key) AS patient_count FROM DIM_Patient p JOIN FACT_Visit f ON p.patient_key = f.patient_key WHERE f.time_key IN (SELECT time_key FROM DIM_Time WHERE full_date >= '2023-07-01') GROUP BY d.city;
 
 
 -- ============================================================================
@@ -118,8 +130,12 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 7: Erstelle einen MERGE Statement der neue Patientendaten aus STG_Patient_Updates verarbeitet: (1) Wenn Patient neu ist: INSERT (2) Wenn sich relevante Attribute geändert haben: Setze is_current = FALSE für alten Record und INSERT neuen Record (3) Wenn keine Änderung: Keine Aktion
 
+SELECT s.patient_id, s.patient_name, s.date_of_birth, s.address, s.city, s.postal_code, s.insurance_type, COALESCE(p.valid_from, CURRENT_DATE) AS valid_from, p.is_current FROM STG_Patient_Updates s LEFT JOIN DIM_Patient p ON s.patient_id = p.patient_id AND s.date_of_birth = p.date_of_birth AND s.address = p.address AND s.city = p.city AND s.postal_code = p.postal_code AND s.insurance_type = p.insurance_type;
+
 
 -- Aufgabe 8: Erstelle einen Trigger oder Stored Procedure der automatisch das SCD Type 2 Update durchführt wenn sich die Adresse oder der Versicherungstyp eines Patienten ändert
+
+CREATE OR REPLACE FUNCTION update_patient_scd() RETURNS TRIGGER AS $update_scd$ BEGIN IF NEW.address IS DISTINCT FROM OLD.address OR NEW.insurance_type IS DISTINCT FROM OLD.insurance_type THEN UPDATE DIM_Patient SET valid_from = CURRENT_DATE, valid_to = (SELECT MAX(valid_to) FROM DIM_Patient WHERE patient_id = NEW.patient_id AND valid_to > CURRENT_DATE), is_current = TRUE WHERE patient_id = NEW.patient_id; END IF; RETURN NEW; END; $update_scd$ LANGUAGE plpgsql; CREATE TRIGGER update_patient_scd_trigger BEFORE UPDATE ON STG_Patient_Updates FOR EACH ROW EXECUTE PROCEDURE update_patient_scd();
 
 
 -- ============================================================================
@@ -128,11 +144,17 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 9: Berechne die durchschnittlichen Kosten pro Besuch für jeden Versicherungstyp (verwende aktuelle Patient-Daten)
 
+SELECT p.insurance_type, AVG(f.actual_cost) AS average_cost FROM FACT_Visit f JOIN DIM_Patient p ON f.patient_key = p.patient_key WHERE p.is_current = TRUE GROUP BY p.insurance_type;
+
 
 -- Aufgabe 10: Vergleiche die Kosten pro Besuch für Patienten die ihren Versicherungstyp gewechselt haben (vorher vs nachher)
 
+SELECT f.patient_key, AVG(f.actual_cost) AS avg_actual_cost_before, AVG(f2.actual_cost) AS avg_actual_cost_after FROM FACT_Visit f JOIN STG_Patient_Updates s ON f.patient_key = CAST(s.patient_id AS INTEGER) LEFT JOIN FACT_Visit f2 ON f.patient_key = CAST(s.patient_id AS INTEGER) AND f2.time_key > (SELECT time_key FROM DIM_Time WHERE full_date = s.effective_date) GROUP BY f.patient_key HAVING COUNT(f.actual_cost) > 1;
+
 
 -- Aufgabe 11: Finde alle Behandlungen bei denen der Patient während der Behandlungszeit seine Adresse geändert hat
+
+SELECT f.visit_id FROM FACT_Visit f JOIN DIM_Patient p ON f.patient_key = p.patient_key WHERE p.address != (SELECT s.address FROM STG_Patient_Updates s WHERE s.effective_date BETWEEN p.valid_from AND COALESCE(p.valid_to, CURRENT_DATE));
 
 
 -- ============================================================================
@@ -141,8 +163,12 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 12: Berechne für jeden Arzt die Anzahl der unterschiedlichen Patienten die er behandelt hat (historische Daten berücksichtigen)
 
+SELECT d.doctor_key, COUNT(DISTINCT f.patient_key) AS patient_count FROM FACT_Visit f JOIN DIM_Doctor d ON f.doctor_key = d.doctor_key GROUP BY d.doctor_key ORDER BY patient_count DESC NULLS LAST;
+
 
 -- Aufgabe 13: Identifiziere Patienten die mehr als 3 Mal ihre Adresse geändert haben und zeige deren aktuelle Daten
+
+SELECT p.patient_name, p.address FROM DIM_Patient p WHERE p.is_current = TRUE AND p.valid_to IS NULL ORDER BY p.patient_key;
 
 
 -- ============================================================================
