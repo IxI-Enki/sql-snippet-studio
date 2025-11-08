@@ -12,42 +12,41 @@ Version 1.6.0 introduces **intelligent LLM response processing** with three majo
 
 The extension now uses a sophisticated parser that extracts clean SQL from various response formats:
 
-**Stage 1: Remove Reasoning Blocks**
-- Strips `<think>...</think>` tags
-- Removes `<reasoning>...</reasoning>` blocks
-- Eliminates "Okay, let's..." reasoning paragraphs
-
-**Stage 2: Extract from Code Blocks**
-- Prioritizes ` ```sql ` markdown blocks
-- Falls back to generic ` ``` ` blocks
-- Validates extracted content
-
-**Stage 3: Find SQL Statements**
-- Locates SQL keywords (SELECT, INSERT, UPDATE, etc.)
-- Extracts from first keyword to last semicolon
-- Handles multiple statements
-
-**Stage 4: Final Cleanup**
-- Removes explanation text after queries
-- Ensures proper semicolon termination
-- Cleans excess whitespace
+- **Stage 1: Remove Reasoning Blocks**
+  - Strips `<think>...</think>` tags
+  - Removes `<reasoning>...</reasoning>` blocks
+  - Eliminates "Okay, let's..." reasoning paragraphs
+- **Stage 2: Extract from Code Blocks**
+  - Prioritizes ` ```sql ` markdown blocks
+  - Falls back to generic ` ``` ` blocks
+  - Validates extracted content
+- **Stage 3: Find SQL Statements**
+  - Locates SQL keywords (SELECT, INSERT, UPDATE, etc.)
+  - Extracts from first keyword to last semicolon
+  - Handles multiple statements
+- **Stage 4: Final Cleanup**
+  - Removes explanation text after queries
+  - Ensures proper semicolon termination
+  - Cleans excess whitespace
 
 ### **Example Input:**
-```
-<think>
-Let me analyze the schema...
-This requires a JOIN between...
-</think>
 
-Here's the query:
-```sql
-SELECT * FROM books;
-```
-
-This query will return all books.
+```markdown
+  <think>
+  Let me analyze the schema...
+  This requires a JOIN between...
+  </think>
+  
+  Here's the query:
+  \`\`\`sql
+  SELECT * FROM books;
+  \`\`\`
+  
+  This query will return all books.
 ```
 
 ### **Example Output:**
+
 ```sql
 SELECT * FROM books;
 ```
@@ -59,9 +58,10 @@ SELECT * FROM books;
 ### **Aggressive Prompts with Stop-Sequences**
 
 **System Message:**
-```
+
+```markdown
 You are an expert SQL code generator. Generate ONLY valid SQL queries.
-RULES: 
+RULES:
 - No explanations, no markdown, no comments
 - No <think> tags or reasoning
 - Start directly with SQL keywords (SELECT/INSERT/UPDATE/DELETE/CREATE)
@@ -70,6 +70,7 @@ RULES:
 
 **Stop Sequences:**
 Prevents over-generation by stopping at:
+
 - `<think>`
 - `<reasoning>`
 - `Explanation:`
@@ -80,7 +81,8 @@ Prevents over-generation by stopping at:
 
 **Few-Shot Examples:**
 Provides concrete examples in the prompt:
-```
+
+```markdown
 Task: Find all books published after 2000
 Output: SELECT * FROM books WHERE publish_year > 2000;
 
@@ -97,18 +99,21 @@ Output: SELECT a.first_name, a.last_name, COUNT(b.book_id) AS book_count ...
 Every LLM-generated query is automatically validated:
 
 **✅ Error Checks:**
+
 - SQL keyword presence
 - Parentheses matching
 - String quote matching
 - Basic syntax structure
 
 **⚠️ Warning Checks:**
+
 - Missing semicolon
 - SELECT without FROM clause
 - Mixed case keywords
 - Suspicious SQL patterns
 
 **📊 Quality Score:**
+
 - 100 = Perfect query
 - 70-99 = Good with minor warnings
 - 50-69 = Functional but has issues
@@ -117,18 +122,21 @@ Every LLM-generated query is automatically validated:
 ### **User Feedback:**
 
 **Perfect Query:**
-```
+
+```markdown
 ✅ Perfect query inserted! (Score: 100/100)
 ```
 
 **With Warnings:**
-```
+
+```markdown
 ⚠️ Query inserted with warnings (Score: 85/100)
 Consider adding spaces around = operator
 ```
 
 **With Errors:**
-```
+
+```markdown
 ⚠️ Query may have issues (Score: 65/100)
 Unmatched parentheses: missing closing
 ```
@@ -151,17 +159,17 @@ Unmatched parentheses: missing closing
 
 ### **Enhanced Files:**
 
-3. **`src/llm/contextBuilder.js`**
+1. **`src/llm/contextBuilder.js`**
    - Enhanced prompt templates
    - Stop sequence definitions
    - Few-shot examples
 
-4. **`src/llm/llmProvider.js`**
+2. **`src/llm/llmProvider.js`**
    - Integrated parser & validator
    - Stop sequence support
    - Result object with validation
 
-5. **`src/extension.js`**
+3. **`src/extension.js`**
    - Context preparation with stop sequences
    - Validation-aware feedback
    - Score-based notifications
@@ -171,16 +179,19 @@ Unmatched parentheses: missing closing
 ## **🎯 Benefits**
 
 ### **For All Models:**
+
 - ✅ Works with ANY LLM (local or remote)
 - ✅ No manual configuration required
 - ✅ Automatic cleanup of problematic responses
 
 ### **For Small Models:**
+
 - ✅ Better extraction from verbose responses
 - ✅ Handles `<think>` blocks common in small models
 - ✅ Validates output to catch common mistakes
 
 ### **For Large Models:**
+
 - ✅ Extracts from markdown-formatted responses
 - ✅ Handles explanatory text
 - ✅ Works with instruction-tuned models
@@ -206,6 +217,7 @@ Tested with the following models:
 All features work automatically! No additional settings required.
 
 **Optional Debug Settings:**
+
 ```json
 {
   "dbiSurvivalKit.llm.verboseLogging": true,
@@ -214,7 +226,8 @@ All features work automatically! No additional settings required.
 ```
 
 With verbose logging enabled, you'll see:
-```
+
+```markdown
 [PARSER] Raw response length: 450 chars
 [PARSER] First 200 chars: <think>Okay, let's...
 [PARSER] ✅ Extracted from code block
@@ -237,6 +250,7 @@ With verbose logging enabled, you'll see:
 ## **🚀 Usage**
 
 1. Place cursor after a task comment:
+
    ```sql
    -- Aufgabe 1: Find all books from 2020
    ```
