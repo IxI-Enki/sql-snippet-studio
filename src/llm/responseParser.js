@@ -154,7 +154,7 @@ class ResponseParser {
     }
 
     /**
-     * Final cleanup: trim whitespace, remove trailing explanations
+     * Final cleanup: trim whitespace, remove trailing explanations, apply auto-fixes
      */
     finalCleanup(sql) {
         if (!sql) return null;
@@ -176,6 +176,9 @@ class ResponseParser {
             }
         }
 
+        // 🔥 PHASE 1.3: Auto-fix ROLLUP Syntax (MySQL → PostgreSQL)
+        sql = this.fixROLLUPSyntax(sql);
+
         // Clean up multiple blank lines
         sql = sql.replace(/\n\s*\n\s*\n/g, '\n\n');
 
@@ -185,6 +188,33 @@ class ResponseParser {
         }
 
         this.log(`📤 Final SQL length: ${sql.length} chars`);
+        return sql;
+    }
+
+    /**
+     * 🔥 PHASE 1.3: Fix ROLLUP Syntax
+     * Converts MySQL "GROUP BY col1, col2 WITH ROLLUP" 
+     * to PostgreSQL "GROUP BY ROLLUP(col1, col2)"
+     */
+    fixROLLUPSyntax(sql) {
+        if (!sql) return sql;
+        
+        // Pattern: GROUP BY ... WITH ROLLUP
+        const mysqlRollupPattern = /GROUP\s+BY\s+([\w\s,\.]+?)\s+WITH\s+ROLLUP/gi;
+        
+        if (mysqlRollupPattern.test(sql)) {
+            sql = sql.replace(mysqlRollupPattern, (match, columns) => {
+                // Remove trailing commas/whitespace
+                const cleanColumns = columns.trim().replace(/,\s*$/, '');
+                
+                this.log(`🔧 Auto-fixing ROLLUP: MySQL → PostgreSQL`);
+                this.log(`   Before: GROUP BY ${cleanColumns} WITH ROLLUP`);
+                this.log(`   After:  GROUP BY ROLLUP(${cleanColumns})`);
+                
+                return `GROUP BY ROLLUP(${cleanColumns})`;
+            });
+        }
+        
         return sql;
     }
 

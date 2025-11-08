@@ -121,30 +121,177 @@ class ContextBuilder {
     buildPrompt(schemas, task) {
         const schemaText = schemas.map(s => s.raw).join('\n\n');
         
-        // Enhanced prompt with strict instructions and few-shot examples
-        return `You are an expert SQL code generator. Your task is to generate ONLY valid SQL queries.
+        // 🔥 PHASE 1.1: Detect query patterns for enhanced instructions
+        const isMergeQuery = /MERGE|UPSERT|WHEN\s+MATCHED|ETL|load.*into|sync.*table/i.test(task);
+        const isWindowFunction = /rank|row_number|dense_rank|ntile|lag|lead|first_value|last_value|top\s+\d+.*per|partition\s+by/i.test(task);
+        const isROLLUP = /ROLLUP|CUBE|subtotal|hierarchical.*aggreg|grand.*total/i.test(task);
+        const isTopNPerGroup = /top\s+\d+.*per|top\s+\d+.*in.*each|best.*per.*group|highest.*per.*category/i.test(task);
+        
+        // Base prompt
+        let prompt = `You are an expert SQL code generator. Your task is to generate ONLY valid SQL queries.
 
 CRITICAL RULES:
 1. Return ONLY the SQL query - no explanations, no markdown, no comments
 2. Do NOT use <think> tags or reasoning blocks
 3. Do NOT add text before or after the query
-4. Start directly with SELECT/INSERT/UPDATE/DELETE/CREATE/etc.
+4. Start directly with SELECT/INSERT/UPDATE/DELETE/MERGE/WITH
 5. End with a semicolon (;)
 6. Use proper SQL syntax for PostgreSQL/Oracle
 
 DATABASE SCHEMA:
 ${schemaText}
 
+⚠️ SCHEMA AWARENESS - COMMON MISTAKES TO AVOID:
+1. fiscal_year, fiscal_quarter, month_name → These are in DIM_Time, NOT in FACT tables!
+2. region, country, city → These are in DIM_Customer or DIM_Location, NOT in DIM_Time!
+3. category, subcategory, brand → These are in DIM_Product, NOT in FACT_Sales!
+4. Always JOIN dimension tables to access their columns
+5. Check which table contains each column before referencing it
+6. Use correct table alias when referencing columns
+`;
+
+        // 🔥 PHASE 1.1: MERGE Statement Instructions
+        if (isMergeQuery) {
+            prompt += `
+⚠️ MERGE/UPSERT STATEMENT DETECTED! CRITICAL INSTRUCTIONS:
+
+POSTGRESQL SYNTAX (Use INSERT ... ON CONFLICT):
+INSERT INTO target_table (col1, col2, col3)
+SELECT col1, col2, col3 
+FROM source_table
+ON CONFLICT (unique_key) 
+DO UPDATE SET col1 = EXCLUDED.col1, col2 = EXCLUDED.col2;
+
+ORACLE/SQL SERVER SYNTAX (Use MERGE):
+MERGE INTO target_table t
+USING (SELECT col1, col2, col3 FROM source_table) s
+ON (t.key = s.key)
+WHEN MATCHED THEN 
+    UPDATE SET t.col1 = s.col1, t.col2 = s.col2
+WHEN NOT MATCHED THEN 
+    INSERT (key, col1, col2) VALUES (s.key, s.col1, s.col2);
+
+COMPLETE STRUCTURE REQUIRED:
+1. Start with MERGE INTO or INSERT INTO (never incomplete!)
+2. Include USING clause (Oracle) or SELECT (PostgreSQL)
+3. Define ON condition for matching
+4. Add WHEN MATCHED and/or WHEN NOT MATCHED clauses
+5. End with semicolon
+6. Do NOT generate only fragments - COMPLETE statement required!
+
+EXAMPLE:
+MERGE INTO products p
+USING (SELECT product_id, name, price FROM stg_products WHERE price > 0) s
+ON (p.product_id = s.product_id)
+WHEN MATCHED THEN UPDATE SET p.name = s.name, p.price = s.price, p.updated_at = CURRENT_TIMESTAMP
+WHEN NOT MATCHED THEN INSERT (product_id, name, price, created_at) VALUES (s.product_id, s.name, s.price, CURRENT_TIMESTAMP);
+`;
+        }
+        
+        // 🔥 PHASE 1.2: Window Functions + CTE Pattern Instructions
+        if (isWindowFunction || isTopNPerGroup) {
+            prompt += `
+⚠️ WINDOW FUNCTION DETECTED! CRITICAL PATTERN:
+
+Window Functions CANNOT be used in WHERE or HAVING clauses!
+They are evaluated AFTER WHERE, so use CTE or Subquery pattern!
+
+CORRECT PATTERN (Use CTE):
+WITH ranked AS (
+    SELECT 
+        column,
+        other_column,
+        RANK() OVER (PARTITION BY group_col ORDER BY order_col DESC) AS rank
+    FROM table
+    WHERE base_filter = true
+)
+SELECT * FROM ranked WHERE rank <= 3;
+
+WRONG PATTERN (DO NOT USE):
+SELECT 
+    column,
+    RANK() OVER (...) AS rank
+FROM table
+WHERE rank <= 3;  -- ❌ ERROR: rank not available in WHERE!
+
+TOP N PER GROUP PATTERN:
+WITH ranked_data AS (
+    SELECT 
+        group_column,
+        value_column,
+        ROW_NUMBER() OVER (PARTITION BY group_column ORDER BY value_column DESC) AS rn
+    FROM table
+)
+SELECT group_column, value_column
+FROM ranked_data
+WHERE rn <= N;
+
+REMEMBER: Window Function → CTE → Filter in outer query!
+`;
+        }
+        
+        // 🔥 PHASE 1.3: ROLLUP Instructions
+        if (isROLLUP) {
+            prompt += `
+⚠️ ROLLUP DETECTED! USE POSTGRESQL SYNTAX:
+
+CORRECT (PostgreSQL):
+SELECT col1, col2, col3, SUM(amount)
+FROM table
+GROUP BY ROLLUP(col1, col2, col3);
+
+WRONG (MySQL - DO NOT USE):
+SELECT col1, col2, col3, SUM(amount)
+FROM table
+GROUP BY col1, col2, col3 WITH ROLLUP;
+
+ROLLUP creates hierarchical subtotals:
+- Grand Total (all columns NULL)
+- Subtotal level 1 (col2, col3 NULL)
+- Subtotal level 2 (col3 NULL)
+- Detail rows (no NULLs)
+
+EXAMPLE:
+SELECT region, country, city, SUM(sales) AS total_sales
+FROM sales_fact
+JOIN dim_location ON sales_fact.location_key = dim_location.location_key
+GROUP BY ROLLUP(region, country, city)
+ORDER BY region NULLS LAST, country NULLS LAST, city NULLS LAST;
+`;
+        }
+        
+        // 🔥 Enhanced Examples (Context-Aware)
+        prompt += `
 EXAMPLES:
 Task: Find all books published after 2000
 Output: SELECT * FROM books WHERE publish_year > 2000;
 
 Task: Count books per author
 Output: SELECT a.first_name, a.last_name, COUNT(b.book_id) AS book_count FROM authors a LEFT JOIN books b ON a.author_id = b.author_id GROUP BY a.author_id, a.first_name, a.last_name;
+`;
 
+        // Add MERGE example if detected
+        if (isMergeQuery) {
+            prompt += `
+Task: MERGE new products from staging into products table
+Output: MERGE INTO products p USING (SELECT product_id, name, price FROM stg_products) s ON (p.product_id = s.product_id) WHEN MATCHED THEN UPDATE SET p.name = s.name, p.price = s.price WHEN NOT MATCHED THEN INSERT (product_id, name, price) VALUES (s.product_id, s.name, s.price);
+`;
+        }
+        
+        // Add Window Function example if detected
+        if (isWindowFunction || isTopNPerGroup) {
+            prompt += `
+Task: Top 3 products per category by sales
+Output: WITH ranked AS (SELECT c.category, p.product_name, SUM(s.amount) AS total_sales, ROW_NUMBER() OVER (PARTITION BY c.category ORDER BY SUM(s.amount) DESC) AS rn FROM products p JOIN sales s ON p.product_id = s.product_id JOIN categories c ON p.category_id = c.category_id GROUP BY c.category, p.product_name) SELECT category, product_name, total_sales FROM ranked WHERE rn <= 3;
+`;
+        }
+        
+        prompt += `
 YOUR TASK: ${task}
 
 SQL QUERY:`;
+        
+        return prompt;
     }
 
     /**
