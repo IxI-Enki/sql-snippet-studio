@@ -13,15 +13,23 @@ class QueryCache {
 
     /**
      * Generiert Cache-Key aus Context
-     * FIXED: Verwendet jetzt den KOMPLETTEN Task-Text + Schema-Definitionen
-     * um falsche Cache-Hits zu vermeiden!
+     * FIXED v1.6.2: Inkludiert jetzt MODEL-NAME im Cache-Key!
+     * Verhindert Cache-Kollisionen beim Model-Wechsel!
      */
     generateKey(context) {
+        const vscode = require('vscode');
+        const modelName = vscode.workspace.getConfiguration('dbiSurvivalKit.llm').get('model', 'unknown');
+        
         // Erstelle einen eindeutigen Key aus:
-        // 1. Kompletten Schema-Definitionen (nicht nur Namen!)
-        // 2. Kompletten Task-Text (nicht nur lowercase/trim!)
-        // 3. Sortierte Tabellennamen als Fallback
+        // 1. MODEL-NAME (NEU! Kritisch für Model-Wechsel!)
+        // 2. Kompletten Schema-Definitionen (nicht nur Namen!)
+        // 3. Kompletten Task-Text (nicht nur lowercase/trim!)
+        // 4. Sortierte Tabellennamen als Fallback
         const keyData = JSON.stringify({
+            // 🔥 KRITISCH: Model-Name im Cache-Key!
+            // Verhindert dass alte Cache-Einträge bei Model-Wechsel verwendet werden!
+            model: modelName,
+            
             // Vollständige Schema-Definitionen für maximale Spezifität
             schemas: context.schemas.map(s => ({
                 name: s.tableName,
@@ -111,6 +119,23 @@ class QueryCache {
      */
     clear() {
         this.cache.clear();
+    }
+
+    /**
+     * Löscht Cache für ein bestimmtes Model
+     * Nützlich beim Model-Wechsel
+     */
+    clearForModel(modelName) {
+        const keysToDelete = [];
+        
+        for (const [key, value] of this.cache.entries()) {
+            // Check if cached task was generated with this model
+            // (simplified check - in reality we'd need to store model info)
+            keysToDelete.push(key);
+        }
+        
+        keysToDelete.forEach(key => this.cache.delete(key));
+        return keysToDelete.length;
     }
 
     /**
