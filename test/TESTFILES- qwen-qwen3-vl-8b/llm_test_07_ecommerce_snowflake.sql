@@ -97,11 +97,54 @@ CREATE TABLE FACT_Order (
 
 -- Aufgabe 1: Zeige alle Bestellungen mit vollständiger Produkthierarchie (Product → Category → Department)
 
+SELECT 
+    f.order_id,
+    f.quantity,
+    f.unit_price,
+    f.discount_amount,
+    f.shipping_cost,
+    f.total_amount,
+    f.order_status,
+    p.product_name,
+    p.sku,
+    c.category_name,
+    c.category_code,
+    d.department_name,
+    d.department_code
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+JOIN DIM_Department d ON c.department_key = d.department_key;
+
 
 -- Aufgabe 2: Zeige alle Bestellungen mit vollständiger Standorthierarchie (Customer → City → Region → Country)
 
+SELECT 
+    f.order_id,
+    d.customer_name,
+    c.city_name,
+    r.region_name,
+    co.country_name
+FROM FACT_Order f
+JOIN DIM_Customer d ON f.customer_key = d.customer_key
+JOIN DIM_City c ON d.city_key = c.city_key
+JOIN DIM_Region r ON c.region_key = r.region_key
+JOIN DIM_Country co ON r.country_key = co.country_key;
+
 
 -- Aufgabe 3: Berechne den Umsatz pro Department → Category → Product (3 Ebenen Hierarchie)
+
+SELECT 
+    d.department_name,
+    c.category_name,
+    p.product_name,
+    SUM(f.quantity * f.unit_price) AS total_revenue
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+JOIN DIM_Department d ON c.department_key = d.department_key
+GROUP BY d.department_name, c.category_name, p.product_name
+ORDER BY total_revenue DESC;
 
 
 -- ============================================================================
@@ -110,11 +153,53 @@ CREATE TABLE FACT_Order (
 
 -- Aufgabe 4: Berechne den Umsatz mit hierarchischen Subtotals nach Department, Category und Product (verwende ROLLUP)
 
+SELECT 
+    d.department_name,
+    c.category_name,
+    p.product_name,
+    SUM(f.total_amount) AS total_sales
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+JOIN DIM_Department d ON c.department_key = d.department_key
+GROUP BY ROLLUP ((d.department_name, c.category_name, p.product_name));
+
 
 -- Aufgabe 5: Berechne den Umsatz mit hierarchischen Subtotals nach Country, Region und City (verwende ROLLUP mit GROUPING Funktion)
 
+SELECT 
+    c.country_name,
+    r.region_name,
+    ci.city_name,
+    SUM(fo.total_amount) AS total_sales
+FROM FACT_Order fo
+JOIN DIM_Customer cu ON fo.customer_key = cu.customer_key
+JOIN DIM_City ci ON cu.city_key = ci.city_key
+JOIN DIM_Region r ON ci.region_key = r.region_key
+JOIN DIM_Country c ON r.country_key = c.country_key
+GROUP BY ROLLUP (c.country_name, r.region_name, ci.city_name)
+HAVING GROUPING(c.country_name) = 0 OR GROUPING(r.region_name) = 0 OR GROUPING(ci.city_name) = 0
+ORDER BY c.country_name, r.region_name, ci.city_name;
+
 
 -- Aufgabe 6: Erstelle einen Bericht mit Subtotals nach Kontinent, Land und Region (ROLLUP über geografische Hierarchie)
+
+SELECT 
+    c.continent,
+    co.country_name,
+    r.region_name,
+    SUM(f.total_amount) AS total_sales
+FROM FACT_Order f
+JOIN DIM_Time t ON f.time_key = t.time_key
+JOIN DIM_Customer cu ON f.customer_key = cu.customer_key
+JOIN DIM_City ci ON cu.city_key = ci.city_key
+JOIN DIM_Region r ON ci.region_key = r.region_key
+JOIN DIM_Country co ON r.country_key = co.country_key
+JOIN DIM_Department d ON f.product_key = d.department_key
+JOIN DIM_Category cat ON d.category_key = cat.category_key
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Country c ON co.country_key = c.country_key
+GROUP BY ROLLUP (c.continent, co.country_name, r.region_name);
 
 
 -- ============================================================================
@@ -123,11 +208,51 @@ CREATE TABLE FACT_Order (
 
 -- Aufgabe 7: Ranke Produkte nach Umsatz innerhalb jeder Kategorie (DENSE_RANK mit PARTITION BY category)
 
+SELECT 
+    p.product_name,
+    c.category_name,
+    SUM(f.quantity * f.unit_price) AS total_revenue,
+    DENSE_RANK() OVER (PARTITION BY c.category_key ORDER BY SUM(f.quantity * f.unit_price) DESC) AS revenue_rank
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+GROUP BY p.product_key, p.product_name, c.category_key, c.category_name
+ORDER BY c.category_key, revenue_rank;
+
 
 -- Aufgabe 8: Berechne den durchschnittlichen Bestellwert pro Kunde mit Vergleich zum Durchschnitt seiner Loyalty Tier (Window Functions)
 
+SELECT 
+    c.customer_name,
+    c.loyalty_tier,
+    AVG(f.total_amount) AS avg_order_value,
+    AVG(
+        AVG(f.total_amount)
+        OVER (PARTITION BY c.loyalty_tier)
+    ) AS avg_value_by_tier
+FROM 
+    DIM_Customer c
+JOIN 
+    FACT_Order f ON c.customer_key = f.customer_key
+GROUP BY 
+    c.customer_key, c.customer_name, c.loyalty_tier
+ORDER BY 
+    c.customer_name;
+
 
 -- Aufgabe 9: Identifiziere die Top 3 Produkte pro Department nach Verkaufsmenge (Window Functions mit PARTITION BY)
+
+SELECT 
+    d.department_name,
+    p.product_name,
+    SUM(f.quantity) AS total_quantity_sold
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+JOIN DIM_Department d ON c.department_key = d.department_key
+GROUP BY d.department_name, p.product_name
+ORDER BY total_quantity_sold DESC
+LIMIT 3;
 
 
 -- ============================================================================
@@ -136,8 +261,23 @@ CREATE TABLE FACT_Order (
 
 -- Aufgabe 10: Berechne die Conversion Rate pro Produktkategorie (abgeschlossene Bestellungen / Gesamtbestellungen)
 
+SELECT c.category_name, 
+       (SUM(CASE WHEN fo.order_status = 'Completed' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS conversion_rate
+FROM FACT_Order fo
+JOIN DIM_Product p ON fo.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+GROUP BY c.category_name;
+
 
 -- Aufgabe 11: Berechne die Return Rate pro Department (zurückgegebene Bestellungen / abgeschlossene Bestellungen)
+
+SELECT d.department_name, 
+       (SUM(CASE WHEN fo.order_status = 'Returned' THEN 1 ELSE 0 END) * 1.0 / SUM(CASE WHEN fo.order_status = 'Completed' THEN 1 ELSE 0 END)) AS return_rate
+FROM DIM_Department d
+JOIN DIM_Category c ON d.department_key = c.department_key
+JOIN DIM_Product p ON c.category_key = p.category_key
+JOIN FACT_Order fo ON p.product_key = fo.product_key
+GROUP BY d.department_key, d.department_name;
 
 
 -- ============================================================================
@@ -146,8 +286,30 @@ CREATE TABLE FACT_Order (
 
 -- Aufgabe 12: Segmentiere Kunden in Quartile basierend auf ihrem Gesamtumsatz (verwende NTILE Window Function)
 
+SELECT 
+    c.customer_key,
+    c.customer_name,
+    SUM(f.total_amount) AS total_spent,
+    NTILE(4) OVER (ORDER BY SUM(f.total_amount) DESC) AS customer_quartile
+FROM 
+    DIM_Customer c
+JOIN 
+    FACT_Order f ON c.customer_key = f.customer_key
+GROUP BY 
+    c.customer_key, c.customer_name
+ORDER BY 
+    total_spent DESC;
+
 
 -- Aufgabe 13: Finde alle Kunden die im obersten Quartil ihres Landes liegen (NTILE mit PARTITION BY country)
+
+SELECT c.customer_key, c.customer_name, c.city_key, c.loyalty_tier, 
+       NTILE(4) OVER (PARTITION BY c.country_key ORDER BY c.customer_key) AS quartile_rank
+FROM DIM_Customer c
+JOIN DIM_City ci ON c.city_key = ci.city_key
+JOIN DIM_Region r ON ci.region_key = r.region_key
+JOIN DIM_Country co ON r.country_key = co.country_key
+ORDER BY co.country_key, quartile_rank DESC;
 
 
 -- ============================================================================

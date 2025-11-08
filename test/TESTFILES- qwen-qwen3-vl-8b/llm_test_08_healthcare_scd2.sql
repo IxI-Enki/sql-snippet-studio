@@ -92,14 +92,49 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 1: Zeige alle aktuellen Patientendaten (is_current = TRUE)
 
+SELECT * FROM DIM_Patient WHERE is_current = TRUE;
+
 
 -- Aufgabe 2: Zeige die vollständige Historie eines bestimmten Patienten (patient_id = 'P001') mit allen historischen Adressen
+
+SELECT 
+    dp.patient_name,
+    dp.date_of_birth,
+    dp.address,
+    dp.city,
+    dp.postal_code,
+    dp.insurance_type,
+    dp.valid_from,
+    dp.valid_to,
+    dp.is_current
+FROM DIM_Patient dp
+WHERE dp.patient_id = 'P001'
+ORDER BY dp.valid_from;
 
 
 -- Aufgabe 3: Finde alle Patienten die ihre Adresse in den letzten 6 Monaten geändert haben
 
+SELECT DISTINCT p.patient_id, p.patient_name, p.address, p.city, p.postal_code
+FROM DIM_Patient p
+JOIN (
+    SELECT patient_id, MAX(effective_date) AS latest_change
+    FROM STG_Patient_Updates
+    GROUP BY patient_id
+) u ON p.patient_id = u.patient_id
+WHERE u.latest_change >= CURRENT_DATE - INTERVAL '6 months'
+AND p.valid_from <= u.latest_change
+AND (p.valid_to IS NULL OR p.valid_to > u.latest_change);
+
 
 -- Aufgabe 4: Zeige für jeden Patienten wie oft sich sein Versicherungstyp geändert hat
+
+SELECT patient_id, COUNT(*) AS insurance_type_changes
+FROM (
+    SELECT patient_id, insurance_type, 
+           ROW_NUMBER() OVER (PARTITION BY patient_id ORDER BY valid_from) AS rn
+    FROM DIM_Patient
+) sub
+GROUP BY patient_id;
 
 
 -- ============================================================================
@@ -108,8 +143,17 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 5: Zeige die Patientendaten so wie sie am 1. Januar 2024 gültig waren
 
+SELECT p.patient_id, p.patient_name, p.date_of_birth, p.address, p.city, p.postal_code, p.insurance_type
+FROM DIM_Patient p
+WHERE p.valid_from <= '2024-01-01' AND (p.valid_to IS NULL OR p.valid_to >= '2024-01-01');
+
 
 -- Aufgabe 6: Berechne die Anzahl der Patienten pro Stadt basierend auf den Daten vom 1. Juli 2023
+
+SELECT city, COUNT(*) AS patient_count
+FROM DIM_Patient
+WHERE valid_from <= '2023-07-01' AND (valid_to IS NULL OR valid_to >= '2023-07-01')
+GROUP BY city;
 
 
 -- ============================================================================
@@ -118,8 +162,91 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 7: Erstelle einen MERGE Statement der neue Patientendaten aus STG_Patient_Updates verarbeitet: (1) Wenn Patient neu ist: INSERT (2) Wenn sich relevante Attribute geändert haben: Setze is_current = FALSE für alten Record und INSERT neuen Record (3) Wenn keine Änderung: Keine Aktion
 
+SELECT 
+        stg.patient_id,
+        stg.patient_name,
+        stg.date_of_birth,
+        stg.address,
+        stg.city,
+        stg.postal_code,
+        stg.insurance_type,
+        stg.effective_date,
+        ROW_NUMBER() OVER (PARTITION BY stg.patient_id ORDER BY stg.effective_date DESC) AS rn
+    FROM STG_Patient_Updates stg
+) AS source
+ON target.patient_id = source.patient_id
+WHEN MATCHED AND (
+    target.patient_name != source.patient_name OR
+    target.date_of_birth != source.date_of_birth OR
+    target.address != source.address OR
+    target.city != source.city OR
+    target.postal_code != source.postal_code OR
+    target.insurance_type != source.insurance_type
+) THEN
+    UPDATE SET
+        valid_to = source.effective_date,
+        is_current = FALSE
+WHEN NOT MATCHED THEN
+    INSERT (patient_id, patient_name, date_of_birth, address, city, postal_code, insurance_type, valid_from, valid_to, is_current)
+    VALUES (
+        source.patient_id,
+        source.patient_name,
+        source.date_of_birth,
+        source.address,
+        source.city,
+        source.postal_code,
+        source.insurance_type,
+        source.effective_date,
+        NULL,
+        TRUE
+    );
+
 
 -- Aufgabe 8: Erstelle einen Trigger oder Stored Procedure der automatisch das SCD Type 2 Update durchführt wenn sich die Adresse oder der Versicherungstyp eines Patienten ändert
+
+CREATE OR REPLACE FUNCTION update_patient_scd_type2()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Find the current record (valid_to is NULL)
+    UPDATE DIM_Patient
+    SET valid_to = CURRENT_DATE,
+        is_current = FALSE
+    WHERE patient_key = OLD.patient_key;
+
+    -- Insert new record with new values and current date
+    INSERT INTO DIM_Patient (
+        patient_id,
+        patient_name,
+        date_of_birth,
+        address,
+        city,
+        postal_code,
+        insurance_type,
+        valid_from,
+        valid_to,
+        is_current
+    ) VALUES (
+        NEW.patient_id,
+        NEW.patient_name,
+        NEW.date_of_birth,
+        NEW.address,
+        NEW.city,
+        NEW.postal_code,
+        NEW.insurance_type,
+        NEW.effective_date,
+        NULL,
+        TRUE
+    );
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_patient_scd_type2
+AFTER UPDATE ON STG_Patient_Updates
+FOR EACH ROW
+WHEN (OLD.address IS DISTINCT FROM NEW.address OR OLD.insurance_type IS DISTINCT FROM NEW.insurance_type)
+EXECUTE FUNCTION update_patient_scd_type2();
 
 
 -- ============================================================================
@@ -128,11 +255,48 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 9: Berechne die durchschnittlichen Kosten pro Besuch für jeden Versicherungstyp (verwende aktuelle Patient-Daten)
 
+SELECT 
+    p.insurance_type,
+    AVG(f.actual_cost) AS avg_cost_per_visit
+FROM 
+    FACT_Visit f
+JOIN 
+    DIM_Patient p ON f.patient_key = p.patient_key
+WHERE 
+    p.is_current = TRUE
+GROUP BY 
+    p.insurance_type;
+
 
 -- Aufgabe 10: Vergleiche die Kosten pro Besuch für Patienten die ihren Versicherungstyp gewechselt haben (vorher vs nachher)
 
+SELECT 
+    p.patient_id,
+    p.patient_name,
+    t1.treatment_name AS treatment_before,
+    t2.treatment_name AS treatment_after,
+    SUM(CASE WHEN pt.valid_from < ptu.effective_date THEN fv.actual_cost ELSE 0 END) AS total_cost_before,
+    SUM(CASE WHEN pt.valid_from >= ptu.effective_date THEN fv.actual_cost ELSE 0 END) AS total_cost_after
+FROM STG_Patient_Updates ptu
+JOIN DIM_Patient p ON ptu.patient_id = p.patient_id
+JOIN FACT_Visit fv ON p.patient_key = fv.patient_key
+JOIN DIM_Treatment t1 ON fv.treatment_key = t1.treatment_key
+JOIN DIM_Treatment t2 ON fv.treatment_key = t2.treatment_key
+JOIN DIM_Patient pt ON pt.patient_id = ptu.patient_id
+WHERE pt.valid_from < ptu.effective_date
+GROUP BY p.patient_id, p.patient_name, t1.treatment_name, t2.treatment_name;
+
 
 -- Aufgabe 11: Finde alle Behandlungen bei denen der Patient während der Behandlungszeit seine Adresse geändert hat
+
+SELECT DISTINCT t.treatment_key, t.treatment_name, p.patient_id, p.patient_name, p.address, p.city, p.postal_code, v.visit_duration_minutes, v.visit_status
+FROM FACT_Visit v
+JOIN DIM_Patient p ON v.patient_key = p.patient_key
+JOIN DIM_Treatment t ON v.treatment_key = t.treatment_key
+JOIN STG_Patient_Updates pu ON p.patient_id = pu.patient_id
+WHERE pu.effective_date BETWEEN v.time_key AND v.time_key
+AND pu.effective_date > p.valid_from
+AND (pu.effective_date < p.valid_to OR p.valid_to IS NULL);
 
 
 -- ============================================================================
@@ -141,8 +305,25 @@ CREATE TABLE STG_Patient_Updates (
 
 -- Aufgabe 12: Berechne für jeden Arzt die Anzahl der unterschiedlichen Patienten die er behandelt hat (historische Daten berücksichtigen)
 
+SELECT d.doctor_key, d.doctor_name, COUNT(DISTINCT fv.patient_key) AS patient_count
+FROM DIM_Doctor d
+JOIN FACT_Visit fv ON d.doctor_key = fv.doctor_key
+GROUP BY d.doctor_key, d.doctor_name;
+
 
 -- Aufgabe 13: Identifiziere Patienten die mehr als 3 Mal ihre Adresse geändert haben und zeige deren aktuelle Daten
+
+SELECT p.patient_id, p.patient_name, p.date_of_birth, p.address, p.city, p.postal_code, p.insurance_type
+FROM DIM_Patient p
+WHERE p.is_current = TRUE
+AND (
+    SELECT COUNT(*)
+    FROM DIM_Patient p2
+    WHERE p2.patient_id = p.patient_id
+    AND p2.valid_from <= p.valid_from
+    AND p2.valid_to > p.valid_from
+    AND p2.patient_key != p.patient_key
+) > 3;
 
 
 -- ============================================================================

@@ -58,6 +58,7 @@ CREATE TABLE FACT_Sales (
 -- ============================================================================
 
 -- Aufgabe 1: Zeige alle Verkäufe mit Produktnamen und Kundennamen
+-- ✅ KORREKT
 
 SELECT f.sale_id, p.product_name, c.customer_name
 FROM FACT_Sales f
@@ -67,6 +68,7 @@ JOIN DIM_Customer c ON f.customer_key = c.customer_key;
 
 
 -- Aufgabe 2: Berechne den Gesamtumsatz pro Kunde (sortiert nach Umsatz absteigend)
+-- ✅ KORREKT
 
 SELECT c.customer_name, SUM(fs.total_amount) AS total_revenue
 FROM FACT_Sales fs
@@ -76,6 +78,7 @@ ORDER BY total_revenue DESC;
 
 
 -- Aufgabe 3: Berechne den Gesamtumsatz pro Monat im Jahr 2024
+-- ❌ FEHLER: ORDER BY t.month ist problematisch - month ist INT, aber month_name ist im SELECT!
 
 SELECT 
     t.month_name,
@@ -91,8 +94,25 @@ GROUP BY
 ORDER BY 
     t.month;
 
+-- KORREKTUR: ORDER BY sollte t.month sein (ist ja auch im Schema), ABER month_name fehlt in GROUP BY für Sortierung!
+-- Bessere Lösung:
+-- SELECT 
+--     t.month_name,
+--     SUM(fs.total_amount) AS total_revenue
+-- FROM 
+--     FACT_Sales fs
+-- JOIN 
+--     DIM_Time t ON fs.time_key = t.time_key
+-- WHERE 
+--     t.year = 2024
+-- GROUP BY 
+--     t.month, t.month_name
+-- ORDER BY 
+--     t.month;
+
 
 -- Aufgabe 4: Finde die Top 5 meistverkauften Produkte nach Menge
+-- ✅ KORREKT
 
 SELECT p.product_name, SUM(fs.quantity) AS total_quantity
 FROM FACT_Sales fs
@@ -103,6 +123,7 @@ LIMIT 5;
 
 
 -- Aufgabe 5: Berechne den durchschnittlichen Bestellwert pro Produktkategorie
+-- ✅ KORREKT
 
 SELECT p.category, AVG(fs.total_amount) AS average_order_value
 FROM FACT_Sales fs
@@ -111,6 +132,7 @@ GROUP BY p.category;
 
 
 -- Aufgabe 6: Zeige alle Kunden die mehr als 1000 Euro Umsatz generiert haben
+-- ✅ KORREKT
 
 SELECT c.customer_name, SUM(fs.total_amount) AS total_sales
 FROM DIM_Customer c
@@ -120,6 +142,7 @@ HAVING SUM(fs.total_amount) > 1000;
 
 
 -- Aufgabe 7: Berechne den Umsatz pro Land (verwende DIM_Customer)
+-- ✅ KORREKT
 
 SELECT c.country, SUM(fs.total_amount) AS total_revenue
 FROM FACT_Sales fs
@@ -128,9 +151,41 @@ GROUP BY c.country;
 
 
 -- Aufgabe 8: Finde alle Verkäufe mit einem Rabatt von mehr als 10 Prozent
+-- ✅ KORREKT
 
 SELECT * FROM FACT_Sales WHERE discount_percent > 10;
 
+
+-- ============================================================================
+-- TEST RESULTS: qwen/qwen3-vl-8b
+-- ============================================================================
+
+-- SCORE: 93.8/100
+-- SUCCESS RATE: 7/8 (87.5%)
+
+-- BREAKDOWN:
+-- ✅ Korrekt:  7 (Tasks 1, 2, 4, 5, 6, 7, 8)
+-- ⚠️ Teilweise: 0
+-- ❌ Fehler:   1 (Task 3)
+-- 🚫 Failed:   0
+
+-- STRENGTHS:
+-- + Alle Basic JOINs perfekt
+-- + GROUP BY und HAVING korrekt
+-- + Aggregationen (SUM, AVG) korrekt
+-- + WHERE Filter korrekt
+-- + ORDER BY meist korrekt
+
+-- WEAKNESSES:
+-- - Task 3: ORDER BY t.month ohne t.month im GROUP BY (kann zu Sortier-Problemen führen)
+
+-- CRITICAL ERRORS:
+-- - Task 3: Minor Issue - Sollte t.month auch im GROUP BY haben für korrekte Sortierung
+
+-- RECOMMENDATION:
+-- ✅ SEHR GUT für Basic SQL!
+-- Score ist identisch mit qwen2.5-vl-7b (93.8%)
+-- Model zeigt solide Basic SQL Kenntnisse
 
 -- ============================================================================
 -- NOTES FOR LLM TESTING:
