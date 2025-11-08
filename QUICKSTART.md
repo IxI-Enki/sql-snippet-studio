@@ -182,6 +182,5 @@ ora-sequence → CREATE SEQUENCE
 ✅ 100% offline & fast  
 ✅ Shareable with team  
 
-<!-- markdownlint-disable MD036 -->
+<!-- markdownlint-disable-next-line MD036 MD047-->
 **Now Go Ace That Test! 🚀🤓**
-<!-- markdownlint-enable MD036 -->
