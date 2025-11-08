@@ -8,6 +8,13 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 
 ## ✨ Features
 
+### 🧪 **Comprehensive Test Suite (NEW in v1.6.0!)**
+- **10 Test Files** - 121 tasks covering ALL DBI topics
+- **Real-World Scenarios** - Retail, Banking, E-Commerce, Healthcare, Education, etc.
+- **All Complexity Levels** - Beginner 🟢 to Expert 🔴
+- **Complete Coverage** - Star-Schema, Window Functions, MERGE, ROLLUP, SCD Type 2, ETL
+- **See:** `test/README_TESTS.md` for testing guide
+
 ### 🚀 **300+ Professional SQL Snippets**
 - ✅ **Star-Schema Templates** - Complete dimension and fact tables
 - ✅ **PostgreSQL Specific** - SERIAL, JSONB, Arrays, Window Functions
@@ -47,25 +54,39 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 
 ### Installation
 
-1. **From Source** (Development):
+1. **From VSIX** (Recommended):
+```bash
+# Drag & Drop dbi-test-survival-kit-1.6.0.vsix into Cursor/VS Code
+# OR: Extensions → Install from VSIX... → Select file
+# THEN: Reload Window (Ctrl+Shift+P → "Reload Window")
+```
+
+2. **From Source** (Development):
 ```bash
 cd D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit
 npm install
-code --install-extension .
-```
-
-2. **From VSIX** (Production):
-```bash
-# Drag & Drop dbi-test-survival-kit-1.6.0.vsix into Cursor/VS Code
-# OR use: code --install-extension dbi-test-survival-kit-1.6.0.vsix
+vsce package
+# Then install generated .vsix file
 ```
 
 ### Usage
 
+**Basic Snippets:**
 1. Open any `.sql` file
 2. Type a trigger like `star-schema`
 3. Press **Tab** ⌨️
 4. Edit the template 🎨
+
+**LLM-Assisted Queries:**
+1. Open a `.sql` file with schema + task comments
+2. Place cursor after task (e.g., `-- Aufgabe 1: ...`)
+3. Press **`Ctrl+Alt+Shift+Q`** 🤖
+4. LLM generates SQL query instantly!
+
+**Testing:**
+- See `test/README_TESTS.md` for 10 comprehensive test files
+- 121 tasks covering ALL DBI topics
+- Perfect for validating LLM performance!
 
 ---
 
