@@ -7,6 +7,7 @@
 Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enki/DbiTheorie-003):
 
 #### **1. STAR-SCHEMA & DIMENSIONAL MODELING** ⭐
+
 - **Facts:** Ereignistabellen mit Measures & Foreign Keys
 - **Dimensions:** Beschreibende Attribute (Denormalisiert!)
 - **Snowflake vs. Star:** Star bevorzugt für OLAP Performance
@@ -16,6 +17,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - **⚠️ CRITICAL:** Mehrere Auflösungsstufen (Hierarchien) verwenden
 
 #### **2. WINDOW FUNCTIONS / ANALYTIC FUNCTIONS** 🪟
+
 - **OVER Clause:** Grundsyntax für Window Functions
 - **PARTITION BY:** Gruppierung ohne Aggregation
 - **ORDER BY:** Reihenfolge innerhalb der Partition
@@ -34,6 +36,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
   - `RANGE BETWEEN ...`
 
 #### **3. SQL MERGE (UPSERT)** 🔄
+
 - **WHEN MATCHED:** UPDATE existierende Zeilen
 - **WHEN NOT MATCHED:** INSERT neue Zeilen
 - **WHEN NOT MATCHED BY SOURCE:** DELETE (optional)
@@ -42,6 +45,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - **Performance:** Besser als separate INSERT + UPDATE
 
 #### **4. ROLLUP (Hierarchische Aggregationen)** 📊
+
 - **ROLLUP:** Hierarchische Subtotals
   - `GROUP BY ROLLUP(a, b, c)` → Subtotals auf jeder Ebene
 - **GROUPING():** Unterscheidung echte Werte vs. NULL
@@ -49,6 +53,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - **⚠️ NOTE:** CUBE wird aus Teststoff entfernt!
 
 #### **5. ETL-PROZESS** 🔧
+
 - **Extract:** Daten aus Quellsystemen extrahieren
 - **Transform:** Bereinigung, Validierung, Berechnung
 - **Load:** In Data Warehouse laden
@@ -56,12 +61,14 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - **Error Handling:** Fehlerhafte Daten behandeln
 
 #### **6. OLAP vs OLTP** 🏢
+
 - **OLTP:** Transaction Processing (normalized, viele Writes)
 - **OLAP:** Analytical Processing (denormalized, Read-optimiert)
 - **Data Warehouse:** OLAP-Datenbank
 - **Data Mart:** Abteilungsspezifisches DW
 
 #### **7. COMPLEX JOINS & AGGREGATIONS** 🔗
+
 - **Multiple JOINs:** 3+ Tabellen
 - **Self-Joins:** Hierarchische Daten
 - **Outer Joins:** LEFT, RIGHT, FULL
@@ -72,153 +79,163 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 
 ## **🎯 TEST COVERAGE MATRIX**
 
-| Test # | Schema Domain | Star-Schema | Window Funcs | MERGE | ROLLUP | Joins | ETL | Complexity |
-|--------|--------------|-------------|--------------|-------|--------|-------|-----|------------|
-| 1 | Retail Sales | ✅ Basic | - | - | - | ✅ | - | 🟢 Beginner |
-| 2 | Logistics/Warehouse | ✅ Advanced | - | ✅ | - | ✅ | ✅ | 🟡 Intermediate |
-| 3 | Sales Analytics | ✅ | ✅ Rankings | - | ✅ | ✅ | - | 🟡 Intermediate |
-| 4 | Time Series Analysis | ✅ | ✅ LAG/LEAD | - | - | ✅ | - | 🟡 Intermediate |
-| 5 | Product Catalog | - | - | ✅ UPSERT | - | ✅ | ✅ | 🟢 Beginner |
-| 6 | Banking/Finance | ✅ Multi-Fact | ✅ Window | - | ✅ | ✅ | - | 🔴 Advanced |
-| 7 | E-Commerce | ✅ Snowflake | ✅ | - | ✅ | ✅ | - | 🔴 Advanced |
-| 8 | Healthcare | ✅ SCD Type 2 | - | ✅ | - | ✅ | ✅ | 🟡 Intermediate |
-| 9 | Education System | ✅ | ✅ All Types | - | ✅ | ✅ | - | 🔴 Advanced |
-| 10 | Mixed/Combined | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🔴 Expert |
+| Test # | Schema Domain        | Star-Schema   | Window Funcs | MERGE     | ROLLUP | Joins | ETL | Complexity      |
+| ------ | -------------------- | ------------- | ------------ | --------- | ------ | ----- | --- | --------------- |
+| 1      | Retail Sales         | ✅ Basic      | -            | -         | -      | ✅    | -   | 🟢 Beginner     |
+| 2      | Logistics/Warehouse  | ✅ Advanced   | -            | ✅        | -      | ✅    | ✅  | 🟡 Intermediate |
+| 3      | Sales Analytics      | ✅            | ✅ Rankings  | -         | ✅     | ✅    | -   | 🟡 Intermediate |
+| 4      | Time Series Analysis | ✅            | ✅ LAG/LEAD  | -         | -      | ✅    | -   | 🟡 Intermediate |
+| 5      | Product Catalog      | -             | -            | ✅ UPSERT | -      | ✅    | ✅  | 🟢 Beginner     |
+| 6      | Banking/Finance      | ✅ Multi-Fact | ✅ Window    | -         | ✅     | ✅    | -   | 🔴 Advanced     |
+| 7      | E-Commerce           | ✅ Snowflake  | ✅           | -         | ✅     | ✅    | -   | 🔴 Advanced     |
+| 8      | Healthcare           | ✅ SCD Type 2 | -            | ✅        | -      | ✅    | ✅  | 🟡 Intermediate |
+| 9      | Education System     | ✅            | ✅ All Types | -         | ✅     | ✅    | -   | 🔴 Advanced     |
+| 10     | Mixed/Combined       | ✅            | ✅           | ✅        | ✅     | ✅    | ✅  | 🔴 Expert       |
 
 ---
 
 ## **📋 TEST FILE SPECIFICATIONS**
 
 ### **Test 1: Retail Sales - Basic Star-Schema** 🟢
-**Domain:** Einzelhandel (Verkauf von Produkten)  
-**Schema Complexity:** Basic  
-**Tables:** DIM_Product, DIM_Customer, DIM_Time, FACT_Sales  
-**Focus:** Grundlegende Star-Schema Struktur, einfache Joins  
-**Tasks:**
-1. Alle Verkäufe mit Produktnamen
-2. Umsatz pro Kunde
-3. Umsatz pro Monat
-4. Top 5 Produkte
+
+- **Domain:** Einzelhandel (Verkauf von Produkten)  
+- **Schema Complexity:** Basic  
+- **Tables:** DIM_Product, DIM_Customer, DIM_Time, FACT_Sales  
+- **Focus:** Grundlegende Star-Schema Struktur, einfache Joins  
+- **Tasks:**
+  - Alle Verkäufe mit Produktnamen
+  - Umsatz pro Kunde
+  - Umsatz pro Monat
+  - Top 5 Produkte
 
 ---
 
 ### **Test 2: Logistics - Advanced Star-Schema + MERGE** 🟡
-**Domain:** Logistik (Lager, Lieferungen, Transportrouten)  
-**Schema Complexity:** Advanced  
-**Tables:** DIM_Warehouse, DIM_Product, DIM_Supplier, DIM_Time, FACT_Delivery  
-**Focus:** Mehrere Dimensionen, Hierarchien (Warehouse → Region → Country), MERGE für Delta-Loading  
-**Tasks:**
-1. Lieferungen pro Lager und Region (ROLLUP-ready)
-2. Durchschnittliche Lieferzeit pro Lieferant
-3. MERGE Statement für neue Lieferungen
-4. Lagerbestand pro Region
+
+- **Domain:** Logistik (Lager, Lieferungen, Transportrouten)  
+- **Schema Complexity:** Advanced  
+- **Tables:** DIM_Warehouse, DIM_Product, DIM_Supplier, DIM_Time, FACT_Delivery  
+- **Focus:** Mehrere Dimensionen, Hierarchien (Warehouse → Region → Country), MERGE für Delta-Loading  
+- **Tasks:**
+  - Lieferungen pro Lager und Region (ROLLUP-ready)
+  - Durchschnittliche Lieferzeit pro Lieferant
+  - MERGE Statement für neue Lieferungen
+  - Lagerbestand pro Region
 
 ---
 
 ### **Test 3: Sales Analytics - Window Functions + ROLLUP** 🟡
-**Domain:** Verkaufsanalyse  
-**Schema Complexity:** Intermediate  
-**Tables:** DIM_Region, DIM_Product, DIM_Time, FACT_Sales  
-**Focus:** Rankings, ROLLUP für hierarchische Aggregationen  
-**Tasks:**
-1. Ranking der Verkäufer nach Umsatz (RANK, DENSE_RANK, ROW_NUMBER)
-2. Umsatz pro Region mit Subtotals (ROLLUP)
-3. Top 3 Produkte pro Kategorie (Window Functions)
-4. Vergleich zum Vormonat (LAG)
+
+- **Domain:** Verkaufsanalyse  
+- **Schema Complexity:** Intermediate  
+- **Tables:** DIM_Region, DIM_Product, DIM_Time, FACT_Sales  
+- **Focus:** Rankings, ROLLUP für hierarchische Aggregationen  
+- **Tasks:**
+  - Ranking der Verkäufer nach Umsatz (RANK, DENSE_RANK, ROW_NUMBER)
+  - Umsatz pro Region mit Subtotals (ROLLUP)
+  - Top 3 Produkte pro Kategorie (Window Functions)
+  - Vergleich zum Vormonat (LAG)
 
 ---
 
 ### **Test 4: Time Series - LAG/LEAD & Moving Averages** 🟡
-**Domain:** Zeitreihenanalyse (Stock Market, Sales Trends)  
-**Schema Complexity:** Intermediate  
-**Tables:** DIM_Product, DIM_Time, FACT_Sales  
-**Focus:** LAG, LEAD, Running Totals, Moving Averages  
-**Tasks:**
-1. Running Total des Umsatzes pro Produkt
-2. 7-Tage Moving Average
-3. Vergleich zum Vormonat (LAG)
-4. Prozentuale Veränderung zum Vorjahr
+
+- **Domain:** Zeitreihenanalyse (Stock Market, Sales Trends)  
+- **Schema Complexity:** Intermediate  
+- **Tables:** DIM_Product, DIM_Time, FACT_Sales  
+- **Focus:** LAG, LEAD, Running Totals, Moving Averages  
+- **Tasks:**
+  - Running Total des Umsatzes pro Produkt
+  - 7-Tage Moving Average
+  - Vergleich zum Vormonat (LAG)
+  - Prozentuale Veränderung zum Vorjahr
 
 ---
 
 ### **Test 5: Product Catalog - SQL MERGE (UPSERT)** 🟢
-**Domain:** Produktkatalog (E-Commerce)  
-**Schema Complexity:** Simple  
-**Tables:** Products, Suppliers, Product_Updates (Staging)  
-**Focus:** MERGE Statement für ETL-Prozess  
-**Tasks:**
-1. MERGE neue Produkte ein (INSERT wenn neu, UPDATE wenn existierend)
-2. DELETE veraltete Produkte (WHEN NOT MATCHED BY SOURCE)
-3. Update nur bei Preisänderung > 10%
-4. Log Änderungen in Audit-Tabelle
+
+- **Domain:** Produktkatalog (E-Commerce)  
+- **Schema Complexity:** Simple  
+- **Tables:** Products, Suppliers, Product_Updates (Staging)  
+- **Focus:** MERGE Statement für ETL-Prozess  
+- **Tasks:**
+  - MERGE neue Produkte ein (INSERT wenn neu, UPDATE wenn existierend)
+  - DELETE veraltete Produkte (WHEN NOT MATCHED BY SOURCE)
+  - Update nur bei Preisänderung > 10%
+  - Log Änderungen in Audit-Tabelle
 
 ---
 
 ### **Test 6: Banking - Multi-Fact + Window Functions + ROLLUP** 🔴
-**Domain:** Banking/Finance  
-**Schema Complexity:** Advanced (Multi-Fact)  
-**Tables:** DIM_Customer, DIM_Account, DIM_Time, FACT_Transaction, FACT_Balance  
-**Focus:** Mehrere Fact-Tabellen, komplexe Window Functions, ROLLUP  
-**Tasks:**
-1. Kontostand-Entwicklung über Zeit (Running Total)
-2. Durchschnittlicher Transaktionsbetrag pro Kunde (Window Functions)
-3. Hierarchische Aggregation nach Kontentyp (ROLLUP)
-4. Identifizierung verdächtiger Transaktionen (Window Functions + HAVING)
+
+- **Domain:** Banking/Finance  
+- **Schema Complexity:** Advanced (Multi-Fact)  
+- **Tables:** DIM_Customer, DIM_Account, DIM_Time, FACT_Transaction, FACT_Balance  
+- **Focus:** Mehrere Fact-Tabellen, komplexe Window Functions, ROLLUP  
+- **Tasks:**
+  - Kontostand-Entwicklung über Zeit (Running Total)
+  - Durchschnittlicher Transaktionsbetrag pro Kunde (Window Functions)
+  - Hierarchische Aggregation nach Kontentyp (ROLLUP)
+  - Identifizierung verdächtiger Transaktionen (Window Functions + HAVING)
 
 ---
 
 ### **Test 7: E-Commerce - Snowflake Schema + Window + ROLLUP** 🔴
-**Domain:** E-Commerce (Online-Shop)  
-**Schema Complexity:** Snowflake (normalisierte Dimensions)  
-**Tables:** DIM_Product → DIM_Category → DIM_Department, DIM_Customer → DIM_City → DIM_Country, FACT_Order  
-**Focus:** Snowflake-Schema mit Hierarchien, Window Functions  
-**Tasks:**
-1. Bestellungen pro Department > Category > Product (ROLLUP)
-2. Ranking der Kunden nach Bestellwert pro Land
-3. Durchschnittliche Bestellgröße pro Kategorie
-4. Conversion Rate pro Produktkategorie (Window Functions)
+
+- **Domain:** E-Commerce (Online-Shop)  
+- **Schema Complexity:** Snowflake (normalisierte Dimensions)  
+- **Tables:** DIM_Product → DIM_Category → DIM_Department, DIM_Customer → DIM_City → DIM_Country, FACT_Order  
+- **Focus:** Snowflake-Schema mit Hierarchien, Window Functions  
+- **Tasks:**
+  - Bestellungen pro Department > Category > Product (ROLLUP)
+  - Ranking der Kunden nach Bestellwert pro Land
+  - Durchschnittliche Bestellgröße pro Kategorie
+  - Conversion Rate pro Produktkategorie (Window Functions)
 
 ---
 
 ### **Test 8: Healthcare - SCD Type 2 + MERGE** 🟡
-**Domain:** Healthcare (Patienten, Behandlungen)  
-**Schema Complexity:** Intermediate (Slowly Changing Dimensions)  
-**Tables:** DIM_Patient (SCD Type 2), DIM_Doctor, DIM_Treatment, FACT_Visit  
-**Focus:** Historisierung (Valid_From, Valid_To, Is_Current), MERGE für Updates  
-**Tasks:**
-1. Aktuelle Patientendaten abfragen (Is_Current = 1)
-2. Historische Adressen eines Patienten
-3. MERGE neuer Patientendaten (mit SCD Type 2 Logik)
-4. Behandlungen pro Arzt und Fachgebiet
+
+- **Domain:** Healthcare (Patienten, Behandlungen)  
+- **Schema Complexity:** Intermediate (Slowly Changing Dimensions)  
+- **Tables:** DIM_Patient (SCD Type 2), DIM_Doctor, DIM_Treatment, FACT_Visit  
+- **Focus:** Historisierung (Valid_From, Valid_To, Is_Current), MERGE für Updates  
+- **Tasks:**
+  - Aktuelle Patientendaten abfragen (Is_Current = 1)
+  - Historische Adressen eines Patienten
+  - MERGE neuer Patientendaten (mit SCD Type 2 Logik)
+  - Behandlungen pro Arzt und Fachgebiet
 
 ---
 
 ### **Test 9: Education System - All Window Functions + ROLLUP** 🔴
-**Domain:** Bildungssystem (Schule/Universität)  
-**Schema Complexity:** Advanced  
-**Tables:** DIM_Student, DIM_Course, DIM_Professor, DIM_Time, FACT_Grade  
-**Focus:** Alle Window Function Typen, ROLLUP, komplexe Analysen  
-**Tasks:**
-1. Ranking der Studenten nach Notendurchschnitt (RANK, DENSE_RANK)
-2. Notenentwicklung über Semester (LAG, LEAD)
-3. Moving Average der Noten pro Kurs
-4. Hierarchische Aggregation (Fakultät → Studiengang → Kurs) (ROLLUP)
-5. Identifizierung von Top-Performern (NTILE für Quartile)
+
+- **Domain:** Bildungssystem (Schule/Universität)  
+- **Schema Complexity:** Advanced  
+- **Tables:** DIM_Student, DIM_Course, DIM_Professor, DIM_Time, FACT_Grade  
+- **Focus:** Alle Window Function Typen, ROLLUP, komplexe Analysen  
+- **Tasks:**
+  - Ranking der Studenten nach Notendurchschnitt (RANK, DENSE_RANK)
+  - Notenentwicklung über Semester (LAG, LEAD)
+  - Moving Average der Noten pro Kurs
+  - Hierarchische Aggregation (Fakultät → Studiengang → Kurs) (ROLLUP)
+  - Identifizierung von Top-Performern (NTILE für Quartile)
 
 ---
 
 ### **Test 10: Mixed Scenario - ALL TOPICS COMBINED** 🔴
-**Domain:** Multi-Domain (Kombination aller Themen)  
-**Schema Complexity:** Expert  
-**Tables:** Complex Star-Schema mit allen Elementen  
-**Focus:** Kombination von Star-Schema, Window Functions, MERGE, ROLLUP, ETL  
-**Tasks:**
-1. Star-Schema Design mit 4+ Dimensions
-2. ETL mit MERGE und Delta-Loading
-3. Complex Window Functions (PARTITION BY mehrere Spalten)
-4. ROLLUP mit 3+ Ebenen
-5. Performance-kritische Queries mit Subqueries & CTEs
-6. Real-World Scenario: "Identifiziere profitable Produkte pro Region mit Trendanalyse"
+
+- **Domain:** Multi-Domain (Kombination aller Themen)  
+- **Schema Complexity:** Expert  
+- **Tables:** Complex Star-Schema mit allen Elementen  
+- **Focus:** Kombination von Star-Schema, Window Functions, MERGE, ROLLUP, ETL  
+- **Tasks:**
+  - Star-Schema Design mit 4+ Dimensions
+  - ETL mit MERGE und Delta-Loading
+  - Complex Window Functions (PARTITION BY mehrere Spalten)
+  - ROLLUP mit 3+ Ebenen
+  - Performance-kritische Queries mit Subqueries & CTEs
+  - Real-World Scenario: "Identifiziere profitable Produkte pro Region mit Trendanalyse"
 
 ---
 
@@ -227,6 +244,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 ### **Test Execution Plan:**
 
 **For Each Test File:**
+
 1. **LLM Query:** Trigger mit `Ctrl+Alt+Shift+Q` bei jeder Task
 2. **Response Validation:**
    - ✅ Parser entfernt `<think>` Blöcke
@@ -245,6 +263,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
    - Issues / Notes
 
 **Success Criteria:**
+
 - ✅ 90%+ der Queries logisch korrekt
 - ✅ 80%+ der Queries Validation Score ≥ 85
 - ✅ Funktioniert mit mindestens 5 verschiedenen Models
@@ -254,19 +273,20 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 
 ## **📊 MODEL TESTING MATRIX**
 
-| Model | Test 1 | Test 2 | Test 3 | Test 4 | Test 5 | Test 6 | Test 7 | Test 8 | Test 9 | Test 10 | Avg Score |
-|-------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------|-----------|
-| **qwen2.5-7b-instruct** | - | - | - | - | - | - | - | - | - | - | TBD |
-| **qwen2.5-vl-7b** | - | - | - | - | - | - | - | - | - | - | TBD |
-| **osmosis-mcp-4b** | - | - | - | - | - | - | - | - | - | - | TBD |
-| **llama3-8b** | - | - | - | - | - | - | - | - | - | - | TBD |
-| **codellama-7b** | - | - | - | - | - | - | - | - | - | - | TBD |
+| Model                   | Test 1 | Test 2 | Test 3 | Test 4 | Test 5 | Test 6 | Test 7 | Test 8 | Test 9 | Test 10 | Avg Score |
+| ----------------------- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------- | --------- |
+| **qwen2.5-7b-instruct** | -      | -      | -      | -      | -      | -      | -      | -      | -      | -       | TBD       |
+| **qwen2.5-vl-7b**       | -      | -      | -      | -      | -      | -      | -      | -      | -      | -       | TBD       |
+| **osmosis-mcp-4b**      | -      | -      | -      | -      | -      | -      | -      | -      | -      | -       | TBD       |
+| **llama3-8b**           | -      | -      | -      | -      | -      | -      | -      | -      | -      | -       | TBD       |
+| **codellama-7b**        | -      | -      | -      | -      | -      | -      | -      | -      | -      | -       | TBD       |
 
 ---
 
 ## **🚀 IMPLEMENTATION PLAN**
 
 ### **Phase 1: Create Test Files (1-5)** ✅
+
 - Test 1: Retail Sales (Basic)
 - Test 2: Logistics (Advanced + MERGE)
 - Test 3: Sales Analytics (Window + ROLLUP)
@@ -274,6 +294,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - Test 5: Product Catalog (MERGE)
 
 ### **Phase 2: Create Test Files (6-10)** ✅
+
 - Test 6: Banking (Multi-Fact)
 - Test 7: E-Commerce (Snowflake)
 - Test 8: Healthcare (SCD Type 2)
@@ -281,6 +302,7 @@ Based on [https://github.com/IxI-Enki/DbiTheorie-003](https://github.com/IxI-Enk
 - Test 10: Mixed (Expert Level)
 
 ### **Phase 3: User Testing** 🧪
+
 - User tests with local models
 - Collection of results
 - Iteration based on findings
