@@ -207,7 +207,7 @@ WHERE p.stock_quantity < 10;
 -- ============================================================================
 
 -- Aufgabe 8: Erstelle einen mehrstufigen ETL Prozess (1) Lade neue Supplier aus Staging (2) Lade neue Produkte mit MERGE (3) Logge alle Änderungen
-
+	
 -- ❌ FAILED (Score: 0/100):
 --    Model konnte KEINEN mehrstufigen ETL Prozess generieren!
 
