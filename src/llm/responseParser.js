@@ -103,14 +103,14 @@ class ResponseParser {
      */
     extractSQLStatements(text) {
         // Find all text that looks like SQL (starts with keyword, ends with semicolon)
-        const sqlKeywords = /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH)\b/i;
+        const sqlKeywords = /\b(MERGE|SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH)\b/i;
         
         if (!sqlKeywords.test(text)) {
             return null;
         }
 
         // Try to find from first SQL keyword to last semicolon
-        const match = text.match(/(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH)[\s\S]*;/i);
+        const match = text.match(/(MERGE|SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH)[\s\S]*;/i);
         if (match) {
             return match[0].trim();
         }
@@ -122,7 +122,7 @@ class ResponseParser {
      * Stage 4: Extract by finding SQL keywords
      */
     extractByKeyword(text) {
-        const keywords = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'ALTER', 'DROP', 'WITH'];
+        const keywords = ['MERGE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'ALTER', 'DROP', 'WITH'];
         
         for (const keyword of keywords) {
             const regex = new RegExp(`\\b${keyword}\\b[\\s\\S]*`, 'i');
@@ -149,7 +149,7 @@ class ResponseParser {
     hasSQL(text) {
         if (!text) return false;
         
-        const sqlPattern = /\b(SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH|FROM|WHERE|JOIN|GROUP BY|ORDER BY|HAVING)\b/i;
+        const sqlPattern = /\b(MERGE|SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|WITH|FROM|WHERE|JOIN|GROUP BY|ORDER BY|HAVING)\b/i;
         return sqlPattern.test(text);
     }
 
