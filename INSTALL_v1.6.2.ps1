@@ -98,4 +98,3 @@ Write-Host "=== INSTALLATION ABGESCHLOSSEN ===" -ForegroundColor Green
 Write-Host ""
 Write-Host "🤓🤜🏻🤛🏻🤖 BEREIT ZUM TESTEN!" -ForegroundColor Magenta
 Write-Host ""
-

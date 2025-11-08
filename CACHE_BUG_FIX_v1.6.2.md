@@ -181,4 +181,3 @@ Nach Installation von v1.6.2:
 **Next Step:** `npm run package` → Install v1.6.2 → Test with llama-3-sqlcoder-8b
 
 ---
-
