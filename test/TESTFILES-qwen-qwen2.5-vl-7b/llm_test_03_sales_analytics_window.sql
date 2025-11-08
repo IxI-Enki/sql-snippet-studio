@@ -55,17 +55,40 @@ CREATE TABLE FACT_Sales (
 
 -- Aufgabe 1: Ranking der Verkäufer nach Gesamtumsatz (verwende RANK, DENSE_RANK und ROW_NUMBER)
 
+SELECT salesperson_key, salesperson_name, SUM(revenue) AS total_revenue,
+       RANK() OVER (ORDER BY SUM(revenue) DESC) as rank,
+       DENSE_RANK() OVER (ORDER BY SUM(revenue) DESC) as dense_rank,
+       ROW_NUMBER() OVER (ORDER BY SUM(revenue) DESC) as row_number
+FROM FACT_Sales fs
+JOIN DIM_Salesperson sp ON fs.salesperson_key = sp.salesperson_key
+GROUP BY salesperson_key, salesperson_name
+ORDER BY total_revenue DESC;
+
 
 -- Aufgabe 2: Zeige die Top 3 Produkte pro Kategorie sortiert nach Umsatz (verwende Window Functions mit PARTITION BY)
+
+SELECT category, subcategory, product_name, SUM(revenue) OVER(PARTITION BY category ORDER BY SUM(revenue) DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Top_3_Revenue FROM FACT_Sales JOIN DIM_Product ON FACT_Sales.product_key = DIM_Product.product_key GROUP BY category, subcategory, product_name ORDER BY category;
 
 
 -- Aufgabe 3: Berechne den Umsatz pro Verkäufer mit laufender Summe über die Monate (Running Total mit Window Functions)
 
+SELECT salesperson_key, salesperson_name, SUM(revenue) OVER (PARTITION BY salesperson_key ORDER BY time_key ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total_revenue
+FROM FACT_Sales
+JOIN DIM_Salesperson ON FACT_Sales.salesperson_key = DIM_Salesperson.salesperson_key
+GROUP BY salesperson_key, salesperson_name;
+
 
 -- Aufgabe 4: Vergleiche den Umsatz jedes Monats mit dem Vormonat für jeden Verkäufer (verwende LAG)
 
+SELECT s.salesperson_name, t.month_name, f.revenue - LAG(f.revenue) OVER (PARTITION BY s.salesperson_key ORDER BY t.time_key) AS revenue_change
+FROM DIM_Salesperson s
+JOIN FACT_Sales f ON s.salesperson_key = f.salesperson_key
+JOIN DIM_Time t ON f.time_key = t.time_key;
+
 
 -- Aufgabe 5: Berechne den durchschnittlichen Umsatz der letzten 3 Monate für jeden Verkäufer (Moving Average mit Window Functions)
+
+SELECT salesperson_key, AVG(revenue) OVER (PARTITION BY salesperson_key ORDER BY time_key ROWS BETWEEN CURRENT ROW AND 3 FOLLOWING) AS average_revenue_last_3_months FROM FACT_Sales WHERE time_key >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '3 months') GROUP BY salesperson_key;
 
 
 -- ============================================================================
@@ -74,11 +97,33 @@ CREATE TABLE FACT_Sales (
 
 -- Aufgabe 6: Berechne den Gesamtumsatz mit hierarchischen Subtotals nach Region, Department und Verkäufer (verwende ROLLUP)
 
+SELECT region, department, salesperson_name, SUM(revenue) AS total_revenue 
+FROM FACT_Sales fs 
+JOIN DIM_Salesperson sp ON fs.salesperson_key = sp.salesperson_key 
+GROUP BY ROLLUP(region, department, salesperson_name);;
+
 
 -- Aufgabe 7: Berechne den Umsatz pro Jahr, Quartal und Monat mit Subtotals auf jeder Ebene (verwende ROLLUP)
 
+SELECT 
+    year(time_key) AS Jahr,
+    quarter(time_key) AS Quartal,
+    month(time_key) AS Monat,
+    SUM(revenue) OVER () AS Gesamtumsatz,
+    SUM(revenue) OVER (PARTITION BY year(time_key)) AS Umsatz_Jahr,
+    SUM(revenue) OVER (PARTITION BY quarter(time_key)) AS Umsatz_Quartal,
+    SUM(revenue) OVER (PARTITION BY month(time_key)) AS Umsatz_Monat
+FROM 
+    FACT_Sales
+GROUP BY 
+    ROLLUP(year(time_key), quarter(time_key), month(time_key))
+ORDER BY 
+    Jahr, Quartal, Monat;
+
 
 -- Aufgabe 8: Zeige den Umsatz pro Produktkategorie und Subkategorie mit Grand Total (verwende ROLLUP und GROUPING Funktion)
+
+SELECT category, subcategory, SUM(revenue) AS total_revenue FROM FACT_Sales JOIN DIM_Product ON FACT_Sales.product_key = DIM_Product.product_key GROUP BY category, subcategory WITH ROLLUP;
 
 
 -- ============================================================================
