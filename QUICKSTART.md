@@ -4,23 +4,26 @@
 
 ### 1. Install (Choose One)
 
-**Option A: PowerShell Script** (Recommended)
-```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
-.\INSTALL.ps1
-```
-
-**Option B: Manual Copy**
-```powershell
-xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit" "%USERPROFILE%\.vscode\extensions\dbi-test-survival-kit" /E /I /Y
-```
+  <!-- markdownlint-disable MD031 -->
+- **Option A: PowerShell Script** (Recommended)
+  ```powershell
+  cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+  .\INSTALL.ps1
+  ```
+- **Option B: Manual Copy**
+  ```powershell
+  xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit" "%USERPROFILE%\.vscode\extensions\dbi-test-survival-kit" /E /I /Y
+  ```
+<!-- markdownlint-enable MD031 -->
 
 ### 2. Reload IDE
+
 - Press `Ctrl+Shift+P`
 - Type: "Reload Window"
 - Press Enter
 
 ### 3. Test It Works
+
 - Create file: `test.sql`
 - Type: `star-schema`
 - Press **Tab** ⌨️
@@ -31,14 +34,16 @@ xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit" "%USERPROFILE%\.vs
 ## 🎯 Essential Snippets
 
 ### Star Schema
-```
+
+```markdown
 star-schema → Complete star schema
 dim-table   → Dimension table
 fact-table  → Fact table
 ```
 
 ### Common SQL
-```
+
+```markdown
 sel         → SELECT statement
 sel-join    → JOIN query
 sel-agg     → Aggregate with GROUP BY
@@ -46,14 +51,16 @@ with-cte    → Common Table Expression
 ```
 
 ### PostgreSQL
-```
+
+```markdown
 pg-function → plpgsql function
 pg-trigger  → Trigger with function
 pg-serial   → SERIAL primary key
 ```
 
 ### Oracle
-```
+
+```markdown
 ora-procedure → Stored procedure
 ora-trigger-bi → BEFORE INSERT trigger
 ora-sequence → CREATE SEQUENCE
@@ -76,6 +83,7 @@ ora-sequence → CREATE SEQUENCE
 ### Example: Build Star Schema
 
 1. **Open SQL File**
+
    ```sql
    -- Empty file: company_dwh.sql
    ```
@@ -89,6 +97,7 @@ ora-sequence → CREATE SEQUENCE
      - Sales facts
 
 3. **Result: Complete Schema!**
+
    ```sql
    -- ═══════════════════════════════════════════════
    -- STAR SCHEMA: Sales
@@ -104,6 +113,7 @@ ora-sequence → CREATE SEQUENCE
 ## 🤝 Share with colleagues
 
 ### Export Your Snippets
+
 ```powershell
 # Press Ctrl+Shift+P
 # Type: DBI: Export Snippets
@@ -112,6 +122,7 @@ ora-sequence → CREATE SEQUENCE
 ```
 
 ### Import from colleagues
+
 ```powershell
 # Press Ctrl+Shift+P
 # Type: DBI: Import Snippets
@@ -124,6 +135,7 @@ ora-sequence → CREATE SEQUENCE
 ## 🎓 Test Day Preparation
 
 ### Day Before Test
+
 - [ ] Install extension
 - [ ] Test all snippets
 - [ ] Customize patterns
@@ -131,6 +143,7 @@ ora-sequence → CREATE SEQUENCE
 - [ ] Practice with old exercises
 
 ### During Test
+
 1. Open SQL file
 2. Use snippets: `trigger` + Tab
 3. Modify templates
@@ -160,7 +173,7 @@ ora-sequence → CREATE SEQUENCE
 
 ---
 
-## 💪 You're Ready!
+## 💪 You're Ready! 🚀
 
 **What You Have:**
 ✅ 300+ professional SQL snippets  
@@ -169,4 +182,6 @@ ora-sequence → CREATE SEQUENCE
 ✅ 100% offline & fast  
 ✅ Shareable with team  
 
+<!-- markdownlint-disable MD036 -->
 **Now Go Ace That Test! 🚀🤓**
+<!-- markdownlint-enable MD036 -->
