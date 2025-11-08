@@ -284,11 +284,12 @@ powershell -Command "Remove-Item -Path 'C:\Users\janri\.cursor\extensions\dbi-te
 
 ### **Documentation:**
 
-- **Main:** `README.md`
-- **Testing:** `test/README_TESTS.md`
-- **Quick Guide:** `TESTING_GUIDE.md`
-- **Features:** `SMART_LLM_FEATURES.md`
-- **Research:** `TEST_RESEARCH_PLAN.md`
+- **Main:** [`../README.md`](../README.md)
+- **Testing:** [`../test/README_TESTS.md`](../test/README_TESTS.md)
+- **Quick Guide:** [`TESTING_GUIDE.md`](TESTING_GUIDE.md)
+- **Features:** [`SMART_LLM_FEATURES.md`](SMART_LLM_FEATURES.md)
+- **Research:** [`TEST_RESEARCH_PLAN.md`](TEST_RESEARCH_PLAN.md)
+- **Results Template:** [`TEST_RESULTS_TEMPLATE.md`](TEST_RESULTS_TEMPLATE.md)
 
 ### **Commands:**
 

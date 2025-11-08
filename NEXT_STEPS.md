@@ -8,20 +8,52 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 
 ```file-tree
 04_dbi_test_survival_kit/
-├── ✅ package.json                 # Extension manifest
-├── ✅ language-configuration.json  # SQL config
-├── ✅ src/extension.js             # Extension logic (300+ lines)
+├── ✅ package.json                             # Extension manifest (v1.6.0)
+├── ✅ language-configuration.json              # SQL config
+├── ✅ src/
+│   ├── ✅ extension.js                         # Extension logic (500+ lines)
+│   └── ✅ llm/
+│       ├── ✅ contextBuilder.js                # Enhanced prompts + stop sequences
+│       ├── ✅ llmProvider.js                   # LLM integration + parser + validator
+│       ├── ✅ debugHelper.js                   # Status bar + logging
+│       ├── ✅ queryCache.js                    # LRU cache
+│       ├── ✅ responseParser.js                # Multi-stage SQL extraction
+│       └── ✅ sqlValidator.js                  # Syntax validation + scoring
+├── ✅ test/
+│   ├── ✅ llm_test_01_retail_basic.sql         # 8 tasks (🟢 Beginner)
+│   ├── ✅ llm_test_02_logistics_advanced.sql   # 8 tasks (🟡 Intermediate)
+│   ├── ✅ llm_test_03_sales_analytics_window.sql # 8 tasks (🟡 Intermediate)
+│   ├── ✅ llm_test_04_time_series_lag_lead.sql # 12 tasks (🟡 Intermediate)
+│   ├── ✅ llm_test_05_product_catalog_merge.sql # 8 tasks (🟢 Beginner)
+│   ├── ✅ llm_test_06_banking_multifact.sql    # 12 tasks (🔴 Advanced)
+│   ├── ✅ llm_test_07_ecommerce_snowflake.sql  # 13 tasks (🔴 Advanced)
+│   ├── ✅ llm_test_08_healthcare_scd2.sql      # 13 tasks (🟡 Intermediate)
+│   ├── ✅ llm_test_09_education_all_window.sql # 21 tasks (🔴 Advanced)
+│   ├── ✅ llm_test_10_mixed_expert.sql         # 18 tasks (🔴 EXPERT)
+│   └── ✅ README_TESTS.md                      # Complete testing guide
+├── ✅ docs/
+│   ├── ✅ SMART_LLM_FEATURES.md                # v1.6.0 feature documentation
+│   ├── ✅ TEST_RESEARCH_PLAN.md                # Detailed research & coverage
+│   ├── ✅ TEST_RESULTS_TEMPLATE.md             # Results documentation template
+│   ├── ✅ TESTING_GUIDE.md                     # Quick testing guide
+│   └── ✅ PROJECT_SUMMARY_v1.6.0.md            # Complete project summary
 ├── ✅ snippets/
-│   ├── ✅ shared-snippets.json     # 20+ gemeinsame Patterns
-│   ├── ✅ postgres-snippets.json   # 25+ PostgreSQL Snippets
-│   └── ✅ oracle-snippets.json     # 25+ Oracle PL/SQL Snippets
-├── ✅ README.md                    # Vollständige Dokumentation
-├── ✅ SETUP_GUIDE.md               # Setup & Troubleshooting
-├── ✅ QUICKSTART.md                # 5-Minuten Quick Start
-├── ✅ PROJECT_CONTEXT.md           # Kontext für weiteres Arbeiten
-├── ✅ INSTALL.ps1                  # PowerShell Installer
-├── ✅ .gitignore
-└── ✅ LICENSE (MIT)
+│   ├── ✅ shared-snippets.json                 # 20+ gemeinsame Patterns
+│   ├── ✅ postgres-snippets.json               # 25+ PostgreSQL Snippets
+│   └── ✅ oracle-snippets.json                 # 25+ Oracle PL/SQL Snippets
+├── ✅ images/
+│   ├── ✅ icon.png                             # Extension icon (PNG)
+│   └── ✅ icon.svg                             # Extension icon (SVG source)
+├── ✅ README.md                                # Vollständige Dokumentation
+├── ✅ LLM_FEATURE.md                           # LLM Setup & Configuration
+├── ✅ SETUP_GUIDE.md                           # Setup & Troubleshooting
+├── ✅ QUICKSTART.md                            # 5-Minuten Quick Start
+├── ✅ PROJECT_CONTEXT.md                       # Kontext für weiteres Arbeiten
+├── ✅ NEXT_STEPS.md                            # This file
+├── ✅ INSTALL.ps1                              # PowerShell Installer
+├── ✅ .gitignore                               # Git ignore patterns
+├── ✅ LICENSE                                  # MIT License
+└── ✅ dbi-test-survival-kit-1.6.0.vsix        # Ready for installation!
 ```
 
 ### 🎨 Features Implementiert

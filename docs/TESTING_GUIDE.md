@@ -241,11 +241,12 @@ curl http://localhost:1234/v1/chat/completions \
 
 ## **📚 Resources**
 
-- **Test Files:** `test/README_TESTS.md`
-- **Research Plan:** `TEST_RESEARCH_PLAN.md`
-- **Feature Docs:** `SMART_LLM_FEATURES.md`
-- **LLM Setup:** `LLM_FEATURE.md`
-- **Main README:** `README.md`
+- **Test Files:** [`../test/README_TESTS.md`](../test/README_TESTS.md)
+- **Research Plan:** [`TEST_RESEARCH_PLAN.md`](TEST_RESEARCH_PLAN.md)
+- **Feature Docs:** [`SMART_LLM_FEATURES.md`](SMART_LLM_FEATURES.md)
+- **Results Template:** [`TEST_RESULTS_TEMPLATE.md`](TEST_RESULTS_TEMPLATE.md)
+- **LLM Setup:** [`../LLM_FEATURE.md`](../LLM_FEATURE.md)
+- **Main README:** [`../README.md`](../README.md)
 
 ---
 

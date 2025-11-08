@@ -253,7 +253,7 @@ This directory contains **10 comprehensive test files** designed to evaluate LLM
 
 After testing:
 
-1. Document results in `TEST_RESULTS.md`
+1. Document results in [`../docs/TEST_RESULTS_TEMPLATE.md`](../docs/TEST_RESULTS_TEMPLATE.md)
 2. Compare models side-by-side
 3. Identify best model for each test category
 4. Report findings to extension development
