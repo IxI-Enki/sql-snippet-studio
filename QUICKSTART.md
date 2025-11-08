@@ -70,11 +70,11 @@ ora-sequence → CREATE SEQUENCE
 
 ## ⌨️ Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Shift+S` | Insert Star Schema |
+| Shortcut       | Action                 |
+| -------------- | ---------------------- |
+| `Ctrl+Shift+S` | Insert Star Schema     |
 | `Ctrl+Shift+D` | Insert Dimension Table |
-| `Ctrl+Shift+F` | Insert Fact Table |
+| `Ctrl+Shift+F` | Insert Fact Table      |
 
 ---
 
