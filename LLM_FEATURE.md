@@ -222,12 +222,12 @@ curl http://localhost:1234/v1/models
 
 ## 📊 **Performance**
 
-| Metrik | Lokal (7B) | API (GPT-4) |
-|--------|------------|-------------|
-| Latenz | ~500ms | ~2000ms |
-| Kosten | 0€ | ~$0.03/query |
-| Offline | ✅ | ❌ |
-| Qualität | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Metrik   | Lokal (7B) | API (GPT-4)  |
+| -------- | ---------- | ------------ |
+| Latenz   | ~500ms     | ~2000ms      |
+| Kosten   | 0€         | ~$0.03/query |
+| Offline  | ✅         | ❌           |
+| Qualität | ⭐⭐⭐⭐  | ⭐⭐⭐⭐⭐  |
 
 ---
 
