@@ -5,12 +5,23 @@ const path = require('path');
 // LLM-Integration
 const ContextBuilder = require('./llm/contextBuilder');
 const LLMProvider = require('./llm/llmProvider');
+const DebugHelper = require('./llm/debugHelper');
+const QueryCache = require('./llm/queryCache');
+
+// Global instances
+let debugHelper = null;
+let queryCache = null;
 
 /**
  * Extension activation entry point
  */
 function activate(context) {
     console.log('DBI Test Survival Kit is now active!');
+
+    // Initialize global instances
+    debugHelper = new DebugHelper();
+    debugHelper.initialize(context);
+    queryCache = new QueryCache();
 
     // Register commands
     registerCommands(context);
@@ -20,6 +31,36 @@ function activate(context) {
     
     // Show welcome message on first activation
     showWelcomeMessage(context);
+
+    // Register show stats command
+    context.subscriptions.push(
+        vscode.commands.registerCommand('dbiSurvivalKit.showLLMStats', () => {
+            if (debugHelper) {
+                debugHelper.showStats();
+            }
+        })
+    );
+
+    // Register clear cache command
+    context.subscriptions.push(
+        vscode.commands.registerCommand('dbiSurvivalKit.clearCache', () => {
+            if (queryCache) {
+                queryCache.clear();
+                vscode.window.showInformationMessage('✅ LLM Cache cleared!');
+            }
+        })
+    );
+
+    // Listen for config changes
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeConfiguration(e => {
+            if (e.affectsConfiguration('dbiSurvivalKit')) {
+                if (debugHelper) {
+                    debugHelper.updateConfig();
+                }
+            }
+        })
+    );
 }
 
 /**
@@ -67,7 +108,7 @@ function registerCommands(context) {
  */
 function registerCompletionProvider(context) {
     const contextBuilder = new ContextBuilder();
-    const llmProvider = new LLMProvider();
+    const llmProvider = new LLMProvider(debugHelper, queryCache);
 
     const provider = vscode.languages.registerCompletionItemProvider(
         ['sql', 'plsql'],
@@ -135,16 +176,17 @@ async function getLLMCompletion(document, position, contextBuilder, llmProvider)
             return null; // No task found
         }
 
-        // Query LLM
-        const sqlQuery = await llmProvider.query(context.prompt);
+        // Query LLM (with context for caching)
+        const sqlQuery = await llmProvider.query(context.prompt, context);
 
         if (!sqlQuery) {
             return null;
         }
 
-        // Create completion item
+        // Create completion item with debug label
+        const debugLabel = debugHelper ? debugHelper.getDebugLabel('llm') : '';
         const completion = new vscode.CompletionItem(
-            '🤖 AI: ' + context.task.substring(0, 50) + '...',
+            debugLabel + ' AI: ' + context.task.substring(0, 50) + '...',
             vscode.CompletionItemKind.Snippet
         );
         
@@ -223,7 +265,7 @@ async function exportSnippets() {
 
         vscode.window.showInformationMessage(
             `Snippets exported to: ${exportPath}\n` +
-            'Share this folder with your Kollegen!'
+            'Share this folder with your colleagues!'
         );
     } catch (error) {
         vscode.window.showErrorMessage(`Export failed: ${error.message}`);
@@ -231,7 +273,7 @@ async function exportSnippets() {
 }
 
 /**
- * Import snippets from Kollegen
+ * Import snippets from colleagues
  */
 async function importSnippets() {
     const importUri = await vscode.window.showOpenDialog({
@@ -304,6 +346,13 @@ function showWelcomeMessage(context) {
  */
 function deactivate() {
     console.log('DBI Test Survival Kit deactivated');
+    
+    if (debugHelper) {
+        debugHelper.dispose();
+    }
+    if (queryCache) {
+        queryCache.clear();
+    }
 }
 
 module.exports = {

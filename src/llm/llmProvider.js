@@ -7,8 +7,10 @@ const https = require('https');
 const http = require('http');
 
 class LLMProvider {
-    constructor() {
+    constructor(debugHelper = null, queryCache = null) {
         this.config = null;
+        this.debugHelper = debugHelper;
+        this.queryCache = queryCache;
         this.updateConfig();
     }
 
@@ -32,18 +34,57 @@ class LLMProvider {
     /**
      * Sendet Query an LLM
      * @param {string} prompt - Der Prompt für das LLM
+     * @param {Object} context - Context für Caching
      * @returns {Promise<string>} Die generierte SQL-Query
      */
-    async query(prompt) {
+    async query(prompt, context = null) {
         if (!this.config.enabled) {
             return null;
         }
 
+        const startTime = Date.now();
+
         try {
+            // Check cache first
+            if (this.queryCache && context) {
+                const cached = this.queryCache.get(context);
+                if (cached) {
+                    if (this.debugHelper) {
+                        this.debugHelper.logCacheHit(context.task);
+                    }
+                    return cached;
+                }
+            }
+
+            // Log request start
+            if (this.debugHelper && context) {
+                this.debugHelper.logRequestStart(context.task, context.schemas);
+            }
+
+            // Query LLM
             const response = await this.sendRequest(prompt);
-            return this.extractSQL(response);
+            const sqlQuery = this.extractSQL(response);
+
+            // Cache result
+            if (this.queryCache && context && sqlQuery) {
+                this.queryCache.set(context, sqlQuery);
+            }
+
+            // Log success
+            if (this.debugHelper) {
+                const duration = Date.now() - startTime;
+                this.debugHelper.logRequestSuccess(sqlQuery, duration);
+            }
+
+            return sqlQuery;
+
         } catch (error) {
             console.error('[DBI Survival Kit] LLM query failed:', error.message);
+            
+            if (this.debugHelper) {
+                this.debugHelper.logRequestError(error);
+            }
+            
             return null;
         }
     }

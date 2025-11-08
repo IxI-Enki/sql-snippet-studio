@@ -14,13 +14,21 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 - ✅ **Oracle PL/SQL Specific** - Sequences, Triggers, Packages, Procedures
 - ✅ **Common Patterns** - JOINs, CTEs, Aggregations, Transactions
 
+### 🤖 **AI-Powered Query Suggestions (NEW in v1.1.0!)**
+- **LLM-Assisted Tab-Completion** - Generates SQL queries from task descriptions
+- **Context-Aware** - Automatically reads schema and task from your file
+- **Subtle & Invisible** - Appears as normal IntelliSense
+- **Offline-Ready** - Works with local LLMs (LM Studio, Ollama)
+- **Smart Caching** - Caches responses for faster repeated queries
+- **Debug Mode** - Visual feedback for development & testing
+
 ### 🧠 **Intelligent Tab-Completion**
 - Context-aware suggestions
 - Auto-completes foreign keys
 - Smart dimension/fact table detection
 - Optimized for test scenarios
 
-### 🤝 **Share with Kollegen**
+### 🤝 **Share with Colleagues**
 - Export your custom snippets
 - Import snippets from team
 - Merge and collaborate
@@ -28,7 +36,7 @@ Perfect for DBI tests when you can't use external LLMs but tab-completion is all
 
 ### 📦 **100% Offline**
 - No internet connection required
-- No external API calls
+- No external API calls (unless you enable LLM)
 - Instant performance
 - Works during screen recording
 
@@ -47,7 +55,7 @@ code --install-extension .
 
 2. **From VSIX** (Production):
 ```bash
-code --install-extension dbi-test-survival-kit-1.0.0.vsix
+code --install-extension dbi-test-survival-kit-1.1.0.vsix
 ```
 
 ### Usage
@@ -121,24 +129,27 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 
 | Shortcut | Command |
 |----------|---------|
-| `Ctrl+Shift+S` | Insert Star Schema |
-| `Ctrl+Shift+D` | Insert Dimension Table |
-| `Ctrl+Shift+F` | Insert Fact Table |
+| `Ctrl+Alt+Shift+S` | Insert Star Schema |
+| `Ctrl+Alt+Shift+D` | Insert Dimension Table |
+| `Ctrl+Alt+Shift+F` | Insert Fact Table |
+| `Ctrl+Alt+Shift+L` | Show LLM Statistics |
+
+**Note:** Changed to `Ctrl+Alt+Shift` to avoid conflicts with built-in shortcuts!
 
 ---
 
-## 🤝 Sharing with Kollegen
+## 🤝 Sharing with Colleagues
 
 ### Export Snippets
 1. Press `Ctrl+Shift+P`
 2. Type: `DBI: Export Snippets`
 3. Choose save location
-4. Share folder with Kollegen
+4. Share folder with colleagues
 
 ### Import Snippets
 1. Press `Ctrl+Shift+P`
 2. Type: `DBI: Import Snippets`
-3. Select folder from Kollegen
+3. Select folder from colleagues
 4. Reload VS Code
 
 ### Manual Sharing
@@ -146,6 +157,56 @@ Simply share the JSON files from:
 ```
 D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\snippets\
 ```
+
+---
+
+## 🤖 AI-Powered Completion (v1.1.0+)
+
+### Quick Setup
+
+1. **Enable LLM** in settings:
+   ```json
+   {
+     "dbiSurvivalKit.llm.enabled": true,
+     "dbiSurvivalKit.llm.endpoint": "http://localhost:1234/v1/chat/completions",
+     "dbiSurvivalKit.llm.model": "qwen2.5-coder"
+   }
+   ```
+
+2. **Use it in tests:**
+   - Copy teacher's schema into your `.sql` file
+   - Add task as comment: `-- Task: Find all books after 2000`
+   - Position cursor below task
+   - Press `Ctrl+Space` or start typing
+   - Select the `🤖 AI: ...` suggestion
+   - **Boom!** Query appears!
+
+### Debug Mode
+
+Enable visual feedback during development:
+
+```json
+{
+  "dbiSurvivalKit.llm.showDebugInfo": true,
+  "dbiSurvivalKit.llm.showNotifications": true,
+  "dbiSurvivalKit.llm.verboseLogging": true
+}
+```
+
+**Features:**
+- 📊 Status bar shows LLM activity
+- 🔔 Toast notifications for requests
+- 📝 Verbose logging to output channel
+- 🏷️ Debug labels in completion items
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `DBI: Show LLM Statistics` | View request count, cache hits, etc. |
+| `DBI: Clear LLM Cache` | Clear cached responses |
+
+See [LLM_FEATURE.md](LLM_FEATURE.md) for detailed documentation!
 
 ---
 
@@ -260,6 +321,15 @@ MIT License - Use and share freely!
 ---
 
 ## 🎯 Version History
+
+### 1.1.0 (2025-11-08)
+- 🤖 **NEW:** AI-Powered Query Suggestions
+- 📊 **NEW:** Debug Mode with Status Bar & Notifications
+- ⚡ **NEW:** Smart Caching for LLM Responses
+- ⌨️ **IMPROVED:** Better Keyboard Shortcuts (Ctrl+Alt+Shift)
+- 🌍 **IMPROVED:** Full English terminology ("Colleagues" instead of "Kollegen")
+- 🐛 **FIXED:** Error handling & timeout feedback
+- 📚 **DOCS:** Added LLM_FEATURE.md
 
 ### 1.0.0 (2025-11-07)
 - ✅ Initial release

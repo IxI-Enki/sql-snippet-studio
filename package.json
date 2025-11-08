@@ -2,7 +2,7 @@
   "name": "dbi-test-survival-kit",
   "displayName": "DBI Test Survival Kit",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {
@@ -121,6 +121,21 @@
           "type": "number",
           "default": 10000,
           "description": "Request timeout in milliseconds"
+        },
+        "dbiSurvivalKit.llm.showDebugInfo": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show debug information (status bar, labels in completions)"
+        },
+        "dbiSurvivalKit.llm.showNotifications": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show toast notifications for LLM requests"
+        },
+        "dbiSurvivalKit.llm.verboseLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging to output channel"
         }
       }
     },
@@ -139,31 +154,45 @@
       },
       {
         "command": "dbiSurvivalKit.shareSnippets",
-        "title": "DBI: Export Snippets for Kollegen"
+        "title": "DBI: Export Snippets for Colleagues"
       },
       {
         "command": "dbiSurvivalKit.importSnippets",
-        "title": "DBI: Import Snippets from Kollegen"
+        "title": "DBI: Import Snippets from Colleagues"
+      },
+      {
+        "command": "dbiSurvivalKit.showLLMStats",
+        "title": "DBI: Show LLM Statistics"
+      },
+      {
+        "command": "dbiSurvivalKit.clearCache",
+        "title": "DBI: Clear LLM Cache"
       }
     ],
     "keybindings": [
       {
         "command": "dbiSurvivalKit.insertStarSchema",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s",
-        "when": "editorTextFocus && editorLangId == sql"
+        "key": "ctrl+alt+shift+s",
+        "mac": "cmd+alt+shift+s",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       },
       {
         "command": "dbiSurvivalKit.insertDimensionTable",
-        "key": "ctrl+shift+d",
-        "mac": "cmd+shift+d",
-        "when": "editorTextFocus && editorLangId == sql"
+        "key": "ctrl+alt+shift+d",
+        "mac": "cmd+alt+shift+d",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       },
       {
         "command": "dbiSurvivalKit.insertFactTable",
-        "key": "ctrl+shift+f",
-        "mac": "cmd+shift+f",
-        "when": "editorTextFocus && editorLangId == sql"
+        "key": "ctrl+alt+shift+f",
+        "mac": "cmd+alt+shift+f",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+      },
+      {
+        "command": "dbiSurvivalKit.showLLMStats",
+        "key": "ctrl+alt+shift+l",
+        "mac": "cmd+alt+shift+l",
+        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       }
     ]
   },
