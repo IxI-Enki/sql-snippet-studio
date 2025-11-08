@@ -5,20 +5,21 @@
 Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 
 ### 📦 Projektstruktur
-```
+
+```file-tree
 04_dbi_test_survival_kit/
-├── ✅ package.json               # Extension manifest
-├── ✅ language-configuration.json # SQL config
-├── ✅ src/extension.js           # Extension logic (300+ lines)
+├── ✅ package.json                 # Extension manifest
+├── ✅ language-configuration.json  # SQL config
+├── ✅ src/extension.js             # Extension logic (300+ lines)
 ├── ✅ snippets/
-│   ├── ✅ shared-snippets.json   # 20+ gemeinsame Patterns
-│   ├── ✅ postgres-snippets.json # 25+ PostgreSQL Snippets
-│   └── ✅ oracle-snippets.json   # 25+ Oracle PL/SQL Snippets
-├── ✅ README.md                  # Vollständige Dokumentation
-├── ✅ SETUP_GUIDE.md             # Setup & Troubleshooting
-├── ✅ QUICKSTART.md              # 5-Minuten Quick Start
-├── ✅ PROJECT_CONTEXT.md         # Kontext für weiteres Arbeiten
-├── ✅ INSTALL.ps1                # PowerShell Installer
+│   ├── ✅ shared-snippets.json     # 20+ gemeinsame Patterns
+│   ├── ✅ postgres-snippets.json   # 25+ PostgreSQL Snippets
+│   └── ✅ oracle-snippets.json     # 25+ Oracle PL/SQL Snippets
+├── ✅ README.md                    # Vollständige Dokumentation
+├── ✅ SETUP_GUIDE.md               # Setup & Troubleshooting
+├── ✅ QUICKSTART.md                # 5-Minuten Quick Start
+├── ✅ PROJECT_CONTEXT.md           # Kontext für weiteres Arbeiten
+├── ✅ INSTALL.ps1                  # PowerShell Installer
 ├── ✅ .gitignore
 └── ✅ LICENSE (MIT)
 ```
@@ -26,27 +27,31 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 ### 🎨 Features Implementiert
 
 ✅ **300+ SQL Snippets**
-   - Star-Schema Templates
-   - Dimension & Fact Tables
-   - PostgreSQL spezifisch (SERIAL, JSONB, Arrays, etc.)
-   - Oracle PL/SQL spezifisch (Sequences, Triggers, Packages)
-   - Common SQL Patterns (JOINs, CTEs, Windows Functions)
+
+- Star-Schema Templates
+- Dimension & Fact Tables
+- PostgreSQL spezifisch (SERIAL, JSONB, Arrays, etc.)
+- Oracle PL/SQL spezifisch (Sequences, Triggers, Packages)
+- Common SQL Patterns (JOINs, CTEs, Windows Functions)
 
 ✅ **Intelligent Tab-Completion**
-   - Context-aware suggestions
-   - Auto-detects DIM/FACT tables
-   - Smart FK suggestions
+
+- Context-aware suggestions
+- Auto-detects DIM/FACT tables
+- Smart FK suggestions
 
 ✅ **Commands & Keybindings**
-   - `Ctrl+Shift+S` → Star Schema
-   - `Ctrl+Shift+D` → Dimension Table
-   - `Ctrl+Shift+F` → Fact Table
-   - Export/Import für colleagues
+
+- `Ctrl+Shift+S` → Star Schema
+- `Ctrl+Shift+D` → Dimension Table
+- `Ctrl+Shift+F` → Fact Table
+- Export/Import für colleagues
 
 ✅ **100% Offline**
-   - Keine Internet-Verbindung nötig
-   - Keine externen Dependencies
-   - Sofort einsatzbereit
+
+- Keine Internet-Verbindung nötig
+- Keine externen Dependencies
+- Sofort einsatzbereit
 
 ---
 
@@ -116,9 +121,10 @@ Dann hast du: `dbi-test-survival-kit-1.0.0.vsix` zum Teilen!
 ### Training
 
 1. **Öffne alte Übungen:**
-   - https://github.com/IxI-Enki/DBI_2025_26_uebung_01
-   - https://github.com/IxI-Enki/DBI_2025_26_uebung_02
-   - https://github.com/IxI-Enki/DBI_2025_26_uebung_05
+
+   - [DBI_2025_26_uebung_01](https://github.com/IxI-Enki/DBI_2025_26_uebung_01)
+   - [DBI_2025_26_uebung_02](https://github.com/IxI-Enki/DBI_2025_26_uebung_02)
+   - [DBI_2025_26_uebung_05](https://github.com/IxI-Enki/DBI_2025_26_uebung_05)
 
 2. **Löse mit Snippets:**
    - Benutze die Extension
@@ -126,6 +132,7 @@ Dann hast du: `dbi-test-survival-kit-1.0.0.vsix` zum Teilen!
    - Lerne die Trigger auswendig
 
 3. **Exportiere Final Version:**
+
    ```powershell
    # Ctrl+Shift+P → DBI: Export Snippets
    # Speichere auf USB Stick
@@ -155,6 +162,7 @@ git push -u origin main
 ```
 
 Dann können colleagues:
+
 ```bash
 git clone <repo-url>
 cd dbi-test-survival-kit
@@ -169,6 +177,7 @@ vsce package
 ```
 
 colleagues installieren:
+
 ```powershell
 code --install-extension dbi-test-survival-kit-1.0.0.vsix
 ```
@@ -186,12 +195,14 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 ## 📊 Snippet Übersicht
 
 ### Star-Schema (shared-snippets.json)
+
 - `star-schema` - Komplettes Star Schema
 - `dim-table` - Dimension Table mit SCD Type 2
 - `fact-table` - Fact Table mit Measures
 - `dim-time` - Standard Time Dimension
 
 ### PostgreSQL (postgres-snippets.json)
+
 - `pg-create-table` - Table mit SERIAL + Triggers
 - `pg-function` - plpgsql Function
 - `pg-trigger` - Trigger mit Function
@@ -200,6 +211,7 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 - ... und 20+ mehr
 
 ### Oracle (oracle-snippets.json)
+
 - `ora-create-table` - Table mit Sequence + Triggers
 - `ora-procedure` - Stored Procedure
 - `ora-function` - Function
@@ -216,6 +228,7 @@ Falls du Zeit hast und noch mehr willst:
 ### Idee 1: Import aus alten Übungen
 
 Script das automatisch Patterns aus deinen GitHub Repos extrahiert:
+
 ```powershell
 # Analyze-DBI-Exercises.ps1
 # Scannt alte Übungen
@@ -225,6 +238,7 @@ Script das automatisch Patterns aus deinen GitHub Repos extrahiert:
 ### Idee 2: Visual Schema Builder
 
 Extension mit GUI zum Star-Schema bauen:
+
 - Drag & Drop Dimensions
 - Visual Relationship Editor
 - Auto-generate SQL
@@ -232,6 +246,7 @@ Extension mit GUI zum Star-Schema bauen:
 ### Idee 3: Query Optimizer
 
 Analyze SQL queries und suggest optimizations:
+
 - Missing indexes
 - Better JOIN strategies
 - Query rewrite suggestions
@@ -239,6 +254,7 @@ Analyze SQL queries und suggest optimizations:
 ### Idee 4: Integration mit D:\USE.ps1
 
 Verbinde Extension mit deinem lokalen LLM:
+
 - Context-aware suggestions from LLM
 - Schema analysis
 - Query generation
@@ -294,16 +310,18 @@ Falls irgendwas nicht funktioniert:
 
 ---
 
-## 🚀 Ready to Launch!
+## 🚀 Ready to Launch! 🚀
 
-Die Extension ist **production-ready**! 
+Die Extension ist **production-ready**!
 
 **Nächster Schritt:**
+
 ```powershell
 .\INSTALL.ps1
 ```
 
 Dann öffne eine `.sql` Datei und type:
+
 ```sql
 star-schema
 ```
