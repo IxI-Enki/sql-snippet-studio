@@ -411,4 +411,3 @@ MIT License - Use and share freely!
 
 <!-- markdownlint-disable-next-line MD036 -->
 **Happy Coding! May your queries be fast and your schemas normalized! 🚀**
-<!-- markdownlint-enable-next-line MD036 -->
