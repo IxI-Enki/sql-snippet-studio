@@ -101,6 +101,100 @@ function registerCommands(context) {
             importSnippets();
         })
     );
+
+    // NEW: Direct LLM Query Command (Ctrl+Alt+Shift+Q)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('dbiSurvivalKit.queryLLM', async () => {
+            await executeLLMQuery();
+        })
+    );
+}
+
+/**
+ * Execute LLM Query on current cursor position
+ * This is the MAIN function that users will trigger via keyboard shortcut
+ */
+async function executeLLMQuery() {
+    try {
+        const editor = vscode.window.activeTextEditor;
+        
+        if (!editor) {
+            vscode.window.showErrorMessage('No active editor!');
+            return;
+        }
+
+        // Check if LLM is enabled
+        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
+        const isEnabled = config.get('enabled', false);
+        
+        if (!isEnabled) {
+            vscode.window.showWarningMessage('🤖 LLM is disabled! Enable it in settings: dbiSurvivalKit.llm.enabled');
+            return;
+        }
+
+        // Show immediate feedback
+        vscode.window.showInformationMessage('🤖 Querying LLM...');
+        
+        if (debugHelper) {
+            debugHelper.updateStatusBar('requesting');
+            debugHelper.log('[COMMAND] LLM Query triggered by user');
+        }
+
+        const document = editor.document;
+        const position = editor.selection.active;
+        const documentText = document.getText();
+        
+        // Build context
+        const contextBuilder = new ContextBuilder();
+        const context = contextBuilder.buildContext(documentText, position.line);
+        
+        if (!context || !context.task) {
+            vscode.window.showWarningMessage('❌ No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Aufgabe 1: ...');
+            if (debugHelper) {
+                debugHelper.log('[COMMAND] No task found');
+                debugHelper.updateStatusBar('idle');
+            }
+            return;
+        }
+
+        if (debugHelper) {
+            debugHelper.log(`[COMMAND] Task found: "${context.task}"`);
+            debugHelper.log(`[COMMAND] Schemas found: ${context.schemas.length}`);
+        }
+
+        // Query LLM
+        const llmProvider = new LLMProvider(debugHelper, queryCache);
+        const sqlQuery = await llmProvider.query(context.prompt, context);
+
+        if (!sqlQuery) {
+            vscode.window.showErrorMessage('❌ LLM returned empty response!\n\nCheck:\n- LM Studio is running\n- Model is loaded\n- Server is on port 1234');
+            if (debugHelper) {
+                debugHelper.log('[COMMAND] LLM returned empty query');
+                debugHelper.updateStatusBar('error');
+            }
+            return;
+        }
+
+        if (debugHelper) {
+            debugHelper.log(`[COMMAND] LLM returned query: ${sqlQuery.substring(0, 200)}...`);
+            debugHelper.updateStatusBar('idle');
+        }
+
+        // Insert the query at cursor position
+        await editor.edit(editBuilder => {
+            editBuilder.insert(position, '\n' + sqlQuery + '\n');
+        });
+
+        vscode.window.showInformationMessage(`✅ LLM Query inserted! (${sqlQuery.length} chars)`);
+
+    } catch (error) {
+        vscode.window.showErrorMessage(`❌ LLM Error: ${error.message}`);
+        if (debugHelper) {
+            debugHelper.log(`[COMMAND] Error: ${error.message}`);
+            debugHelper.logError(error);
+            debugHelper.updateStatusBar('error');
+        }
+    }
 }
 
 /**
@@ -114,8 +208,17 @@ function registerCompletionProvider(context) {
         ['sql', 'plsql'],
         {
             async provideCompletionItems(document, position) {
+                // DEBUG: Log every invocation
+                if (debugHelper) {
+                    debugHelper.log(`[TRIGGER] provideCompletionItems called at line ${position.line}, char ${position.character}`);
+                }
+
                 const linePrefix = document.lineAt(position).text.substr(0, position.character);
                 const completions = [];
+
+                if (debugHelper) {
+                    debugHelper.log(`[TRIGGER] Line prefix: "${linePrefix}"`);
+                }
 
                 // Standard completions (existing)
                 if (linePrefix.includes('CREATE TABLE')) {
@@ -155,7 +258,7 @@ function registerCompletionProvider(context) {
                 return completions;
             }
         },
-        '.' // Trigger on dot
+        '.', ' ', ';', '-', 'S', 'E', 'L', 'C', 'T'  // Trigger on: dot, space, semicolon, dash, SQL keywords
     );
 
     context.subscriptions.push(provider);
@@ -166,21 +269,51 @@ function registerCompletionProvider(context) {
  */
 async function getLLMCompletion(document, position, contextBuilder, llmProvider) {
     try {
+        // Check if LLM is enabled in settings
+        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
+        const isEnabled = config.get('enabled', false);
+        
+        if (!isEnabled) {
+            if (debugHelper) {
+                debugHelper.log('LLM is disabled in settings');
+            }
+            return null;
+        }
+
         const documentText = document.getText();
         const cursorLine = position.line;
+
+        if (debugHelper) {
+            debugHelper.log(`LLM triggered at line ${cursorLine}`);
+        }
 
         // Build context from document
         const context = contextBuilder.buildContext(documentText, cursorLine);
         
         if (!context || !context.task) {
+            if (debugHelper) {
+                debugHelper.log('No task found at cursor position');
+            }
             return null; // No task found
+        }
+
+        if (debugHelper) {
+            debugHelper.log(`Task found: "${context.task}"`);
+            debugHelper.log(`Schemas found: ${context.schemas.length}`);
         }
 
         // Query LLM (with context for caching)
         const sqlQuery = await llmProvider.query(context.prompt, context);
 
         if (!sqlQuery) {
+            if (debugHelper) {
+                debugHelper.log('LLM returned empty query');
+            }
             return null;
+        }
+
+        if (debugHelper) {
+            debugHelper.log(`LLM generated query: ${sqlQuery.substring(0, 100)}...`);
         }
 
         // Create completion item with debug label

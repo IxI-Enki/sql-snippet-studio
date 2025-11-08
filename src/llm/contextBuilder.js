@@ -140,17 +140,22 @@ Provide only the SQL query (no explanations, no markdown, just the query):`;
     shouldTriggerCompletion(lineText, character) {
         const beforeCursor = lineText.substring(0, character).trim();
         
-        // Trigger nur wenn:
+        // Trigger wenn:
         // - Zeile leer ist
-        // - Zeile mit -- beginnt (Kommentar)
+        // - Zeile mit -- beginnt (Kommentar) 
         // - Nach einem Semikolon
+        // - Nach einem Space (Space getippt)
+        // - Zeile beginnt mit SQL Keywords (SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER)
+        const sqlKeywords = /^(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP|ALTER|WITH|FROM|WHERE|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|ORDER|HAVING)/i;
+        
         return (
             beforeCursor === '' ||
             beforeCursor.endsWith(';') ||
-            beforeCursor.startsWith('--')
+            beforeCursor.startsWith('--') ||
+            beforeCursor.endsWith(' ') ||
+            sqlKeywords.test(beforeCursor)
         );
     }
 }
 
 module.exports = ContextBuilder;
-

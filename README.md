@@ -129,6 +129,7 @@ code --install-extension dbi-test-survival-kit-1.1.2.vsix
 
 | Shortcut | Command |
 |----------|---------|
+| **`Ctrl+Alt+Shift+Q`** | **Query LLM for SQL Solution** 🤖 |
 | `Ctrl+Alt+Shift+S` | Insert Star Schema |
 | `Ctrl+Alt+Shift+D` | Insert Dimension Table |
 | `Ctrl+Alt+Shift+F` | Insert Fact Table |

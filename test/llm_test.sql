@@ -43,31 +43,21 @@ CREATE TABLE loans (
 -- AUFGABEN
 -- ════════════════════════════════════════════════════════
 
--- Aufgabe 1: Finde alle Bücher die nach dem Jahr 2000 veröffentlicht wurden
+-- Aufgabe 1: finde alle bücher die nach dem jahr 2000 veröffentlicht wurden
 
-SELECT * FROM books WHERE publication_year > 2000;
+-- Aufgabe 2: Zeige alle Autoren mit ihren Büchern (auch Autoren ohne Bücher)
 
+-- Autoren ohne Bücher:
 
--- Aufgabe 2: Zeige alle Autoren mit ihren Büchern (auch Autoren ohne Bücher
-
-SELECT * FROM authors LEFT JOIN books ON authors.author_id = books.author_id;
+-- Autoren mit Büchern: SELECT
 
 -- Aufgabe 3: Finde alle Mitglieder die aktuell Bücher ausgeliehen haben
 
-SELECT * FROM members LEFT JOIN loans ON members.member_id = loans.member_id WHERE loans.return_date IS NULL;
+-- Aufgabe 4: erstelle eine abfrage die die anzahl der bücher pro autor zeigt
 
--- Aufgabe 4: Erstelle eine Abfrage die die Anzahl der Bücher pro Autor zeigt
-
-SELECT authors.author_id, COUNT(books.book_id) AS book_count FROM authors LEFT JOIN books ON authors.author_id = books.author_id GROUP BY authors.author_id;
-
--- Aufgabe 5: Finde das meistgeliehene Buch
-
-SELECT books.book_id, COUNT(loans.loan_id) AS loan_count FROM books LEFT JOIN loans ON books.book_id = loans.book_id GROUP BY books.book_id ORDER BY loan_count DESC LIMIT 1;
+-- Aufgabe 5: finde das meistgeliehene buch
 
 -- Aufgabe 6: Zeige alle überfälligen Ausleihen (return_date < heute und noch nicht zurückgegeben)
-
-SELECT * FROM loans WHERE return_date < CURRENT_DATE AND return_date IS NOT NULL;
-SELECT * FROM loans WHERE return_date < CURRENT_DATE AND return_date IS NULL;
 
 -- ════════════════════════════════════════════════════════
 -- USAGE INSTRUCTIONS:

@@ -49,12 +49,11 @@ class DebugHelper {
      * Zeigt Status in Status Bar
      */
     updateStatusBar(state, message = '') {
-        if (!this.statusBarItem || !this.config.showDebugInfo) {
-            if (this.statusBarItem) {
-                this.statusBarItem.hide();
-            }
+        if (!this.statusBarItem) {
             return;
         }
+        
+        // ALWAYS show status bar (not just when debug is enabled)
 
         switch (state) {
             case 'idle':
@@ -101,6 +100,19 @@ class DebugHelper {
         }
 
         this.statusBarItem.show();
+    }
+
+    /**
+     * Simple log method for general messages
+     */
+    log(message) {
+        if (!this.outputChannel) {
+            return;
+        }
+        
+        if (this.config.verboseLogging) {
+            this.outputChannel.appendLine(`[${new Date().toLocaleTimeString()}] ${message}`);
+        }
     }
 
     /**
@@ -196,6 +208,20 @@ class DebugHelper {
     }
 
     /**
+     * Logs errors
+     */
+    logError(error) {
+        if (!this.outputChannel) {
+            return;
+        }
+        
+        this.outputChannel.appendLine(`[${new Date().toLocaleTimeString()}] ❌ ERROR: ${error.message}`);
+        if (error.stack) {
+            this.outputChannel.appendLine(error.stack);
+        }
+    }
+
+    /**
      * Zeigt Statistiken
      */
     showStats() {
@@ -254,4 +280,3 @@ class DebugHelper {
 }
 
 module.exports = DebugHelper;
-

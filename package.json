@@ -2,7 +2,7 @@
   "name": "dbi-test-survival-kit",
   "displayName": "DBI Test Survival Kit",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
-  "version": "1.1.2",
+  "version": "1.4.1",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {
@@ -164,10 +164,14 @@
         "command": "dbiSurvivalKit.showLLMStats",
         "title": "DBI: Show LLM Statistics"
       },
-      {
-        "command": "dbiSurvivalKit.clearCache",
-        "title": "DBI: Clear LLM Cache"
-      }
+            {
+              "command": "dbiSurvivalKit.clearCache",
+              "title": "DBI: Clear LLM Cache"
+            },
+            {
+              "command": "dbiSurvivalKit.queryLLM",
+              "title": "DBI: Query LLM for SQL Solution"
+            }
     ],
     "keybindings": [
       {
@@ -188,18 +192,24 @@
         "mac": "cmd+alt+shift+f",
         "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
       },
-      {
-        "command": "dbiSurvivalKit.showLLMStats",
-        "key": "ctrl+alt+shift+l",
-        "mac": "cmd+alt+shift+l",
-        "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
-      }
+            {
+              "command": "dbiSurvivalKit.showLLMStats",
+              "key": "ctrl+alt+shift+l",
+              "mac": "cmd+alt+shift+l",
+              "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+            },
+            {
+              "command": "dbiSurvivalKit.queryLLM",
+              "key": "ctrl+alt+shift+q",
+              "mac": "cmd+alt+shift+q",
+              "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
+            }
     ]
   },
   "scripts": {
     "test": "node ./test/runTest.js",
     "package": "vsce package",
-    "install-local": "code --install-extension dbi-test-survival-kit-1.1.2.vsix"
+    "install-local": "code --install-extension dbi-test-survival-kit-1.4.1.vsix"
   },
   "devDependencies": {
     "@types/vscode": "^1.80.0",
