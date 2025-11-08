@@ -2,6 +2,10 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
+// LLM-Integration
+const ContextBuilder = require('./llm/contextBuilder');
+const LLMProvider = require('./llm/llmProvider');
+
 /**
  * Extension activation entry point
  */
@@ -59,17 +63,20 @@ function registerCommands(context) {
 }
 
 /**
- * Register intelligent completion provider
+ * Register intelligent completion provider (with LLM support)
  */
 function registerCompletionProvider(context) {
+    const contextBuilder = new ContextBuilder();
+    const llmProvider = new LLMProvider();
+
     const provider = vscode.languages.registerCompletionItemProvider(
         ['sql', 'plsql'],
         {
-            provideCompletionItems(document, position) {
+            async provideCompletionItems(document, position) {
                 const linePrefix = document.lineAt(position).text.substr(0, position.character);
                 const completions = [];
 
-                // Detect context and provide smart suggestions
+                // Standard completions (existing)
                 if (linePrefix.includes('CREATE TABLE')) {
                     completions.push(createCompletion('DIM_ (Dimension Table)', 'DIM_', 
                         'Start of a dimension table name'));
@@ -90,6 +97,20 @@ function registerCompletionProvider(context) {
                         'Standard surrogate key for dimension'));
                 }
 
+                // LLM-based completion (NEW!)
+                if (contextBuilder.shouldTriggerCompletion(linePrefix, position.character)) {
+                    const llmCompletion = await getLLMCompletion(
+                        document, 
+                        position, 
+                        contextBuilder, 
+                        llmProvider
+                    );
+
+                    if (llmCompletion) {
+                        completions.push(llmCompletion);
+                    }
+                }
+
                 return completions;
             }
         },
@@ -97,6 +118,55 @@ function registerCompletionProvider(context) {
     );
 
     context.subscriptions.push(provider);
+}
+
+/**
+ * Get LLM-based completion for current context
+ */
+async function getLLMCompletion(document, position, contextBuilder, llmProvider) {
+    try {
+        const documentText = document.getText();
+        const cursorLine = position.line;
+
+        // Build context from document
+        const context = contextBuilder.buildContext(documentText, cursorLine);
+        
+        if (!context || !context.task) {
+            return null; // No task found
+        }
+
+        // Query LLM
+        const sqlQuery = await llmProvider.query(context.prompt);
+
+        if (!sqlQuery) {
+            return null;
+        }
+
+        // Create completion item
+        const completion = new vscode.CompletionItem(
+            '🤖 AI: ' + context.task.substring(0, 50) + '...',
+            vscode.CompletionItemKind.Snippet
+        );
+        
+        completion.insertText = sqlQuery;
+        completion.detail = 'AI-generated SQL query';
+        completion.documentation = new vscode.MarkdownString(
+            `**Task:** ${context.task}\n\n` +
+            `**Schema:**\n\`\`\`sql\n${context.schemaText}\n\`\`\`\n\n` +
+            `**Generated Query:**\n\`\`\`sql\n${sqlQuery}\n\`\`\`\n\n` +
+            `_Powered by LLM_`
+        );
+        
+        // Higher sort priority so it appears first
+        completion.sortText = '0000';
+        completion.preselect = true;
+
+        return completion;
+
+    } catch (error) {
+        console.error('[DBI Survival Kit] LLM completion failed:', error);
+        return null;
+    }
 }
 
 /**
