@@ -409,4 +409,3 @@ Memorize common ones:
 
 <!-- markdownlint-disable-next-line MD036 -->
 **Good luck on your DBI test! You got this! 🤓🤜🏻🤛🏻🤖**
-<!-- markdownlint-enable-next-line MD036 -->
