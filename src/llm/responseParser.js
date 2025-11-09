@@ -179,6 +179,9 @@ class ResponseParser {
         // 🔥 PHASE 1.3: Auto-fix ROLLUP Syntax (MySQL → PostgreSQL)
         sql = this.fixROLLUPSyntax(sql);
 
+        // 🔥 PHASE 2.1++: Auto-fix BY SOURCE Syntax (SQL Server → PostgreSQL)
+        sql = this.fixBySourceSyntax(sql);
+
         // Clean up multiple blank lines
         sql = sql.replace(/\n\s*\n\s*\n/g, '\n\n');
 
@@ -212,6 +215,42 @@ class ResponseParser {
                 this.log(`   After:  GROUP BY ROLLUP(${cleanColumns})`);
                 
                 return `GROUP BY ROLLUP(${cleanColumns})`;
+            });
+        }
+        
+        return sql;
+    }
+
+    /**
+     * 🔥 PHASE 2.1++: Fix BY SOURCE Syntax
+     * Converts SQL Server "MERGE ... WHEN NOT MATCHED BY SOURCE THEN DELETE" 
+     * to PostgreSQL "DELETE FROM ... WHERE key NOT IN (...)"
+     */
+    fixBySourceSyntax(sql) {
+        if (!sql) return sql;
+        
+        // Pattern: MERGE with BY SOURCE DELETE
+        const bySourcePattern = /MERGE\s+INTO\s+(\w+)\s+(\w+)\s+USING\s+\((.*?)\)\s+(\w+)\s+ON\s+\((.*?)\)\s+WHEN\s+NOT\s+MATCHED\s+BY\s+SOURCE\s+THEN\s+DELETE\s*;?/gis;
+        
+        if (bySourcePattern.test(sql)) {
+            sql = sql.replace(bySourcePattern, (match, targetTable, targetAlias, sourceQuery, sourceAlias, onCondition) => {
+                this.log(`🔧 Auto-fixing BY SOURCE: SQL Server → PostgreSQL`);
+                this.log(`   Before: MERGE INTO ${targetTable} ... BY SOURCE THEN DELETE`);
+                
+                // Extract key column from ON condition (e.g., "p.product_id = s.product_id")
+                const keyMatch = onCondition.match(/\w+\.(\w+)\s*=\s*\w+\.(\w+)/);
+                const keyColumn = keyMatch ? keyMatch[1] : 'id';
+                
+                // Extract column name from source query (e.g., "SELECT product_id FROM ...")
+                const sourceColumnMatch = sourceQuery.match(/SELECT\s+(\w+)/i);
+                const sourceColumn = sourceColumnMatch ? sourceColumnMatch[1] : keyColumn;
+                
+                // Generate PostgreSQL DELETE
+                const postgresDelete = `DELETE FROM ${targetTable} WHERE ${keyColumn} NOT IN (${sourceQuery.trim()})`;
+                
+                this.log(`   After:  ${postgresDelete}`);
+                
+                return postgresDelete;
             });
         }
         

@@ -66,8 +66,29 @@ CREATE TABLE Product_Change_Log (
 
 -- Aufgabe 2: Erweitere den MERGE Statement um nur Produkte zu updaten bei denen sich der Preis geändert hat
 
+MERGE INTO Products p
+USING (SELECT product_id, product_name, sku, category, price, stock_quantity, supplier_id FROM STG_Product_Updates) s
+ON (p.product_id = s.product_id)
+WHEN MATCHED THEN UPDATE SET 
+    p.product_name = s.product_name,
+    p.sku = s.sku,
+    p.category = s.category,
+    p.price = s.price,
+    p.stock_quantity = s.stock_quantity,
+    p.supplier_id = s.supplier_id,
+    p.last_updated = CURRENT_TIMESTAMP
+WHERE p.price <> s.price;
+
 
 -- Aufgabe 3: Erstelle einen MERGE Statement der Produkte löscht die in Products existieren aber nicht in STG_Product_Updates (WHEN NOT MATCHED BY SOURCE THEN DELETE)
+DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product_Updates);
+
+-- Aufgabe 3 zweiter versuch selbe query wie oben.
+MERGE INTO Products p
+USING (SELECT product_id FROM STG_Product_Updates) s
+ON (p.product_id = s.product_id)
+WHEN NOT MATCHED BY SOURCE THEN DELETE;
+
 
 
 -- ============================================================================

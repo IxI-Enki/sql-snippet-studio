@@ -182,14 +182,26 @@ COMPLETE STRUCTURE REQUIRED:
 🚨 POSTGRESQL DIALECT LIMITATIONS (CRITICAL!):
 
 1. ❌ "WHEN NOT MATCHED BY SOURCE THEN DELETE" → NOT SUPPORTED in PostgreSQL!
-   ⚠️ This is SQL Server/Oracle syntax ONLY!
-   ⚠️ If task asks for "delete rows not in source", DO NOT use "BY SOURCE"
    
-   WRONG (SQL Server/Oracle): 
+   ⚠️⚠️⚠️ IMPORTANT: The task description might MENTION "BY SOURCE" syntax! ⚠️⚠️⚠️
+   → This is SQL Server/Oracle syntax mentioned in the task
+   → DO NOT copy "BY SOURCE" syntax from the task into your SQL!
+   → PostgreSQL does NOT support "BY SOURCE" clause!
+   → IGNORE the "BY SOURCE" part and use PostgreSQL-compatible solution!
+   
+   TASK MIGHT SAY: "...WHEN NOT MATCHED BY SOURCE THEN DELETE"
+   → This is just describing SQL Server syntax
+   → DO NOT generate this literally!
+   
+   WRONG (SQL Server/Oracle - DO NOT GENERATE): 
    MERGE INTO target USING source ON (key) WHEN NOT MATCHED BY SOURCE THEN DELETE;
    
-   ✅ CORRECT (PostgreSQL): Use separate DELETE statement:
+   ✅ CORRECT (PostgreSQL - GENERATE THIS): 
    DELETE FROM target WHERE key NOT IN (SELECT key FROM source);
+   
+   ✅ OR: Use LEFT JOIN approach:
+   DELETE FROM target t
+   WHERE NOT EXISTS (SELECT 1 FROM source s WHERE s.key = t.key);
    
    ✅ OR: Explain that PostgreSQL does not support BY SOURCE clause
 

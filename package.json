@@ -2,7 +2,7 @@
   "name": "dbi-test-survival-kit",
   "displayName": "DBI Test Survival Kit",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {
@@ -217,7 +217,7 @@
   "scripts": {
     "test": "node ./test/runTest.js",
     "package": "vsce package",
-    "install-local": "code --install-extension dbi-test-survival-kit-1.8.2.vsix"
+    "install-local": "code --install-extension dbi-test-survival-kit-1.8.3.vsix"
   },
   "devDependencies": {
     "@types/vscode": "^1.80.0",
