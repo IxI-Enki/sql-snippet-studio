@@ -88,11 +88,36 @@ CREATE TABLE STG_Delivery (
 
 -- Aufgabe 1: Zeige alle Lieferungen mit Lager-, Produkt- und Lieferantendetails
 
+SELECT 
+    f.warehouse_key,
+    w.warehouse_name,
+    f.product_key,
+    p.product_name,
+    f.supplier_key,
+    s.supplier_name,
+    f.quantity_delivered,
+    f.quantity_ordered,
+    f.delivery_days,
+    f.on_time,
+    f.cost
+FROM 
+    FACT_Delivery f
+JOIN 
+    DIM_Warehouse w ON f.warehouse_key = w.warehouse_key
+JOIN 
+    DIM_Product p ON f.product_key = p.product_key
+JOIN 
+    DIM_Supplier s ON f.supplier_key = s.supplier_key;
+
 
 -- Aufgabe 2: Berechne die durchschnittliche Lieferzeit in Tagen pro Lieferant
 
+SELECT s.supplier_name, AVG(f.delivery_days) AS average_delivery_days FROM STG_Delivery f JOIN DIM_Supplier s ON f.supplier_code = s.supplier_code GROUP BY s.supplier_name;
+
 
 -- Aufgabe 3: Finde alle Lieferungen die nicht pünktlich waren (on_time = false)
+
+SELECT * FROM FACT_Delivery WHERE on_time = FALSE;
 
 
 -- Aufgabe 4: Berechne die Anzahl der Lieferungen pro Region (verwende DIM_Warehouse)
