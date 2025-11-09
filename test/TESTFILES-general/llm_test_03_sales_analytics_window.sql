@@ -13,6 +13,9 @@
 -- SCHEMA: Sales Performance Data Warehouse
 -- ============================================================================
 
+
+
+
 CREATE TABLE DIM_Salesperson (
     salesperson_key SERIAL PRIMARY KEY,
     salesperson_name VARCHAR(100) NOT NULL,

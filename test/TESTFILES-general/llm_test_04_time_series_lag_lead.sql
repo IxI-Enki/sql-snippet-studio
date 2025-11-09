@@ -47,11 +47,55 @@ CREATE TABLE FACT_Daily_Sales (
 
 -- Aufgabe 1: Zeige den täglichen Umsatz pro Produkt mit dem Umsatz des Vortages (verwende LAG)
 
+WITH daily_sales AS (
+    SELECT 
+        f.product_key,
+        d.full_date,
+        f.daily_revenue,
+        LAG(f.daily_revenue) OVER (PARTITION BY f.product_key ORDER BY d.full_date) AS previous_day_revenue
+    FROM 
+        FACT_Daily_Sales f
+    JOIN 
+        DIM_Time d ON f.time_key = d.time_key
+)
+SELECT 
+    product_key, 
+    full_date, 
+    daily_revenue, 
+    previous_day_revenue
+FROM 
+    daily_sales;
+
 
 -- Aufgabe 2: Berechne die prozentuale Veränderung des Umsatzes zum Vortag für jedes Produkt
 
+SELECT p.product_name, 
+       (f1.daily_revenue - f2.daily_revenue) / f2.daily_revenue * 100 AS revenue_change_percentage
+FROM FACT_Daily_Sales f1
+JOIN FACT_Daily_Sales f2 ON f1.time_key = f2.time_key + 1 AND f1.product_key = f2.product_key
+JOIN DIM_Product p ON f1.product_key = p.product_key;
+
 
 -- Aufgabe 3: Vergleiche den Umsatz jedes Monats mit dem Vorjahresmonat (Same Month Last Year) verwende LAG mit Offset 12
+
+WITH same_month_last_year AS (
+    SELECT 
+        t.time_key,
+        t.month,
+        f.daily_revenue,
+        LAG(f.daily_revenue, 12) OVER (PARTITION BY t.month ORDER BY t.time_key) AS prev_year_revenue
+    FROM 
+        FACT_Daily_Sales f
+    JOIN 
+        DIM_Time t ON f.time_key = t.time_key
+)
+SELECT 
+    month,
+    daily_revenue,
+    prev_year_revenue,
+    daily_revenue - prev_year_revenue AS revenue_difference
+FROM 
+    same_month_last_year;
 
 
 -- Aufgabe 4: Zeige den Umsatz mit dem Umsatz von vor 7 Tagen und in 7 Tagen (verwende LAG und LEAD)
