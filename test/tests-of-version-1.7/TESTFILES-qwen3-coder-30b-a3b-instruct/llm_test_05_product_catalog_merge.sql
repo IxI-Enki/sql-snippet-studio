@@ -111,3 +111,4 @@ CREATE TABLE Product_Change_Log (
 --   - PostgreSQL: ON CONFLICT statt MERGE (alternative Syntax möglich)
 --   - Oracle: MERGE INTO ... USING ... ON ...
 -- ============================================================================
+
