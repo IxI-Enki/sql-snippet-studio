@@ -183,6 +183,22 @@ ORDER BY
 
 -- Aufgabe 6: Erstelle einen Bericht mit Subtotals nach Kontinent, Land und Region (ROLLUP über geografische Hierarchie)
 
+SELECT 
+    c.continent,
+    co.country_name,
+    r.region_name,
+    SUM(f.total_amount) AS total_sales
+FROM FACT_Order f
+JOIN DIM_Customer cust ON f.customer_key = cust.customer_key
+JOIN DIM_City ci ON cust.city_key = ci.city_key
+JOIN DIM_Region r ON ci.region_key = r.region_key
+JOIN DIM_Country co ON r.country_key = co.country_key
+JOIN DIM_Region reg ON ci.region_key = reg.region_key
+JOIN DIM_Country cou ON reg.country_key = cou.country_key
+JOIN DIM_Time t ON f.time_key = t.time_key
+GROUP BY ROLLUP(c.continent, co.country_name, r.region_name)
+ORDER BY c.continent NULLS LAST, co.country_name NULLS LAST, r.region_name NULLS LAST;
+
 
 -- ============================================================================
 -- TEST TASKS - WINDOW FUNCTIONS
@@ -203,8 +219,35 @@ GROUP BY p.product_name, c.category_name, c.category_key;
 
 -- Aufgabe 8: Berechne den durchschnittlichen Bestellwert pro Kunde mit Vergleich zum Durchschnitt seiner Loyalty Tier (Window Functions)
 
+SELECT 
+    c.customer_key,
+    AVG(fo.total_amount) AS avg_order_value,
+    AVG(AVG(fo.total_amount)) OVER (PARTITION BY c.loyalty_tier) AS tier_avg_order_value
+FROM FACT_Order fo
+JOIN DIM_Customer c ON fo.customer_key = c.customer_key
+GROUP BY c.customer_key, c.loyalty_tier;
+
 
 -- Aufgabe 9: Identifiziere die Top 3 Produkte pro Department nach Verkaufsmenge (Window Functions mit PARTITION BY)
+
+WITH ranked_products AS (
+    SELECT 
+        d.department_name,
+        p.product_name,
+        SUM(f.quantity) AS total_quantity,
+        ROW_NUMBER() OVER (PARTITION BY d.department_key ORDER BY SUM(f.quantity) DESC) AS rn
+    FROM FACT_Order f
+    JOIN DIM_Product p ON f.product_key = p.product_key
+    JOIN DIM_Category c ON p.category_key = c.category_key
+    JOIN DIM_Department d ON c.department_key = d.department_key
+    GROUP BY d.department_key, d.department_name, p.product_name
+)
+SELECT 
+    department_name,
+    product_name,
+    total_quantity
+FROM ranked_products
+WHERE rn <= 3;
 
 
 -- ============================================================================
@@ -213,8 +256,27 @@ GROUP BY p.product_name, c.category_name, c.category_key;
 
 -- Aufgabe 10: Berechne die Conversion Rate pro Produktkategorie (abgeschlossene Bestellungen / Gesamtbestellungen)
 
+SELECT 
+    c.category_name,
+    CAST(SUM(CASE WHEN f.order_status = 'Completed' THEN 1 ELSE 0 END) AS FLOAT) * 100 / COUNT(*) AS conversion_rate
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+GROUP BY c.category_name
+ORDER BY conversion_rate DESC;
+
 
 -- Aufgabe 11: Berechne die Return Rate pro Department (zurückgegebene Bestellungen / abgeschlossene Bestellungen)
+
+SELECT 
+    d.department_name,
+    COALESCE(SUM(CASE WHEN f.order_status = 'Returned' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 0) AS return_rate_percentage
+FROM FACT_Order f
+JOIN DIM_Product p ON f.product_key = p.product_key
+JOIN DIM_Category c ON p.category_key = c.category_key
+JOIN DIM_Department d ON c.department_key = d.department_key
+WHERE f.order_status IN ('Completed', 'Returned')
+GROUP BY d.department_name;
 
 
 -- ============================================================================
@@ -223,8 +285,53 @@ GROUP BY p.product_name, c.category_name, c.category_key;
 
 -- Aufgabe 12: Segmentiere Kunden in Quartile basierend auf ihrem Gesamtumsatz (verwende NTILE Window Function)
 
+WITH customer_sales AS (
+    SELECT 
+        c.customer_key,
+        c.customer_name,
+        SUM(f.total_amount) AS total_sales
+    FROM DIM_Customer c
+    JOIN FACT_Order f ON c.customer_key = f.customer_key
+    GROUP BY c.customer_key, c.customer_name
+),
+ranked_customers AS (
+    SELECT 
+        customer_key,
+        customer_name,
+        total_sales,
+        NTILE(4) OVER (ORDER BY total_sales DESC) AS sales_quartile
+    FROM customer_sales
+)
+SELECT 
+    customer_key,
+    customer_name,
+    total_sales,
+    sales_quartile
+FROM ranked_customers
+ORDER BY sales_quartile, total_sales DESC;
+
 
 -- Aufgabe 13: Finde alle Kunden die im obersten Quartil ihres Landes liegen (NTILE mit PARTITION BY country)
+
+WITH customer_ranked AS (
+    SELECT 
+        c.customer_key,
+        c.customer_name,
+        co.country_name,
+        NTILE(4) OVER (PARTITION BY co.country_name ORDER BY COUNT(o.order_id) DESC) AS quartile
+    FROM DIM_Customer c
+    JOIN DIM_City ci ON c.city_key = ci.city_key
+    JOIN DIM_Region r ON ci.region_key = r.region_key
+    JOIN DIM_Country co ON r.country_key = co.country_key
+    LEFT JOIN FACT_Order o ON c.customer_key = o.customer_key
+    GROUP BY c.customer_key, c.customer_name, co.country_name
+)
+SELECT 
+    customer_key,
+    customer_name,
+    country_name
+FROM customer_ranked
+WHERE quartile = 1;
 
 
 -- ============================================================================
