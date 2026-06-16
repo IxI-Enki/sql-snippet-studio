@@ -281,9 +281,8 @@ After installation, ALL of these should be TRUE:
 
 ---
 
-**Version:** 1.8.4  
+**Version:** 1.8.7  
 **Status:** ✅ Ready for deployment  
 **Priority:** 🔥 CRITICAL
 
 **DEPLOY NOW!** 🚀
-

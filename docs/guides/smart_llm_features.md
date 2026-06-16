@@ -1,4 +1,4 @@
-# 🚀 Smart LLM Features v1.6.0
+# 🚀 Smart LLM Features (introduced in v1.6.0)
 
 ## **What's New**
 
@@ -203,7 +203,7 @@ Unmatched parentheses: missing closing
 Validated with the following models:
 
 | Model | Before v1.6.0 | After v1.6.0 | Notes |
-|-------|--------------|-------------|-------|
+| ----- | ------------- | ------------- | ----- |
 | **qwen2.5-7b-instruct** | ✅ Good | ✅ Perfect | Clean extraction |
 | **qwen2.5-vl-7b** | ✅ Good | ✅ Perfect | Handles markdown |
 | **osmosis-mcp-4b** | ❌ Failed (`<think>` blocks) | ✅ Good | Parser removes reasoning |
@@ -275,5 +275,5 @@ No more manual cleanup of `<think>` blocks, explanations, or markdown!
 
 ---
 
-**Version:** 1.6.0  
-**Date:** November 2025
+> **Version:** 1.8.7  
+> **Date:** 2025-11-09
