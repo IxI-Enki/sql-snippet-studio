@@ -1,15 +1,23 @@
-# Node modules
+# Dependencies
 node_modules/
 
-# Build output
+# Build / packaging
 *.vsix
 *.tgz
 
-# OS files
+# Local test suite (keep locally, do not version)
+test/
+
+# Tooling cache
+.cache/
+graphify-out/
+
+# OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# IDE
+# IDE (local settings only)
 .vscode/
 .idea/
 
@@ -17,6 +25,5 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Temporary files
+# Temp
 *.tmp
-.cache/
