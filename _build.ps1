@@ -1,23 +1,22 @@
 #!/usr/bin/env pwsh
-Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  Building VSIX v1.1.0" -ForegroundColor Green
-Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host ""
+$pkg = Get-Content (Join-Path $PSScriptRoot "package.json") -Raw | ConvertFrom-Json
+$name = $pkg.name
+$displayName = $pkg.displayName
+$version = $pkg.version
 
-# Remove old VSIX
-Write-Host "Removing old VSIX files..." -ForegroundColor Yellow
-Remove-Item "dbi-test-survival-kit-*.vsix" -Force -ErrorAction SilentlyContinue
+Write-Host "[INFO] Building $displayName v$version"
 
-# Package
-Write-Host "Packaging extension..." -ForegroundColor Yellow
+Write-Host "[INFO] Removing old VSIX files..."
+Get-ChildItem -Path $PSScriptRoot -Filter "$name-*.vsix" -ErrorAction SilentlyContinue | Remove-Item -Force
+
+Write-Host "[INFO] Packaging extension..."
+Set-Location $PSScriptRoot
 vsce package --no-dependencies
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host ""
-    Write-Host "✅ Successfully created VSIX!" -ForegroundColor Green
-    Get-ChildItem "dbi-test-survival-kit-*.vsix" | Format-List Name, Length, LastWriteTime
+    Write-Host "[OK] Successfully created VSIX"
+    Get-ChildItem -Path $PSScriptRoot -Filter "$name-*.vsix" | Format-List Name, Length, LastWriteTime
 } else {
-    Write-Host ""
-    Write-Host "❌ Failed to create VSIX!" -ForegroundColor Red
+    Write-Host "[ERROR] Failed to create VSIX"
     exit 1
 }
