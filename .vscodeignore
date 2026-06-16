@@ -1,0 +1,14 @@
+.cursor/**
+graphify-out/**
+test/**
+bug-fixes/**
+scriptfiles-probably-all-obsolete/**
+AGENTS.md
+.git/**
+.gitignore
+node_modules/**
+*.vsix
+docs/archive/**
+docs/superpowers/**
+package-lock.json
+_build.ps1

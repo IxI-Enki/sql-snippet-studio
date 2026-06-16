@@ -1,4 +1,4 @@
-# DBI Survival Kit
+# SQL Snippet Studio
 
 **Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL** — a VS Code / Cursor extension for writing database queries without depending on the web.
 
@@ -6,7 +6,13 @@
 
 ## What it is
 
-DBI Survival Kit is a lightweight extension that brings **300+ SQL snippets**, **star-schema templates**, and **optional local LLM assistance** into your editor. Core features work fully offline; connect a local model (LM Studio, Ollama, etc.) only when you want AI-generated query suggestions.
+SQL Snippet Studio is a lightweight extension that brings **300+ SQL snippets**, **star-schema templates**, and **optional local LLM assistance** into your editor. Core features work fully offline; connect a local model (LM Studio, Ollama, etc.) only when you want AI-generated query suggestions.
+
+---
+
+## Built for HTL DBI — useful beyond the classroom
+
+Designed for database courses at HTL, but built as a daily SQL companion: offline snippets, star-schema templates, and optional local LLM work the same in class, internships, and professional projects. No emergency-kit vibe — just a focused snippet studio for PostgreSQL and Oracle.
 
 ---
 
@@ -40,7 +46,7 @@ Full documentation lives under **[docs/](docs/README.md)**:
 | Setup & troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
 | Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
 | LLM features (v1.6+) | [docs/guides/smart_llm_features.md](docs/guides/smart_llm_features.md) |
-| Latest changes | [docs/changelogs/changelog_v1_8_7.md](docs/changelogs/changelog_v1_8_7.md) |
+| Latest changes | [docs/changelogs/changelog_v2_0_0.md](docs/changelogs/changelog_v2_0_0.md) |
 
 ---
 

@@ -32,7 +32,7 @@ code --uninstall-extension dbi-team.dbi-test-survival-kit
 Or manually:
 1. Open VS Code
 2. Extensions view (Ctrl+Shift+X)
-3. Find "DBI Survival Kit"
+3. Find "SQL Snippet Studio"
 4. Click gear icon → Uninstall
 5. **Close ALL VS Code windows!**
 
@@ -72,7 +72,7 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 #### **✅ Check 1: Runtime Status**
 
 1. Open Extensions view (Ctrl+Shift+X)
-2. Click on "DBI Survival Kit"
+2. Click on "SQL Snippet Studio"
 3. Click "Runtime Status" tab
 4. **Expected:** "Activation: Activated"
 5. **Expected:** No error messages
@@ -101,14 +101,14 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 #### **✅ Check 3: Commands**
 
 1. Open Command Palette (Ctrl+Shift+P)
-2. Type: `DBI:`
+2. Type: `SQL:`
 3. **Expected:** All commands visible:
-   - DBI: Query LLM for SQL Solution
-   - DBI: Show LLM Statistics
-   - DBI: Clear LLM Cache
-   - DBI: Insert Star Schema Template
-   - DBI: Insert Dimension Table
-   - DBI: Insert Fact Table
+   - SQL: Query LLM for SQL Solution
+   - SQL: Show LLM Statistics
+   - SQL: Clear LLM Cache
+   - SQL: Insert Star Schema Template
+   - SQL: Insert Dimension Table
+   - SQL: Insert Fact Table
    - etc.
 
 **If commands missing:**
@@ -162,7 +162,7 @@ CREATE TABLE Customers (
 **If nothing happens:**
 - Check settings: `dbiSurvivalKit.llm.enabled` = true
 - Check LM Studio is running (http://localhost:1234)
-- Check Output panel → "DBI Survival Kit" for errors
+- Check Output panel → "SQL Snippet Studio" for errors
 
 ---
 
@@ -215,7 +215,7 @@ CREATE TABLE Customers (
 
 **Report:**
 1. Screenshot Runtime Status (with error messages)
-2. Output panel content ("DBI Survival Kit")
+2. Output panel content ("SQL Snippet Studio")
 3. Your VS Code version: Help → About
 4. Your OS: Windows/Mac/Linux
 

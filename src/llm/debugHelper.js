@@ -27,7 +27,7 @@ class DebugHelper {
         context.subscriptions.push(this.statusBarItem);
 
         // Output Channel
-        this.outputChannel = vscode.window.createOutputChannel('DBI Survival Kit - LLM');
+        this.outputChannel = vscode.window.createOutputChannel('SQL Snippet Studio - LLM');
         context.subscriptions.push(this.outputChannel);
 
         this.updateStatusBar('idle');

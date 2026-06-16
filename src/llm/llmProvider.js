@@ -109,7 +109,7 @@ class LLMProvider {
             return result;
 
         } catch (error) {
-            console.error('[DBI Survival Kit] LLM query failed:', error.message);
+            console.error('[SQL Snippet Studio] LLM query failed:', error.message);
             
             if (this.debugHelper) {
                 this.debugHelper.logRequestError(error);

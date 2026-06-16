@@ -1,6 +1,6 @@
-# DBI Survival Kit — Documentation
+# SQL Snippet Studio — Documentation
 
-Documentation for the **DBI Survival Kit** VS Code / Cursor extension (offline SQL snippets, IntelliSense, optional local LLM).
+Documentation for the **SQL Snippet Studio** VS Code / Cursor extension (offline SQL snippets, IntelliSense, optional local LLM).
 
 ---
 
@@ -18,10 +18,11 @@ Documentation for the **DBI Survival Kit** VS Code / Cursor extension (offline S
 
 ### Changelogs
 
-Version history in [changelogs/](changelogs/). **Latest:** [changelog_v1_8_7.md](changelogs/changelog_v1_8_7.md)
+Version history in [changelogs/](changelogs/). **Latest:** [changelog_v2_0_0.md](changelogs/changelog_v2_0_0.md)
 
 | Version | File |
 | ------- | ---- |
+| v2.0.0 | [changelog_v2_0_0.md](changelogs/changelog_v2_0_0.md) |
 | v1.8.7 | [changelog_v1_8_7.md](changelogs/changelog_v1_8_7.md) |
 | v1.8.6 | [changelog_v1_8_6.md](changelogs/changelog_v1_8_6.md) |
 | v1.8.5 | [changelog_v1_8_5.md](changelogs/changelog_v1_8_5.md) |

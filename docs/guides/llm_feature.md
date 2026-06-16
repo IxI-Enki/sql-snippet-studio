@@ -1,6 +1,6 @@
 # LLM-assisted SQL suggestions
 
-Optional AI-powered query suggestions for **DBI Survival Kit**. Works with any OpenAI-compatible local endpoint (LM Studio, Ollama, etc.) or remote API.
+Optional AI-powered query suggestions for **SQL Snippet Studio**. Works with any OpenAI-compatible local endpoint (LM Studio, Ollama, etc.) or remote API.
 
 ---
 
@@ -36,7 +36,7 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 
 ### Enable in VS Code / Cursor
 
-1. `Ctrl + ,` → search **DBI Survival Kit**
+1. `Ctrl + ,` → search **SQL Snippet Studio**
 2. Enable **Llm: Enabled**
 3. Configure endpoint and model:
 

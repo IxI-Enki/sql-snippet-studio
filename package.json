@@ -1,8 +1,8 @@
 {
-  "name": "dbi-test-survival-kit",
-  "displayName": "DBI Survival Kit",
-  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance",
-  "version": "1.8.7",
+  "name": "sql-snippet-studio",
+  "displayName": "SQL Snippet Studio",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance. Ideal for DBI courses and daily SQL work.",
+  "version": "2.0.0",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
   "engines": {
@@ -74,7 +74,7 @@
     }
   ],
     "configuration": {
-      "title": "DBI Survival Kit",
+      "title": "SQL Snippet Studio",
       "properties": {
         "dbiSurvivalKit.enableAutoCompletion": {
           "type": "boolean",
@@ -149,35 +149,35 @@
     "commands": [
       {
         "command": "dbiSurvivalKit.insertStarSchema",
-        "title": "DBI: Insert Star Schema Template"
+        "title": "SQL: Insert Star Schema Template"
       },
       {
         "command": "dbiSurvivalKit.insertDimensionTable",
-        "title": "DBI: Insert Dimension Table"
+        "title": "SQL: Insert Dimension Table"
       },
       {
         "command": "dbiSurvivalKit.insertFactTable",
-        "title": "DBI: Insert Fact Table"
+        "title": "SQL: Insert Fact Table"
       },
       {
         "command": "dbiSurvivalKit.shareSnippets",
-        "title": "DBI: Export Snippets for Colleagues"
+        "title": "SQL: Export Snippets for Colleagues"
       },
       {
         "command": "dbiSurvivalKit.importSnippets",
-        "title": "DBI: Import Snippets from Colleagues"
+        "title": "SQL: Import Snippets from Colleagues"
       },
       {
         "command": "dbiSurvivalKit.showLLMStats",
-        "title": "DBI: Show LLM Statistics"
+        "title": "SQL: Show LLM Statistics"
       },
             {
               "command": "dbiSurvivalKit.clearCache",
-              "title": "DBI: Clear LLM Cache"
+              "title": "SQL: Clear LLM Cache"
             },
             {
               "command": "dbiSurvivalKit.queryLLM",
-              "title": "DBI: Query LLM for SQL Solution"
+              "title": "SQL: Query LLM for SQL Solution"
             }
     ],
     "keybindings": [
@@ -216,7 +216,7 @@
   "scripts": {
     "test": "node ./test/runTest.js",
     "package": "vsce package",
-    "install-local": "code --install-extension dbi-test-survival-kit-1.8.7.vsix"
+    "install-local": "code --install-extension sql-snippet-studio-2.0.0.vsix"
   },
   "devDependencies": {
     "@types/vscode": "^1.80.0",

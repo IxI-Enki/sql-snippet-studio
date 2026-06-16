@@ -1,4 +1,4 @@
-# 🚀 Setup Guide - DBI Survival Kit
+# Setup Guide - SQL Snippet Studio
 
 ## 📋 Prerequisites
 
@@ -47,13 +47,13 @@ vsce package
 3. **Install VSIX:**
 
 ```powershell
-code --install-extension dbi-test-survival-kit-1.0.0.vsix
+code --install-extension sql-snippet-studio-2.0.0.vsix
 ```
 
 4. **Share with colleagues:**
 
 - Send them the `.vsix` file
-- They run: `code --install-extension dbi-test-survival-kit-1.0.0.vsix`
+- They run: `code --install-extension sql-snippet-studio-2.0.0.vsix`
 
 ---
 
@@ -104,8 +104,8 @@ code .
 ### Check 5: Commands
 
 1. Press `Ctrl+Shift+P`
-2. Type: `DBI:`
-3. All DBI commands should be listed
+2. Type: `SQL:`
+3. All SQL commands should be listed
 
 ---
 
@@ -145,7 +145,7 @@ If you only work with one database:
 ### Export your snippets
 
 ```powershell
-# Or use: Ctrl+Shift+P → DBI: Export Snippets
+# Or use: Ctrl+Shift+P → SQL: Export Snippets
 xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\snippets" "D:\dbi-backup\snippets" /E /I /Y
 ```
 
@@ -168,7 +168,7 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 **Solution 3:** Check extension is active
 
 - `Ctrl+Shift+P` → "Show Installed Extensions"
-- Search for "DBI Survival Kit"
+- Search for "SQL Snippet Studio"
 - Should show "Active"
 
 ### Issue: Wrong Suggestions Appearing
@@ -199,8 +199,10 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 **Solution 2:** Reinstall
 
 ```powershell
-code --uninstall-extension dbi-team.dbi-test-survival-kit
-code --install-extension dbi-test-survival-kit-1.0.0.vsix
+# Uninstall both IDs if upgrading from v1.8.x or after a partial v2 install
+code --uninstall-extension dbi-team.sql-snippet-studio
+code --uninstall-extension dbi-team.dbi-test-survival-kit   # pre-v2 extension ID
+code --install-extension sql-snippet-studio-2.0.0.vsix
 ```
 
 ---
@@ -215,9 +217,9 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 
 ### Method 2: Share Snippets Only
 
-1. Export snippets: `Ctrl+Shift+P` → `DBI: Export Snippets`
+1. Export snippets: `Ctrl+Shift+P` → `SQL: Export Snippets`
 2. Send folder to colleagues
-3. They import: `Ctrl+Shift+P` → `DBI: Import Snippets`
+3. They import: `Ctrl+Shift+P` → `SQL: Import Snippets`
 
 ### Method 3: Git Repository
 
@@ -239,7 +241,9 @@ git push -u origin main
 ```bash
 git clone <repo-url>
 cd dbi-test-survival-kit
-code --install-extension .
+npm install
+vsce package
+code --install-extension sql-snippet-studio-2.0.0.vsix
 ```
 
 <!-- markdownlint-enable MD029 -->
@@ -305,7 +309,7 @@ Open:
 ### Customize snippets
 
 - Add patterns you use often under `snippets/`
-- Export a backup via **DBI: Export Snippets**
+- Export a backup via **SQL: Export Snippets**
 
 ---
 

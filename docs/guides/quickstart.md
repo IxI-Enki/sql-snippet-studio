@@ -1,4 +1,4 @@
-# Quick Start — DBI Survival Kit
+# Quick Start — SQL Snippet Studio
 
 ## 5-minute setup
 
@@ -6,7 +6,7 @@
 
 **Option A: From VSIX (recommended)**
 
-1. Build or obtain `dbi-test-survival-kit-*.vsix`
+1. Build or obtain `sql-snippet-studio-*.vsix`
 2. In VS Code / Cursor: **Extensions → Install from VSIX…**
 3. Select the `.vsix` file
 
@@ -93,8 +93,8 @@ npx vsce package
 
 ## Share snippets
 
-- **Export:** `Ctrl+Shift+P` → **DBI: Export Snippets**
-- **Import:** `Ctrl+Shift+P` → **DBI: Import Snippets** → reload window
+- **Export:** `Ctrl+Shift+P` → **SQL: Export Snippets**
+- **Import:** `Ctrl+Shift+P` → **SQL: Import Snippets** → reload window
 
 ---
 

@@ -16,7 +16,7 @@ let queryCache = null;
  * Extension activation entry point
  */
 function activate(context) {
-    console.log('DBI Survival Kit is now active!');
+    console.log('SQL Snippet Studio is now active!');
 
     // Initialize global instances
     debugHelper = new DebugHelper();
@@ -372,7 +372,7 @@ async function getLLMCompletion(document, position, contextBuilder, llmProvider)
         return completion;
 
     } catch (error) {
-        console.error('[DBI Survival Kit] LLM completion failed:', error);
+        console.error('[SQL Snippet Studio] LLM completion failed:', error);
         return null;
     }
 }
@@ -495,7 +495,7 @@ function showWelcomeMessage(context) {
     
     if (!hasShownWelcome) {
         vscode.window.showInformationMessage(
-            'DBI Survival Kit activated! Type "star-schema" and press Tab to get started.',
+            'SQL Snippet Studio activated! Type "star-schema" and press Tab to get started.',
             'Show Commands'
         ).then(selection => {
             if (selection === 'Show Commands') {
@@ -511,7 +511,7 @@ function showWelcomeMessage(context) {
  * Extension deactivation
  */
 function deactivate() {
-    console.log('DBI Survival Kit deactivated');
+    console.log('SQL Snippet Studio deactivated');
     
     if (debugHelper) {
         debugHelper.dispose();
