@@ -37,3 +37,8 @@ npm-debug.log*
 # Root markdown (tracked docs live under docs/ only)
 /*.md
 !README.md
+
+# Test-era archive (local reference only)
+docs/archive/test_research_plan.md
+docs/archive/test_results_template.md
+docs/archive/testing_guide.md

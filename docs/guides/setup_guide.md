@@ -77,35 +77,35 @@ code .
 
 ---
 
-## 🧪 Testing Your Installation
+## Verify your installation
 
-### Test 1: Basic Snippets
+### Check 1: Basic snippets
 
-1. Create new file: `test.sql`
+1. Create a new file: `example.sql`
 2. Type: `create-table` + Tab
-3. Should show CREATE TABLE template
+3. You should see a CREATE TABLE template
 
-### Test 2: Star Schema
+### Check 2: Star schema
 
 1. Type: `star-schema` + Tab
-2. Should show complete Star Schema template
+2. You should see a complete star-schema template
 3. Tab through placeholders
 
-### Test 3: PostgreSQL Specific
+### Check 3: PostgreSQL
 
 1. Type: `pg-function` + Tab
-2. Should show plpgsql function template
+2. You should see a PL/pgSQL function template
 
-### Test 4: Oracle Specific
+### Check 4: Oracle
 
 1. Type: `ora-procedure` + Tab
-2. Should show Oracle procedure template
+2. You should see an Oracle procedure template
 
-### Test 5: Commands
+### Check 5: Commands
 
 1. Press `Ctrl+Shift+P`
 2. Type: `DBI:`
-3. Should see all DBI commands listed
+3. All DBI commands should be listed
 
 ---
 

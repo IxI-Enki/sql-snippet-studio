@@ -198,9 +198,9 @@ Unmatched parentheses: missing closing
 
 ---
 
-## **🧪 Testing Results**
+## **Validation results**
 
-Tested with the following models:
+Validated with the following models:
 
 | Model | Before v1.6.0 | After v1.6.0 | Notes |
 |-------|--------------|-------------|-------|
@@ -240,7 +240,7 @@ With verbose logging enabled, you'll see:
 
 ## **💡 Pro Tips**
 
-1. **Enable Verbose Logging** during testing to see parser stages
+1. **Enable verbose logging** during setup to see parser stages
 2. **Check Validation Score** in Output Channel
 3. **Adjust Model Temperature** to 0.1-0.3 for more consistent SQL
 4. **Use Stop Sequences** if your model generates explanations
