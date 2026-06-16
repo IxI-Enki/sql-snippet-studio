@@ -276,5 +276,4 @@ No more manual cleanup of `<think>` blocks, explanations, or markdown!
 ---
 
 **Version:** 1.6.0  
-**Date:** November 2025  
-**License:** MIT
+**Date:** November 2025

@@ -56,8 +56,4 @@ Full documentation lives under **[docs/](docs/README.md)**:
 
 ---
 
-## License
-
-MIT — see [LICENSE](LICENSE).
-
 **Author:** [IxI-Enki](https://github.com/IxI-Enki)

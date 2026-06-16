@@ -54,7 +54,6 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 ├── ✅ archive/next_steps.md                               # This file
 ├── ✅ INSTALL.ps1                                 # PowerShell Installer
 ├── ✅ .gitignore                                  # Git ignore patterns
-├── ✅ LICENSE                                     # MIT License
 └── ✅ dbi-test-survival-kit-1.6.0.vsix            # Ready for installation!
 ```
 
