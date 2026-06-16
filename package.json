@@ -1,7 +1,7 @@
 {
   "name": "dbi-test-survival-kit",
-  "displayName": "DBI Test Survival Kit",
-  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL - Perfect for DBI tests",
+  "displayName": "DBI Survival Kit",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance",
   "version": "1.8.7",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
@@ -74,7 +74,7 @@
     }
   ],
     "configuration": {
-      "title": "DBI Test Survival Kit",
+      "title": "DBI Survival Kit",
       "properties": {
         "dbiSurvivalKit.enableAutoCompletion": {
           "type": "boolean",

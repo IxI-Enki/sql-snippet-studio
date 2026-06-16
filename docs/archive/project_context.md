@@ -1,4 +1,6 @@
-# 📚 DBI Test Survival Kit - Project Context
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
+# 📚 DBI Survival Kit - Project Context
 
 ## 🎯 Project Goal
 
@@ -239,7 +241,7 @@ Based on GitHub repos:
 3. Press `Ctrl+Alt+Shift+Q`
 4. Verify generated SQL
 5. Check validation score (Output Channel)
-6. Document results in `docs/TEST_RESULTS_TEMPLATE.md`
+6. Document results in `docs/archive/test_results_template.md`
 
 ## 🔑 Key Design Decisions
 
@@ -282,7 +284,7 @@ Based on GitHub repos:
    - Open `test/llm_test_01_retail_basic.sql`
    - Try different models
    - Compare results
-   - Document in `docs/TEST_RESULTS_TEMPLATE.md`
+   - Document in `docs/archive/test_results_template.md`
 
 4. **Use in Tests:**
    - Snippets work 100% offline
@@ -309,7 +311,7 @@ Based on GitHub repos:
    - Add validation rules in `sqlValidator.js`
 
 4. **Document Results:**
-   - Use `docs/TEST_RESULTS_TEMPLATE.md`
+   - Use `docs/archive/test_results_template.md`
    - Share findings with team
    - Iterate & improve
 
@@ -374,20 +376,20 @@ D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\
 │   ├── llm_test_01-10.sql                    # 10 comprehensive tests
 │   └── README_TESTS.md                       # Testing guide
 ├── docs/                                     # Documentation (6 files)
-│   ├── SMART_LLM_FEATURES.md                 # v1.6.0 features
-│   ├── TEST_RESEARCH_PLAN.md                 # Research plan
-│   ├── TEST_RESULTS_TEMPLATE.md              # Results template
-│   ├── TESTING_GUIDE.md                      # Quick guide
-│   ├── PROJECT_SUMMARY_v1.6.0.md             # Complete summary
+│   ├── guides/smart_llm_features.md                 # v1.6.0 features
+│   ├── archive/test_research_plan.md                 # Research plan
+│   ├── archive/test_results_template.md              # Results template
+│   ├── archive/testing_guide.md                      # Quick guide
+│   ├── archive/project_summary_v1_6_0.md             # Complete summary
 │   └── STRUCTURE_VERIFICATION.md             # Consistency check
 ├── snippets/                                 # 70+ SQL snippets
 ├── images/                                   # Extension icons
 ├── README.md                                 # Main documentation
-├── LLM_FEATURE.md                            # LLM setup guide
-├── SETUP_GUIDE.md                            # Setup & troubleshooting
-├── QUICKSTART.md                             # 5-minute quick start
-├── PROJECT_CONTEXT.md                        # This file
-├── NEXT_STEPS.md                             # What's next
+├── guides/llm_feature.md                            # LLM setup guide
+├── guides/setup_guide.md                            # Setup & troubleshooting
+├── guides/quickstart.md                             # 5-minute quick start
+├── archive/project_context.md                        # This file
+├── archive/next_steps.md                             # What's next
 └── dbi-test-survival-kit-1.6.0.vsix          # Ready for installation!
 ```
 

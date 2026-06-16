@@ -1,4 +1,6 @@
-# 🚀 EXTENSION OPTIMIZATION ROADMAP - DBI Test Survival Kit
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
+# 🚀 EXTENSION OPTIMIZATION ROADMAP - DBI Survival Kit
 
 **Created:** November 8, 2025  
 **Analyst:** Claude Sonnet 4.5  

@@ -245,7 +245,7 @@ code --install-extension dbi-test-survival-kit-1.7.0.vsix
 
 ## 🔗 LINKS
 
-- **Roadmap:** `EXTENSION_OPTIMIZATION_ROADMAP.md`
+- **Roadmap:** `archive/extension_optimization_roadmap.md`
 - **Test Results (Baseline):** `test/TESTFILES-qwen3-coder-30b-a3b-instruct/TEST_RESULTS_SUMMARY_COMPLETE.md`
 - **Branch:** `feature/production-ready-optimization`
 - **Tag:** `v1.6.2-baseline`

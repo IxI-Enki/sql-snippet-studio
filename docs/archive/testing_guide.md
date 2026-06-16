@@ -1,3 +1,5 @@
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
 # 🧪 Testing Guide - DBI Survival Kit v1.6.0
 
 ## **🎯 Quick Testing Guide**
@@ -102,7 +104,7 @@ test/
    - Validation score? XX/100
 
 4. **Document:**
-   - Copy to `TEST_RESULTS_TEMPLATE.md`
+   - Copy to `archive/test_results_template.md`
    - Note any issues
    - Rate difficulty
 
@@ -212,7 +214,7 @@ curl http://localhost:1234/v1/chat/completions \
 
 ### **Found a Bug?**
 
-1. Document in `TEST_RESULTS_TEMPLATE.md`
+1. Document in `archive/test_results_template.md`
 2. Include:
    - Model name & version
    - Test file & task number
@@ -233,7 +235,7 @@ curl http://localhost:1234/v1/chat/completions \
 1. **Start Simple:** Begin with Test 1, progress to Test 10
 2. **Check Logs:** Always review Output Channel
 3. **Compare Models:** Test multiple models on same task
-4. **Document Everything:** Use `TEST_RESULTS_TEMPLATE.md`
+4. **Document Everything:** Use `archive/test_results_template.md`
 5. **Be Patient:** Complex queries take time
 6. **Iterate:** If query fails, try again or simplify task
 
@@ -242,10 +244,10 @@ curl http://localhost:1234/v1/chat/completions \
 ## **📚 Resources**
 
 - **Test Files:** [`../test/README_TESTS.md`](../test/README_TESTS.md)
-- **Research Plan:** [`TEST_RESEARCH_PLAN.md`](TEST_RESEARCH_PLAN.md)
-- **Feature Docs:** [`SMART_LLM_FEATURES.md`](SMART_LLM_FEATURES.md)
-- **Results Template:** [`TEST_RESULTS_TEMPLATE.md`](TEST_RESULTS_TEMPLATE.md)
-- **LLM Setup:** [`../LLM_FEATURE.md`](../LLM_FEATURE.md)
+- **Research Plan:** [`archive/test_research_plan.md`](archive/test_research_plan.md)
+- **Feature Docs:** [`guides/smart_llm_features.md`](guides/smart_llm_features.md)
+- **Results Template:** [`archive/test_results_template.md`](archive/test_results_template.md)
+- **LLM Setup:** [`../guides/llm_feature.md`](../guides/llm_feature.md)
 - **Main README:** [`../README.md`](../README.md)
 
 ---

@@ -1,3 +1,5 @@
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
 # 📊 Project Summary - DBI Survival Kit v1.6.0
 
 ## **🎉 MAJOR UPDATE: v1.6.0 "SMART LLM & COMPREHENSIVE TESTING"**
@@ -77,11 +79,11 @@
 **Files:**
 
 - `test/README_TESTS.md` - Complete testing guide
-- `TEST_RESEARCH_PLAN.md` - Detailed research plan
-- `TEST_RESULTS_TEMPLATE.md` - Results documentation template
-- `TESTING_GUIDE.md` - Quick testing guide
-- `SMART_LLM_FEATURES.md` - Feature documentation
-- `PROJECT_SUMMARY_v1.6.0.md` - This file
+- `archive/test_research_plan.md` - Detailed research plan
+- `archive/test_results_template.md` - Results documentation template
+- `archive/testing_guide.md` - Quick testing guide
+- `guides/smart_llm_features.md` - Feature documentation
+- `archive/project_summary_v1_6_0.md` - This file
 
 **Impact:** 🎯 User knows exactly how to test!
 
@@ -113,11 +115,11 @@ D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\
 │   ├── llm_test_10_mixed_expert.sql            (NEW) ⭐
 │   └── README_TESTS.md                         (NEW) ⭐
 ├── docs/
-│   ├── SMART_LLM_FEATURES.md                   (NEW) ⭐
-│   ├── TEST_RESEARCH_PLAN.md                   (NEW) ⭐
-│   ├── TEST_RESULTS_TEMPLATE.md                (NEW) ⭐
-│   ├── TESTING_GUIDE.md                        (NEW) ⭐
-│   └── PROJECT_SUMMARY_v1.6.0.md               (NEW) ⭐
+│   ├── guides/smart_llm_features.md                   (NEW) ⭐
+│   ├── archive/test_research_plan.md                   (NEW) ⭐
+│   ├── archive/test_results_template.md                (NEW) ⭐
+│   ├── archive/testing_guide.md                        (NEW) ⭐
+│   └── archive/project_summary_v1_6_0.md               (NEW) ⭐
 ├── package.json                                (v1.6.0)
 ├── README.md                                   (UPDATED)
 └── dbi-test-survival-kit-1.6.0.vsix            ✅
@@ -286,10 +288,10 @@ powershell -Command "Remove-Item -Path 'C:\Users\janri\.cursor\extensions\dbi-te
 
 - **Main:** [`../README.md`](../README.md)
 - **Testing:** [`../test/README_TESTS.md`](../test/README_TESTS.md)
-- **Quick Guide:** [`TESTING_GUIDE.md`](TESTING_GUIDE.md)
-- **Features:** [`SMART_LLM_FEATURES.md`](SMART_LLM_FEATURES.md)
-- **Research:** [`TEST_RESEARCH_PLAN.md`](TEST_RESEARCH_PLAN.md)
-- **Results Template:** [`TEST_RESULTS_TEMPLATE.md`](TEST_RESULTS_TEMPLATE.md)
+- **Quick Guide:** [`archive/testing_guide.md`](archive/testing_guide.md)
+- **Features:** [`guides/smart_llm_features.md`](guides/smart_llm_features.md)
+- **Research:** [`archive/test_research_plan.md`](archive/test_research_plan.md)
+- **Results Template:** [`archive/test_results_template.md`](archive/test_results_template.md)
 
 ### **Commands:**
 

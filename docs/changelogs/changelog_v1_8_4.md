@@ -213,7 +213,7 @@ package.json
 ├── snippets: Removed 2x "postgresql" entries
 └── install-local: Updated to 1.8.4
 
-CHANGELOG_v1.8.4.md (NEW)
+changelogs/changelog_v1_8_4.md (NEW)
 └── Complete documentation
 ```
 
@@ -234,7 +234,7 @@ After installing v1.8.4, verify:
 **If ANY checkbox fails:**
 1. Fully close VS Code (all windows)
 2. Reopen and re-test
-3. If still fails: Check Output → "DBI Test Survival Kit" for logs
+3. If still fails: Check Output → "DBI Survival Kit" for logs
 
 ---
 

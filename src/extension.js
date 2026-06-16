@@ -16,7 +16,7 @@ let queryCache = null;
  * Extension activation entry point
  */
 function activate(context) {
-    console.log('DBI Test Survival Kit is now active!');
+    console.log('DBI Survival Kit is now active!');
 
     // Initialize global instances
     debugHelper = new DebugHelper();
@@ -495,7 +495,7 @@ function showWelcomeMessage(context) {
     
     if (!hasShownWelcome) {
         vscode.window.showInformationMessage(
-            '🎓 DBI Test Survival Kit activated! Type "star-schema" and press Tab to get started.',
+            'DBI Survival Kit activated! Type "star-schema" and press Tab to get started.',
             'Show Commands'
         ).then(selection => {
             if (selection === 'Show Commands') {
@@ -511,7 +511,7 @@ function showWelcomeMessage(context) {
  * Extension deactivation
  */
 function deactivate() {
-    console.log('DBI Test Survival Kit deactivated');
+    console.log('DBI Survival Kit deactivated');
     
     if (debugHelper) {
         debugHelper.dispose();

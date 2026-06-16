@@ -1,3 +1,5 @@
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
 # 🚀 PHASE 2 IMPLEMENTATION COMPLETE! 🎉
 
 **Date:** November 9, 2025  
@@ -181,7 +183,7 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 |----------|-----------|---------|
 | `src/llm/contextBuilder.js` | Phase 2 prompt enhancements | +90 |
 | `package.json` | Version: 1.7.1 → 1.8.0 | 2 |
-| `CHANGELOG_v1.8.0.md` | Documentation | +400 |
+| `changelogs/changelog_v1_8_0.md` | Documentation | +400 |
 
 **Total:** 492 lines changed
 

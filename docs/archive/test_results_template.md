@@ -1,3 +1,5 @@
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
 # 📊 LLM Test Results - DBI Survival Kit v1.6.0
 
 ## **Test Session Information**

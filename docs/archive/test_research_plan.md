@@ -1,3 +1,5 @@
+> **Archive:** Historical document. Kept for reference; may not reflect current product naming or structure.
+
 # 🔬 LLM Test Research Plan - DBI Survival Kit v1.6.0
 
 ## **📚 Repository Analysis: DbiTheorie-003**

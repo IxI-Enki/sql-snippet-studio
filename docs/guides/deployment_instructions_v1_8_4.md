@@ -32,7 +32,7 @@ code --uninstall-extension dbi-team.dbi-test-survival-kit
 Or manually:
 1. Open VS Code
 2. Extensions view (Ctrl+Shift+X)
-3. Find "DBI Test Survival Kit"
+3. Find "DBI Survival Kit"
 4. Click gear icon → Uninstall
 5. **Close ALL VS Code windows!**
 
@@ -72,7 +72,7 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 #### **✅ Check 1: Runtime Status**
 
 1. Open Extensions view (Ctrl+Shift+X)
-2. Click on "DBI Test Survival Kit"
+2. Click on "DBI Survival Kit"
 3. Click "Runtime Status" tab
 4. **Expected:** "Activation: Activated"
 5. **Expected:** No error messages
@@ -162,7 +162,7 @@ CREATE TABLE Customers (
 **If nothing happens:**
 - Check settings: `dbiSurvivalKit.llm.enabled` = true
 - Check LM Studio is running (http://localhost:1234)
-- Check Output panel → "DBI Test Survival Kit" for errors
+- Check Output panel → "DBI Survival Kit" for errors
 
 ---
 
@@ -215,7 +215,7 @@ CREATE TABLE Customers (
 
 **Report:**
 1. Screenshot Runtime Status (with error messages)
-2. Output panel content ("DBI Test Survival Kit")
+2. Output panel content ("DBI Survival Kit")
 3. Your VS Code version: Help → About
 4. Your OS: Windows/Mac/Linux
 

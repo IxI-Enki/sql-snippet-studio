@@ -209,7 +209,7 @@ code --install-extension dbi-test-survival-kit-1.8.5.vsix
 ### **Test 4: Runtime Status**
 
 1. Extensions view
-2. DBI Test Survival Kit → Features → Runtime Status
+2. DBI Survival Kit → Features → Runtime Status
 3. **Expected:**
    - "Activation: Activated" (after any of above tests)
    - No error messages
@@ -251,7 +251,7 @@ CHANGELOG_v1.8.5.md (NEW)
 **After activation works, check:**
 1. LM Studio running? (http://localhost:1234)
 2. Settings: `dbiSurvivalKit.llm.enabled` = true
-3. Output panel: "DBI Test Survival Kit" for errors
+3. Output panel: "DBI Survival Kit" for errors
 
 ---
 

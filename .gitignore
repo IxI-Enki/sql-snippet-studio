@@ -4,6 +4,7 @@ node_modules/
 # Build / packaging
 *.vsix
 *.tgz
+.dist/
 
 # Local test suite (keep locally, do not version)
 test/
@@ -20,6 +21,11 @@ desktop.ini
 # IDE (local settings only)
 .vscode/
 .idea/
+.cursor/
+
+# Local-only folders (not versioned)
+bug-fixes/
+scriptfiles-probably-all-obsolete/
 
 # Logs
 *.log
@@ -27,3 +33,7 @@ npm-debug.log*
 
 # Temp
 *.tmp
+
+# Root markdown (tracked docs live under docs/ only)
+/*.md
+!README.md

@@ -209,7 +209,7 @@ code --install-extension dbi-test-survival-kit-1.8.7.vsix
 ### **Test 2: Runtime Status Check** ✅
 
 1. Start VS Code
-2. Extensions view → DBI Test Survival Kit → Features → Runtime Status
+2. Extensions view → DBI Survival Kit → Features → Runtime Status
 3. **Expected:**
    - ✅ "Activation: Activated" (immediately after startup)
 
@@ -239,7 +239,7 @@ package.json
 ├── activationEvents: Added "onStartupFinished" (first entry)
 └── install-local: Updated to 1.8.7
 
-CHANGELOG_v1.8.7.md (NEW)
+changelogs/changelog_v1_8_7.md (NEW)
 └── Complete documentation
 ```
 
@@ -337,4 +337,5 @@ CHANGELOG_v1.8.7.md (NEW)
 **Priority:** 🔥 HIGH - Better UX!
 
 **STATUS BAR WILL BE VISIBLE IMMEDIATELY!** 💪🚀
+
 
