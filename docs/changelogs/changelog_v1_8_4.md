@@ -1,7 +1,7 @@
 # 🚨 CRITICAL HOTFIX v1.8.4 - Extension Activation Bug
 
-**Release Date:** 2025-11-09  
-**Type:** CRITICAL BUG FIX  
+**Release Date:** 2025-11-09
+**Type:** CRITICAL BUG FIX
 **Priority:** 🔥 BLOCKING (prevents extension from activating)
 
 ---
@@ -10,19 +10,22 @@
 
 Extension failed to activate in VS Code for multiple users with error:
 
-```
+```text
 ❌ Unknown language in contributes.dbi-test-survival-kit.language
    Provided value: postgresql
+
 ```
 
-**Impact:** 
+Impact:
+
 - ❌ Extension does not activate
 - ❌ No snippets available
 - ❌ No LLM features available
 - ❌ Status bar not showing
 - ❌ Commands not registered
 
-**Affected Users:**
+Affected Users:
+
 - 3 out of 4 team members (75% failure rate!)
 - Inconsistent behavior between VS Code installations
 - Extension worked in Cursor, failed in VS Code
@@ -45,9 +48,10 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
     "path": "./snippets/postgres-snippets.json"
   }
 ]
+
 ```
 
-**Why this failed:**
+Why this failed:
 
 1. **VS Code does NOT recognize `"postgresql"` as a built-in language ID**
    - Only `"sql"` and `"plsql"` are standard
@@ -68,7 +72,8 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
    - Others don't → Extension fails to load
    - Cursor might handle this differently (more forgiving)
 
-**Why this wasn't caught earlier:**
+Why this wasn't caught earlier:
+
 - Tested primarily in Cursor (works)
 - Cursor may have more forgiving language ID validation
 - VS Code is stricter about unknown language IDs
@@ -77,7 +82,7 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
 
 ## ✅ **FIX:**
 
-**Removed ALL `"postgresql"` language ID references:**
+Removed ALL `"postgresql"` language ID references:
 
 ```json
 // package.json (v1.8.4)
@@ -103,14 +108,17 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
     "path": "./snippets/shared-snippets.json"
   }
 ]
+
 ```
 
-**Changes:**
+Changes:
+
 - ❌ Removed: `{"language": "postgresql", "path": "./snippets/postgres-snippets.json"}`
 - ❌ Removed: `{"language": "postgresql", "path": "./snippets/shared-snippets.json"}`
 - ✅ Kept: Only `"sql"` and `"plsql"` (standard VS Code language IDs)
 
-**Result:**
+Result:
+
 - ✅ Extension activates consistently in ALL VS Code installations
 - ✅ Snippets work for `.sql` files
 - ✅ No dependency on third-party language extensions
@@ -127,7 +135,8 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
 | **VS Code Compatibility** | ⚠️ Inconsistent | ✅ Universal |
 | **Cursor Compatibility** | ✅ Working | ✅ Working |
 
-**Expected Result:**
+Expected Result:
+
 - ✅ Extension activates for ALL users
 - ✅ Status bar shows "LLM Ready"
 - ✅ Commands available in Command Palette
@@ -139,6 +148,7 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
 ## 🎓 **KEY LEARNINGS:**
 
 ### **1. Only use STANDARD Language IDs:**
+
 - ✅ `"sql"` - built-in VS Code
 - ✅ `"plsql"` - built-in VS Code
 - ✅ `"javascript"`, `"python"`, etc. - built-in
@@ -147,6 +157,7 @@ In v1.8.2, I added `"postgresql"` as a language ID for snippet contributions:
 - ❌ Custom language IDs - require explicit registration
 
 ### **2. Language ID Registration:**
+
 If you want to use a custom/non-standard language ID:
 ```json
 "contributes": {
@@ -162,14 +173,17 @@ If you want to use a custom/non-standard language ID:
     "onLanguage:postgresql"  // Activate on this language
   ]
 }
+
 ```
 
 ### **3. VS Code vs. Cursor differences:**
+
 - Cursor may be more forgiving with language IDs
 - Always test in BOTH environments
 - VS Code is stricter (better for catching bugs!)
 
 ### **4. Test with clean installations:**
+
 - User A had PostgreSQL extension → worked
 - User B, C, D had clean VS Code → failed
 - Always test without optional extensions!
@@ -180,7 +194,7 @@ If you want to use a custom/non-standard language ID:
 
 **File:** `dbi-test-survival-kit-1.8.4.vsix`
 
-**Installation:**
+Installation:
 ```bash
 # Uninstall old version first!
 code --uninstall-extension dbi-team.dbi-test-survival-kit
@@ -195,9 +209,11 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 # 3. Open Command Palette (Ctrl+Shift+P)
 # 4. Type "DBI:" - should see all commands
 # 5. Test snippet: type "pg-" → should see snippets
+
 ```
 
 **CRITICAL:** Full restart required!
+
 - Close ALL VS Code windows
 - Wait 5 seconds
 - Reopen VS Code
@@ -207,7 +223,7 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 
 ## 📝 **FILES CHANGED:**
 
-```
+```text
 package.json
 ├── version: 1.8.3 → 1.8.4
 ├── snippets: Removed 2x "postgresql" entries
@@ -215,6 +231,7 @@ package.json
 
 changelogs/changelog_v1_8_4.md (NEW)
 └── Complete documentation
+
 ```
 
 ---
@@ -231,7 +248,8 @@ After installing v1.8.4, verify:
 - [ ] Snippets work: `star-` in `.sql` file
 - [ ] LLM query works: `Ctrl+Alt+Shift+Q`
 
-**If ANY checkbox fails:**
+If ANY checkbox fails:
+
 1. Fully close VS Code (all windows)
 2. Reopen and re-test
 3. If still fails: Check Output → "DBI Survival Kit" for logs
@@ -263,7 +281,6 @@ After installing v1.8.4, verify:
 
 ---
 
-**Version:** 1.8.4  
-**Status:** ✅ Ready for deployment  
+**Version:** 1.8.4
+**Status:** ✅ Ready for deployment
 **Priority:** 🔥🔥🔥 CRITICAL - Deploy immediately!
-

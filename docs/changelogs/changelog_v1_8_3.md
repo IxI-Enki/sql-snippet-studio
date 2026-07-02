@@ -1,8 +1,8 @@
 # 🚀 CHANGELOG v1.8.3 - Phase 2.1++ Enhancement
 
-**Release Date:** November 9, 2025  
-**Version:** 1.8.3  
-**Type:** Critical Enhancement (Consistency Fix)  
+**Release Date:** November 9, 2025
+**Version:** 1.8.3
+**Type:** Critical Enhancement (Consistency Fix)
 **Focus:** "BY SOURCE" Syntax - Dual-Layer Protection
 
 ---
@@ -11,14 +11,16 @@
 
 ### **Issue Discovered in v1.8.2 Testing:**
 
-**User tested Aufgabe 3 twice with IDENTICAL prompt:**
+User tested Aufgabe 3 twice with IDENTICAL prompt:
 
 ```sql
--- Aufgabe 3: Erstelle einen MERGE Statement der Produkte löscht die in Products 
+-- Aufgabe 3: Erstelle einen MERGE Statement der Produkte löscht die in Products
 -- existieren aber nicht in STG_Product_Updates (WHEN NOT MATCHED BY SOURCE THEN DELETE)
+
 ```
 
-**Results:**
+Results:
+
 - **Test 1 (after model reload):** ✅ `DELETE FROM Products WHERE ...` (CORRECT!)
 - **Test 2 (same session):** ❌ `MERGE INTO ... BY SOURCE THEN DELETE` (WRONG!)
 
@@ -51,39 +53,42 @@
 
 **Location:** `src/llm/contextBuilder.js`
 
-**BEFORE (v1.8.1):**
+BEFORE (v1.8.1):
 ```javascript
 1. ❌ "WHEN NOT MATCHED BY SOURCE THEN DELETE" → NOT SUPPORTED in PostgreSQL!
    ⚠️ This is SQL Server/Oracle syntax ONLY!
    ⚠️ If task asks for "delete rows not in source", DO NOT use "BY SOURCE"
+
 ```
 
-**AFTER (v1.8.3):**
+AFTER (v1.8.3):
 ```javascript
 1. ❌ "WHEN NOT MATCHED BY SOURCE THEN DELETE" → NOT SUPPORTED in PostgreSQL!
-   
+
    ⚠️⚠️⚠️ IMPORTANT: The task description might MENTION "BY SOURCE" syntax! ⚠️⚠️⚠️
    → This is SQL Server/Oracle syntax mentioned in the task
    → DO NOT copy "BY SOURCE" syntax from the task into your SQL!
    → PostgreSQL does NOT support "BY SOURCE" clause!
    → IGNORE the "BY SOURCE" part and use PostgreSQL-compatible solution!
-   
+
    TASK MIGHT SAY: "...WHEN NOT MATCHED BY SOURCE THEN DELETE"
    → This is just describing SQL Server syntax
    → DO NOT generate this literally!
-   
-   WRONG (SQL Server/Oracle - DO NOT GENERATE): 
+
+   WRONG (SQL Server/Oracle - DO NOT GENERATE):
    MERGE INTO target USING source ON (key) WHEN NOT MATCHED BY SOURCE THEN DELETE;
-   
-   ✅ CORRECT (PostgreSQL - GENERATE THIS): 
+
+   ✅ CORRECT (PostgreSQL - GENERATE THIS):
    DELETE FROM target WHERE key NOT IN (SELECT key FROM source);
-   
+
    ✅ OR: Use LEFT JOIN approach:
    DELETE FROM target t
    WHERE NOT EXISTS (SELECT 1 FROM source s WHERE s.key = t.key);
+
 ```
 
-**Key Improvements:**
+Key Improvements:
+
 - ✅ **Triple Warning:** "⚠️⚠️⚠️ IMPORTANT: The task might MENTION..."
 - ✅ **Explicit Instruction:** "DO NOT copy BY SOURCE syntax from task"
 - ✅ **Context Clarification:** "This is just describing SQL Server syntax"
@@ -97,36 +102,39 @@
 
 **New Method:** `fixBySourceSyntax(sql)`
 
-**What It Does:**
+What It Does:
 ```javascript
 /**
  * 🔥 PHASE 2.1++: Fix BY SOURCE Syntax
- * Converts SQL Server "MERGE ... WHEN NOT MATCHED BY SOURCE THEN DELETE" 
+ * Converts SQL Server "MERGE ... WHEN NOT MATCHED BY SOURCE THEN DELETE"
  * to PostgreSQL "DELETE FROM ... WHERE key NOT IN (...)"
  */
 fixBySourceSyntax(sql) {
     // Pattern: Detect BY SOURCE in MERGE
     const bySourcePattern = /MERGE\s+INTO\s+(\w+)\s+(\w+)\s+USING\s+\((.*?)\)\s+(\w+)\s+ON\s+\((.*?)\)\s+WHEN\s+NOT\s+MATCHED\s+BY\s+SOURCE\s+THEN\s+DELETE/gis;
-    
+
     // Extract: table name, source query, key column
     // Generate: DELETE FROM target WHERE key NOT IN (source_query);
-    
+
     // Example:
     // INPUT:  MERGE INTO Products p USING (SELECT product_id FROM STG) s ON (p.product_id = s.product_id) WHEN NOT MATCHED BY SOURCE THEN DELETE;
     // OUTPUT: DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG);
 }
+
 ```
 
-**Execution Flow:**
-```
+Execution Flow:
+```text
 Model Output → Parser → Check for BY SOURCE → Auto-Convert → Clean SQL
+
 ```
 
-**Log Output Example:**
-```
+Log Output Example:
+```text
 🔧 Auto-fixing BY SOURCE: SQL Server → PostgreSQL
    Before: MERGE INTO Products ... BY SOURCE THEN DELETE
    After:  DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product_Updates)
+
 ```
 
 ---
@@ -142,7 +150,7 @@ Model Output → Parser → Check for BY SOURCE → Auto-Convert → Clean SQL
 
 ### **Dual-Layer Protection:**
 
-```
+```text
 Scenario 1: Model follows enhanced warning
 → Layer 1: ✅ Generates DELETE FROM
 → Layer 2: (not needed)
@@ -157,6 +165,7 @@ Scenario 3: Edge case (malformed MERGE)
 → Layer 1: ❌ Generates invalid syntax
 → Layer 2: ⚠️ Cannot parse/convert
 → Result: ❌ (but logged for debugging)
+
 ```
 
 ---
@@ -167,26 +176,30 @@ Scenario 3: Edge case (malformed MERGE)
 
 ```sql
 -- Task:
--- Erstelle einen MERGE Statement der Produkte löscht die in Products existieren 
+-- Erstelle einen MERGE Statement der Produkte löscht die in Products existieren
 -- aber nicht in STG_Product_Updates (WHEN NOT MATCHED BY SOURCE THEN DELETE)
+
 ```
 
 ### **Expected Output (v1.8.3):**
 
-**Option A (Model follows warning):**
+Option A (Model follows warning):
 ```sql
 DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product_Updates);
+
 ```
 
-**Option B (Parser auto-fixes):**
-```
+Option B (Parser auto-fixes):
+```text
 [PARSER] 🔧 Auto-fixing BY SOURCE: SQL Server → PostgreSQL
 [PARSER]    Before: MERGE INTO Products ... BY SOURCE THEN DELETE
 [PARSER]    After:  DELETE FROM Products WHERE product_id NOT IN (...)
+
 ```
 → Output: Same as Option A
 
-**Success Criteria:**
+Success Criteria:
+
 - ✅ **NEVER** outputs `WHEN NOT MATCHED BY SOURCE THEN DELETE`
 - ✅ **ALWAYS** outputs PostgreSQL-compatible `DELETE FROM`
 - ✅ **100% consistency** across multiple tests
@@ -198,17 +211,20 @@ DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product
 ### **Files Changed:**
 
 #### **1. src/llm/contextBuilder.js**
+
 - **Lines Modified:** ~182-206
 - **Changes:** Enhanced BY SOURCE warning with triple emphasis and explicit "DO NOT copy from task" instruction
 - **Impact:** Reduces probability of model generating BY SOURCE
 
 #### **2. src/llm/responseParser.js**
+
 - **Lines Added:** ~224-258 (new method)
 - **Changes:** Added `fixBySourceSyntax()` method for automatic conversion
 - **Integration:** Called in `finalCleanup()` after ROLLUP fix
 - **Impact:** Guarantees correct output even if model ignores warning
 
 #### **3. package.json**
+
 - **Version:** 1.8.2 → 1.8.3
 
 ---
@@ -216,20 +232,24 @@ DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product
 ## 🎓 **KEY LEARNINGS**
 
 ### **1. Task Descriptions Can Mislead Models:**
+
 - When task contains example syntax (e.g., "BY SOURCE"), model might copy it literally
 - Need to explicitly tell model: "This is just an example, DO NOT use!"
 
 ### **2. Warnings Must Be EXTREMELY Explicit:**
+
 - "PostgreSQL doesn't support X" → TOO WEAK
 - "DO NOT copy X from task, IGNORE IT!" → BETTER
 - Triple emphasis (⚠️⚠️⚠️) increases attention
 
 ### **3. Dual-Layer Approach = Maximum Reliability:**
+
 - **Layer 1 (Prevention):** Strong prompt guidance
 - **Layer 2 (Failsafe):** Parser auto-fix
 - **Result:** Even if Layer 1 fails, Layer 2 catches it
 
 ### **4. Non-Determinism Requires Robustness:**
+
 - LLMs have intrinsic randomness (temperature, sampling)
 - Same prompt can produce different outputs
 - Must design for **worst-case scenario**, not best-case
@@ -254,18 +274,22 @@ DELETE FROM Products WHERE product_id NOT IN (SELECT product_id FROM STG_Product
 ## 🚀 **DEPLOYMENT**
 
 ### **Installation:**
+
 ```bash
 # Install v1.8.3
 code --install-extension dbi-test-survival-kit-1.8.3.vsix
 
 # IMPORTANT: Restart Cursor completely!
+
 ```
 
 ### **Verification Test:**
+
 ```bash
 # Test the exact same prompt MULTIPLE TIMES (5-10x)
 # ALL results should be PostgreSQL-compatible DELETE FROM
 # NONE should contain BY SOURCE syntax
+
 ```
 
 ---
@@ -293,20 +317,19 @@ code --install-extension dbi-test-survival-kit-1.8.3.vsix
 
 ## 📝 **SUMMARY**
 
-**Problem:** Non-deterministic BY SOURCE generation (50% failure rate)  
-**Solution:** Dual-layer protection (enhanced warning + parser auto-fix)  
-**Impact:** 50% → 100% consistency, guaranteed correct output  
+**Problem:** Non-deterministic BY SOURCE generation (50% failure rate)
+**Solution:** Dual-layer protection (enhanced warning + parser auto-fix)
+**Impact:** 50% → 100% consistency, guaranteed correct output
 **Status:** ✅ **PRODUCTION READY**
 
-**Version:** v1.8.3  
-**Package Size:** 457.9 KB  
-**Files Changed:** 2 (contextBuilder.js, responseParser.js)  
-**Lines Added:** ~35 (warning enhancement + new method)  
+**Version:** v1.8.3
+**Package Size:** 457.9 KB
+**Files Changed:** 2 (contextBuilder.js, responseParser.js)
+**Lines Added:** ~35 (warning enhancement + new method)
 
 ---
 
-**Release Date:** November 9, 2025  
-**Tested With:** qwen3-coder-30b-a3b-instruct  
-**Test File:** `llm_test_05_product_catalog_merge.sql` (Aufgabe 3)  
+**Release Date:** November 9, 2025
+**Tested With:** qwen3-coder-30b-a3b-instruct
+**Test File:** `llm_test_05_product_catalog_merge.sql` (Aufgabe 3)
 **Result:** ✅ **100% SUCCESS RATE EXPECTED** 🚀🔥💪
-

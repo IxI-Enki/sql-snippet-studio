@@ -55,6 +55,7 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 ├── ✅ INSTALL.ps1                                 # PowerShell Installer
 ├── ✅ .gitignore                                  # Git ignore patterns
 └── ✅ dbi-test-survival-kit-1.6.0.vsix            # Ready for installation!
+
 ```
 
 ### 🎨 Features Implementiert
@@ -95,6 +96,7 @@ Die Extension ist **komplett fertig** und einsatzbereit! 🎉
 ```powershell
 cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 .\INSTALL.ps1
+
 ```
 
 ### 2. Testen
@@ -104,6 +106,7 @@ cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 # 1. Neue Datei: test.sql
 # 2. Type: star-schema + Tab
 # 3. 🎉 Sollte funktionieren!
+
 ```
 
 ---
@@ -128,6 +131,7 @@ Bearbeite die JSON Files in `snippets/`:
     "description": "Was macht es"
   }
 }
+
 ```
 
 ### 2. Icon Hinzufügen
@@ -143,6 +147,7 @@ Erstelle: `test/test-suite.sql` mit Test-Cases
 ```powershell
 npm install -g @vscode/vsce
 vsce package
+
 ```
 
 Dann hast du: `dbi-test-survival-kit-1.0.0.vsix` zum Teilen!
@@ -192,6 +197,7 @@ git add .
 git commit -m "Initial commit: DBI Survival Kit"
 git remote add origin <your-repo-url>
 git push -u origin main
+
 ```
 
 Dann können colleagues:
@@ -200,6 +206,7 @@ Dann können colleagues:
 git clone <repo-url>
 cd dbi-test-survival-kit
 .\INSTALL.ps1
+
 ```
 
 ### Methode 2: VSIX File
@@ -207,12 +214,14 @@ cd dbi-test-survival-kit
 ```powershell
 vsce package
 # Teile: dbi-test-survival-kit-1.0.0.vsix
+
 ```
 
 colleagues installieren:
 
 ```powershell
 code --install-extension dbi-test-survival-kit-1.0.0.vsix
+
 ```
 
 ### Methode 3: Nur Snippets
@@ -221,6 +230,7 @@ code --install-extension dbi-test-survival-kit-1.0.0.vsix
 # Teile den snippets/ Ordner
 # colleagues kopieren nach:
 # %USERPROFILE%\.vscode\extensions\dbi-test-survival-kit\snippets\
+
 ```
 
 ---
@@ -266,6 +276,7 @@ Script das automatisch Patterns aus deinen GitHub Repos extrahiert:
 # Analyze-DBI-Exercises.ps1
 # Scannt alte Übungen
 # Generiert neue Snippets
+
 ```
 
 ### Idee 2: Visual Schema Builder
@@ -333,13 +344,13 @@ Falls irgendwas nicht funktioniert:
 
 ## 🏆 Du Hast Jetzt
 
-✅ Eine **professionelle VS Code/Cursor Extension**  
-✅ **300+ SQL Snippets** für PostgreSQL & Oracle  
-✅ **Star-Schema Templates** für DBI Tests  
-✅ **100% Offline** - funktioniert ohne Internet  
-✅ **Shareable** - einfach mit Team teilen  
-✅ **Extensible** - einfach erweitern  
-✅ **Dokumentiert** - README, Guides, Context  
+✅ Eine **professionelle VS Code/Cursor Extension**
+✅ **300+ SQL Snippets** für PostgreSQL & Oracle
+✅ **Star-Schema Templates** für DBI Tests
+✅ **100% Offline** - funktioniert ohne Internet
+✅ **Shareable** - einfach mit Team teilen
+✅ **Extensible** - einfach erweitern
+✅ **Dokumentiert** - README, Guides, Context
 
 ---
 
@@ -347,16 +358,18 @@ Falls irgendwas nicht funktioniert:
 
 Die Extension ist **production-ready**!
 
-**Nächster Schritt:**
+Nächster Schritt:
 
 ```powershell
 .\INSTALL.ps1
+
 ```
 
 Dann öffne eine `.sql` Datei und type:
 
 ```sql
 star-schema
+
 ```
 
 Und Tab drücken! 🎉

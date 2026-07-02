@@ -1,7 +1,7 @@
 # v2.0.0 - SQL Snippet Studio Rebrand
 
-**Release Date:** 2026-06-16  
-**Type:** MAJOR (User-facing rebrand + extension package ID change)  
+**Release Date:** 2026-06-16
+**Type:** MAJOR (User-facing rebrand + extension package ID change)
 **Priority:** HIGH (Product positioning)
 
 ---
@@ -65,6 +65,7 @@ Uninstall the old extension ID before installing v2.0.0. Existing `settings.json
 ```powershell
 code --uninstall-extension dbi-team.dbi-test-survival-kit
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 If you already installed an earlier v2.0.0 build under the old ID, uninstall both IDs before reinstalling:
@@ -73,6 +74,7 @@ If you already installed an earlier v2.0.0 build under the old ID, uninstall bot
 code --uninstall-extension dbi-team.dbi-test-survival-kit
 code --uninstall-extension dbi-team.sql-snippet-studio
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 Or install the VSIX via **Extensions → Install from VSIX…** and reload the window.
@@ -89,6 +91,7 @@ Build:
 npm install
 .\_build.ps1
 # or: npx vsce package --no-dependencies
+
 ```
 
 ---

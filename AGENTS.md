@@ -1,3 +1,22 @@
+---
+title: AGENTS — SQL Snippet Studio
+description: Learned user preferences and workspace facts for Cursor agents working on the SQL Snippet Studio VS Code extension.
+dates:
+  - created: 2026-06
+  - updated: 2026-07-01
+version: 1.0.0
+status: active
+author:
+  - name: Jan Ritt
+    email: janritt.office@gmail.com
+    location: Österreich
+    github:
+      handle: IxI-Enki
+      userpage: 'https://github.com/IxI-Enki'
+tags: [ agents, cursor, vscode-extension, sql, dbi ]
+repo: IxI-Enki/dbi-test-survival-kit
+---
+
 ## Learned User Preferences
 
 - Create git commits only when explicitly asked.

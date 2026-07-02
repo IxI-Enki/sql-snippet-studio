@@ -1,7 +1,7 @@
 # 🚨 CRITICAL HOTFIX v1.8.4 - Deployment Instructions
 
-**Priority:** 🔥 IMMEDIATE (fixes blocking activation bug)  
-**Date:** 2025-11-09  
+**Priority:** 🔥 IMMEDIATE (fixes blocking activation bug)
+**Date:** 2025-11-09
 **For:** All team members experiencing activation issues
 
 ---
@@ -9,6 +9,7 @@
 ## 🎯 **PROBLEM THIS FIXES:**
 
 If you experienced ANY of these issues:
+
 - ❌ Extension status shows "Not yet activated"
 - ❌ Error: "Unknown language in contributes: postgresql"
 - ❌ Status bar doesn't show "LLM Ready"
@@ -27,9 +28,11 @@ If you experienced ANY of these issues:
 
 ```bash
 code --uninstall-extension dbi-team.dbi-test-survival-kit
+
 ```
 
 Or manually:
+
 1. Open VS Code
 2. Extensions view (Ctrl+Shift+X)
 3. Find "SQL Snippet Studio"
@@ -42,12 +45,14 @@ Or manually:
 
 **File:** `dbi-test-survival-kit-1.8.4.vsix` (1.09 MB)
 
-**Command Line:**
+Command Line:
 ```bash
 code --install-extension dbi-test-survival-kit-1.8.4.vsix
+
 ```
 
-**Or GUI:**
+Or GUI:
+
 1. Open VS Code
 2. Extensions view (Ctrl+Shift+X)
 3. Click "..." (three dots) → "Install from VSIX..."
@@ -77,12 +82,14 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 4. **Expected:** "Activation: Activated"
 5. **Expected:** No error messages
 
-**If you see "Not yet activated":**
+If you see "Not yet activated":
+
 - Open a `.sql` file (this triggers activation)
 - Wait 2 seconds
 - Refresh Runtime Status
 
-**If you see error messages:**
+If you see error messages:
+
 - Screenshot the error
 - Report immediately!
 
@@ -90,10 +97,12 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 
 #### **✅ Check 2: Status Bar**
 
-**If LLM enabled:**
+If LLM enabled:
+
 - Bottom right should show "LLM Ready" (green)
 
-**If LLM disabled:**
+If LLM disabled:
+
 - No status bar item (this is normal)
 
 ---
@@ -111,7 +120,8 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
    - SQL: Insert Fact Table
    - etc.
 
-**If commands missing:**
+If commands missing:
+
 - Check Runtime Status (Step 1)
 - Try opening a `.sql` file
 - Full restart again
@@ -135,7 +145,8 @@ code --install-extension dbi-test-survival-kit-1.8.4.vsix
 6. Type: `star-`
 7. **Expected:** IntelliSense shows Star Schema snippets
 
-**If snippets NOT appearing:**
+If snippets NOT appearing:
+
 - Check file is recognized as SQL (bottom right: "SQL" or "Plain Text")
 - Try Ctrl+Space to force IntelliSense
 - Check Runtime Status
@@ -153,13 +164,15 @@ CREATE TABLE Customers (
 );
 
 -- TASK: Show all customers
+
 ```
 
 2. Select the schema + task
 3. Press: `Ctrl+Alt+Shift+Q`
 4. **Expected:** SQL query appears after schema
 
-**If nothing happens:**
+If nothing happens:
+
 - Check settings: `dbiSurvivalKit.llm.enabled` = true
 - Check LM Studio is running (http://localhost:1234)
 - Check Output panel → "SQL Snippet Studio" for errors
@@ -170,7 +183,8 @@ CREATE TABLE Customers (
 
 ### **Problem: "Not yet activated"**
 
-**Solution:**
+Solution:
+
 1. Open a `.sql` file (triggers activation)
 2. Wait 2 seconds
 3. Check Runtime Status again
@@ -179,7 +193,8 @@ CREATE TABLE Customers (
 
 ### **Problem: Snippets not appearing**
 
-**Solution:**
+Solution:
+
 1. Check file language (bottom right corner)
 2. If "Plain Text", change to "SQL":
    - Click "Plain Text"
@@ -191,7 +206,8 @@ CREATE TABLE Customers (
 
 ### **Problem: Commands missing**
 
-**Solution:**
+Solution:
+
 1. Check Runtime Status for errors
 2. Full restart (close ALL windows)
 3. Reinstall extension (uninstall → install → restart)
@@ -200,7 +216,8 @@ CREATE TABLE Customers (
 
 ### **Problem: LLM not responding**
 
-**Check:**
+Check:
+
 1. Is LM Studio running? (http://localhost:1234)
 2. Is model loaded in LM Studio?
 3. Check settings:
@@ -213,7 +230,8 @@ CREATE TABLE Customers (
 
 ### **Problem: Still errors after v1.8.4**
 
-**Report:**
+Report:
+
 1. Screenshot Runtime Status (with error messages)
 2. Output panel content ("SQL Snippet Studio")
 3. Your VS Code version: Help → About
@@ -223,9 +241,10 @@ CREATE TABLE Customers (
 
 ## 📊 **WHAT CHANGED IN v1.8.4:**
 
-**Technical Details:**
+Technical Details:
 
-**Removed:**
+Removed:
+
 - `{"language": "postgresql", "path": "./snippets/postgres-snippets.json"}`
 - `{"language": "postgresql", "path": "./snippets/shared-snippets.json"}`
 
@@ -255,7 +274,8 @@ After installation, ALL of these should be TRUE:
 
 ## 📞 **SUPPORT:**
 
-**If you have issues:**
+If you have issues:
+
 1. Follow Troubleshooting steps above
 2. Try full uninstall → restart → reinstall
 3. If still fails: Report with screenshots
@@ -266,13 +286,15 @@ After installation, ALL of these should be TRUE:
 
 ## 🎓 **WHY THIS HAPPENED:**
 
-**v1.8.2 introduced the bug:**
+v1.8.2 introduced the bug:
+
 - Added `"postgresql"` language ID for better snippet support
 - Worked in Cursor (more forgiving)
 - Failed in VS Code (stricter validation)
 - 75% failure rate in team (3 out of 4 users!)
 
-**v1.8.4 fixes it:**
+v1.8.4 fixes it:
+
 - Use ONLY standard language IDs
 - 100% VS Code compatibility
 - Tested in clean installations
@@ -281,8 +303,8 @@ After installation, ALL of these should be TRUE:
 
 ---
 
-**Version:** 1.8.7  
-**Status:** ✅ Ready for deployment  
+**Version:** 1.8.7
+**Status:** ✅ Ready for deployment
 **Priority:** 🔥 CRITICAL
 
 **DEPLOY NOW!** 🚀

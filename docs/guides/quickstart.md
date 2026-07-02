@@ -4,19 +4,20 @@
 
 ### 1. Install
 
-**Option A: From VSIX (recommended)**
+Option A: From VSIX (recommended)
 
 1. Build or obtain `sql-snippet-studio-*.vsix`
 2. In VS Code / Cursor: **Extensions → Install from VSIX…**
 3. Select the `.vsix` file
 
-**Option B: From source**
+Option B: From source
 
 ```powershell
 cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 npm install
 npx vsce package
 # Install the generated .vsix via Extensions → Install from VSIX…
+
 ```
 
 ### 2. Reload IDE

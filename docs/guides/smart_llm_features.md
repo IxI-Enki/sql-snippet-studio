@@ -36,19 +36,21 @@ The extension now uses a sophisticated parser that extracts clean SQL from vario
   Let me analyze the schema...
   This requires a JOIN between...
   </think>
-  
+
   Here's the query:
   \`\`\`sql
   SELECT * FROM books;
   \`\`\`
-  
+
   This query will return all books.
+
 ```
 
 ### **Example Output:**
 
 ```sql
 SELECT * FROM books;
+
 ```
 
 ---
@@ -57,7 +59,7 @@ SELECT * FROM books;
 
 ### **Aggressive Prompts with Stop-Sequences**
 
-**System Message:**
+System Message:
 
 ```markdown
 You are an expert SQL code generator. Generate ONLY valid SQL queries.
@@ -66,9 +68,10 @@ RULES:
 - No <think> tags or reasoning
 - Start directly with SQL keywords (SELECT/INSERT/UPDATE/DELETE/CREATE)
 - End with semicolon (;)
+
 ```
 
-**Stop Sequences:**
+Stop Sequences:
 Prevents over-generation by stopping at:
 
 - `<think>`
@@ -79,7 +82,7 @@ Prevents over-generation by stopping at:
 - Triple newlines (`\n\n\n`)
 - Code block markers (` ``` `)
 
-**Few-Shot Examples:**
+Few-Shot Examples:
 Provides concrete examples in the prompt:
 
 ```markdown
@@ -88,6 +91,7 @@ Output: SELECT * FROM books WHERE publish_year > 2000;
 
 Task: Count books per author
 Output: SELECT a.first_name, a.last_name, COUNT(b.book_id) AS book_count ...
+
 ```
 
 ---
@@ -98,21 +102,21 @@ Output: SELECT a.first_name, a.last_name, COUNT(b.book_id) AS book_count ...
 
 Every LLM-generated query is automatically validated:
 
-**✅ Error Checks:**
+✅ Error Checks:
 
 - SQL keyword presence
 - Parentheses matching
 - String quote matching
 - Basic syntax structure
 
-**⚠️ Warning Checks:**
+⚠️ Warning Checks:
 
 - Missing semicolon
 - SELECT without FROM clause
 - Mixed case keywords
 - Suspicious SQL patterns
 
-**📊 Quality Score:**
+📊 Quality Score:
 
 - 100 = Perfect query
 - 70-99 = Good with minor warnings
@@ -121,24 +125,27 @@ Every LLM-generated query is automatically validated:
 
 ### **User Feedback:**
 
-**Perfect Query:**
+Perfect Query:
 
 ```markdown
 ✅ Perfect query inserted! (Score: 100/100)
+
 ```
 
-**With Warnings:**
+With Warnings:
 
 ```markdown
 ⚠️ Query inserted with warnings (Score: 85/100)
 Consider adding spaces around = operator
+
 ```
 
-**With Errors:**
+With Errors:
 
 ```markdown
 ⚠️ Query may have issues (Score: 65/100)
 Unmatched parentheses: missing closing
+
 ```
 
 ---
@@ -216,13 +223,14 @@ Validated with the following models:
 
 All features work automatically! No additional settings required.
 
-**Optional Debug Settings:**
+Optional Debug Settings:
 
 ```json
 {
   "dbiSurvivalKit.llm.verboseLogging": true,
   "dbiSurvivalKit.llm.showNotifications": true
 }
+
 ```
 
 With verbose logging enabled, you'll see:
@@ -234,6 +242,7 @@ With verbose logging enabled, you'll see:
 [PARSER] Final SQL length: 85 chars
 [VALIDATOR] 🔍 Validating SQL (85 chars)
 [VALIDATOR] ✅ Validation complete: VALID (Score: 100)
+
 ```
 
 ---
@@ -275,5 +284,5 @@ No more manual cleanup of `<think>` blocks, explanations, or markdown!
 
 ---
 
-> **Version:** 1.8.7  
+> **Version:** 1.8.7
 > **Date:** 2025-11-09

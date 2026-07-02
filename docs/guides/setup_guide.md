@@ -13,12 +13,14 @@
 ### Method 1: Install from VSIX (recommended)
 
 <!-- markdownlint-disable MD029 -->
+
 1. **Package or obtain VSIX:**
 
 ```powershell
 cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 npm install
 npx vsce package
+
 ```
 
 2. **Install:** Extensions → Install from VSIX… → select the `.vsix` file
@@ -35,6 +37,7 @@ npx vsce package
 
 ```powershell
 npm install -g @vscode/vsce
+
 ```
 
 2. **Package Extension:**
@@ -42,12 +45,14 @@ npm install -g @vscode/vsce
 ```powershell
 cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 vsce package
+
 ```
 
 3. **Install VSIX:**
 
 ```powershell
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 4. **Share with colleagues:**
@@ -64,6 +69,7 @@ code --install-extension sql-snippet-studio-2.0.0.vsix
 ```powershell
 cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
 code .
+
 ```
 
 2. **Run Extension:**
@@ -126,6 +132,7 @@ Add to your `settings.json`:
     "strings": true
   }
 }
+
 ```
 
 ### Database-Specific Mode
@@ -136,6 +143,7 @@ If you only work with one database:
 {
   "dbiSurvivalKit.databaseDialect": "postgres"  // or "oracle"
 }
+
 ```
 
 ---
@@ -147,6 +155,7 @@ If you only work with one database:
 ```powershell
 # Or use: Ctrl+Shift+P → SQL: Export Snippets
 xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\snippets" "D:\dbi-backup\snippets" /E /I /Y
+
 ```
 
 Keep a copy of your customized snippets and the latest `.vsix` for reinstall or sharing.
@@ -187,6 +196,7 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 {
   "editor.tabCompletion": "on"
 }
+
 ```
 
 ### Issue: Extension Not Loading
@@ -203,6 +213,7 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 code --uninstall-extension dbi-team.sql-snippet-studio
 code --uninstall-extension dbi-team.dbi-test-survival-kit   # pre-v2 extension ID
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 ---
@@ -234,6 +245,7 @@ git add .
 git commit -m "Initial commit"
 git remote add origin <your-repo-url>
 git push -u origin main
+
 ```
 
 2. colleagues clone and install:
@@ -244,6 +256,7 @@ cd dbi-test-survival-kit
 npm install
 vsce package
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 <!-- markdownlint-enable MD029 -->
@@ -276,6 +289,7 @@ Open:
     "description": "What your snippet does"
   }
 }
+
 ```
 
 ### 3. Reload VS Code
@@ -332,6 +346,7 @@ Open:
 │   └── extension.js
 └── images/
     └── icon.png
+
 ```
 
 ---

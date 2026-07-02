@@ -2,8 +2,8 @@
 
 # 🚀 PHASE 2 IMPLEMENTATION COMPLETE! 🎉
 
-**Date:** November 9, 2025  
-**Version:** v1.8.0  
+**Date:** November 9, 2025
+**Version:** v1.8.0
 **Status:** ✅ **READY FOR TESTING**
 
 ---
@@ -13,6 +13,7 @@
 ### **Phase 2: PostgreSQL Dialect Specifics & Logic Validation**
 
 Basierend auf **Test 5 Ergebnissen (qwen3-coder-30b, v1.7.1):**
+
 - ✅ 5/8 tasks perfect (62.5%)
 - ❌ 3 tasks broken (37.5%)
 - **Root Cause:** PostgreSQL dialect issues + logic errors
@@ -25,12 +26,13 @@ Basierend auf **Test 5 Ergebnissen (qwen3-coder-30b, v1.7.1):**
 
 ### **1. PostgreSQL MERGE Dialect Specifics (Phase 2.1)**
 
-**Target Issues:**
+Target Issues:
+
 - **Aufgabe 3:** `WHEN NOT MATCHED BY SOURCE` (SQL Server syntax, PostgreSQL doesn't support)
 - **Aufgabe 8:** `MERGE in CTE` (PostgreSQL limitation)
 - **Aufgabe 6:** `OUTPUT` clause (PostgreSQL doesn't support)
 
-**Implementation:**
+Implementation:
 ```javascript
 // src/llm/contextBuilder.js
 
@@ -48,9 +50,11 @@ if (isMergeQuery) {
    ✅ Alternative: Use RETURNING or separate INSERT for logging
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 3:** ❌ → ✅ (Generate separate DELETE)
 - **Aufgabe 8:** ❌ → ✅ (MERGE outside CTE)
 - **Aufgabe 6:** ✅ (Reinforce correct pattern)
@@ -59,12 +63,13 @@ if (isMergeQuery) {
 
 ### **2. UPDATE/DELETE Logic Validation (Phase 2.2)**
 
-**Target Issues:**
+Target Issues:
+
 - **Aufgabe 7:** WHERE clause checks wrong table (Staging instead of Products)
   - Generated: `WHERE product_id IN (SELECT id FROM Staging WHERE stock < 10)`
   - Should be: `WHERE product_id IN (SELECT id FROM Products WHERE stock < 10)`
 
-**Implementation:**
+Implementation:
 ```javascript
 // src/llm/contextBuilder.js
 
@@ -77,7 +82,7 @@ if (isUpdateOrDelete) {
 1. Check WHERE clause on CORRECT table:
    WRONG: UPDATE Products ... WHERE id IN (SELECT id FROM Staging WHERE stock < 10);
    → Checks stock in STAGING!
-   
+
    CORRECT: UPDATE Products ... WHERE id IN (SELECT id FROM Products WHERE stock < 10);
    → Checks stock in TARGET!
 
@@ -88,9 +93,11 @@ if (isUpdateOrDelete) {
    UPDATE Products ... WHERE stock < 10 RETURNING id, stock, last_updated;
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 7:** ⚠️ → ✅ (WHERE clause on correct table)
 - Other UPDATE/DELETE queries: Improved logic validation
 
@@ -98,12 +105,13 @@ if (isUpdateOrDelete) {
 
 ### **3. Multi-Stage ETL Process Hints (Phase 2.3)**
 
-**Target Issues:**
+Target Issues:
+
 - **Aufgabe 8:** Complex multi-stage ETL with MERGE in CTE
   - Model struggled (timeout 200000ms required)
   - Generated MERGE inside WITH clause (not supported in PostgreSQL)
 
-**Implementation:**
+Implementation:
 ```javascript
 // src/llm/contextBuilder.js
 
@@ -132,9 +140,11 @@ MERGE INTO target USING source ON (...) WHEN MATCHED THEN ... WHEN NOT MATCHED T
 INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 8:** ❌ → ✅ (Structured ETL, MERGE outside CTE)
 - Faster generation (clear structure guidance)
 
@@ -155,7 +165,8 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 | **7. UPDATE RETURNING** | ⚠️ 50% | ✅ **100%** | **Logic validation!** |
 | **8. Multi-Stage ETL** | ❌ 0% | ✅ **100%** | **MERGE in CTE fix!** |
 
-**Total:**
+Total:
+
 - **v1.7.1:** 62.5% (5/8)
 - **v1.8.0:** **87.5%-100%** (7-8/8)
 - **Improvement:** **+25-37.5 percentage points!** 🚀
@@ -170,7 +181,8 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 | **qwen3-vl-8b** | 42.1% | ~45% | **55-65%** | **+13-23 pts** |
 | **llama-3-sqlcoder-8b** | 27.9% | ~30% | **45-60%** | **+17-32 pts** |
 
-**Why Bigger Impact for Smaller Models?**
+Why Bigger Impact for Smaller Models?
+
 - Smaller models benefit MORE from explicit dialect instructions
 - They have less implicit knowledge about PostgreSQL vs. SQL Server differences
 - Detailed hints compensate for smaller parameter count
@@ -199,6 +211,7 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 
 # Restart Cursor
 # Clear LM Studio cache (if needed)
+
 ```
 
 ### **Test Priority:**
@@ -223,37 +236,43 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 ### **What to Check:**
 
 ✅ **Aufgabe 3 (Test 5):**
+
 - Model should generate:
   ```sql
   DELETE FROM products WHERE product_id NOT IN (SELECT product_id FROM stg_product_updates);
   ```
+
 - NOT:
   ```sql
   MERGE INTO products p ... WHEN NOT MATCHED BY SOURCE THEN DELETE;
   ```
 
 ✅ **Aufgabe 7 (Test 5):**
+
 - Model should check stock in Products:
   ```sql
   UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Products WHERE stock < 10);
   ```
+
 - NOT in Staging:
   ```sql
   UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Staging WHERE stock < 10);
   ```
 
 ✅ **Aufgabe 8 (Test 5):**
+
 - Model should structure as separate statements:
   ```sql
   -- Step 1: CTE
   WITH new_suppliers AS (INSERT INTO Suppliers ... RETURNING id) SELECT * FROM new_suppliers;
-  
+
   -- Step 2: MERGE (outside CTE!)
   MERGE INTO Products p USING (SELECT ... FROM stg) s ON (...) WHEN MATCHED THEN ... WHEN NOT MATCHED THEN ...;
-  
+
   -- Step 3: Logging
   INSERT INTO log SELECT ... FROM Products JOIN stg ...;
   ```
+
 - NOT:
   ```sql
   WITH ... , updated_products AS (MERGE INTO ...) ... -- ❌ MERGE in CTE!
@@ -264,15 +283,18 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 ## 📈 **SUCCESS METRICS**
 
 ### **Primary Goals (Phase 2):**
+
 - ✅ Test 5 MERGE: 62.5% → **87.5%+**
 - ✅ Fix 3 PostgreSQL dialect issues
 - ✅ Fix 1 logic error
 
 ### **Secondary Goals:**
+
 - ✅ Overall improvement: +5-15 points across all tests
 - ✅ Smaller models benefit more (+17-32 pts for llama-3-sqlcoder-8b)
 
 ### **Validation:**
+
 - **If Aufgabe 3, 7, 8 are fixed:** Phase 2 successful! ✅
 - **If Test 5 reaches 87.5%+:** Target achieved! 🎯
 - **If overall score improves +10 pts:** Excellent! 🚀
@@ -282,22 +304,26 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 ## 🔮 **NEXT STEPS**
 
 ### **Immediate:**
+
 1. ✅ Install v1.8.0
 2. ✅ Re-test Test 5 (MERGE) with qwen3-coder-30b
 3. ✅ Verify fixes for Aufgabe 3, 7, 8
 4. ✅ Document results
 
 ### **Optional (Phase 3):**
+
 - Query Complexity Detection + Model Routing
 - Dynamic Timeout Management
 - Advanced Schema Relationship Extraction
 
 ### **Recommended Test Flow:**
-```
+
+```text
 1. Test 5 (MERGE) with qwen3-coder-30b     [PRIORITY 1] 🔥
 2. Test 2 (Logistics) with qwen3-coder-30b [PRIORITY 2]
 3. Test 10 (Mixed Expert) with qwen3-coder-30b [PRIORITY 3]
 4. Re-test other models with v1.8.0        [OPTIONAL]
+
 ```
 
 ---
@@ -330,14 +356,16 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 
 **Phase 2 is a TARGETED, SURGICAL FIX** for the 3 remaining issues in Test 5!
 
-**The Journey:**
+The Journey:
+
 - **v1.7.0:** 0% (parser bug) ❌
 - **v1.7.1:** 62.5% (parser fixed) ✅
 - **v1.8.0:** **87.5%+** (dialect + logic fixed) ✅✅
 
 **Total Improvement:** 0% → **87.5%+** = **+87.5 points in 2 versions!** 🚀🔥
 
-**ROI:**
+ROI:
+
 - **Phase 1:** 6 lines changed → +62.5 points = **10.4 pts/line**
 - **Phase 2:** 90 lines changed → +25 points (expected) = **0.28 pts/line**
 - **Combined:** 96 lines → +87.5 points = **0.91 pts/line**
@@ -348,25 +376,28 @@ code --install-extension dbi-test-survival-kit-1.8.0.vsix
 
 ## 🤓🤜🏻🤛🏻🤖 **LET'S TEST IT!**
 
-**Installation:**
+Installation:
 ```bash
 code --install-extension dbi-test-survival-kit-1.8.0.vsix
+
 ```
 
-**First Test:**
+First Test:
+
 - Test 5 (MERGE) with qwen3-coder-30b
 - Focus on Aufgabe 3, 7, 8
 
-**Expected Result:**
+Expected Result:
+
 - **87.5%+** (7-8/8 tasks perfect)
 
 **BEREIT?** 🚀
 
 ---
 
-**Phase 2 Implementation:** ✅ **COMPLETE**  
-**Package:** `dbi-test-survival-kit-1.8.0.vsix` (419.06 KB)  
-**Status:** ✅ **READY FOR TESTING**  
+**Phase 2 Implementation:** ✅ **COMPLETE**
+**Package:** `dbi-test-survival-kit-1.8.0.vsix` (419.06 KB)
+**Status:** ✅ **READY FOR TESTING**
 **Date:** November 9, 2025
 
 **LET'S GO!** 🔥💪🚀

@@ -1,7 +1,7 @@
 # Rebrand Design Spec: SQL Snippet Studio (v2.0.0)
 
-**Date:** 2026-06-16  
-**Status:** Implemented — Option A (full package + extension ID rename)  
+**Date:** 2026-06-16
+**Status:** Implemented — Option A (full package + extension ID rename)
 **Branch:** `release/v2-rebrand`
 
 ---
@@ -67,6 +67,7 @@ Upgrading from v1.8.x requires **uninstall of the old extension ID** and **insta
 ```powershell
 code --uninstall-extension dbi-team.dbi-test-survival-kit
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 If both IDs are present after a partial upgrade:
@@ -75,6 +76,7 @@ If both IDs are present after a partial upgrade:
 code --uninstall-extension dbi-team.sql-snippet-studio
 code --uninstall-extension dbi-team.dbi-test-survival-kit
 code --install-extension sql-snippet-studio-2.0.0.vsix
+
 ```
 
 Full migration table: `docs/changelogs/changelog_v2_0_0.md`.

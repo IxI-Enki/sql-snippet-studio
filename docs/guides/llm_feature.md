@@ -23,6 +23,7 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 # Install LM Studio or Ollama
 # Load a code model (e.g. qwen2.5-coder)
 # Start server on localhost:1234
+
 ```
 
 ### Option B: Remote API
@@ -32,6 +33,7 @@ Core snippets work **without** LLM — enable this only when you want AI assista
   "dbiSurvivalKit.llm.endpoint": "https://api.openai.com/v1/chat/completions",
   "dbiSurvivalKit.llm.apiKey": "sk-..."
 }
+
 ```
 
 ### Enable in VS Code / Cursor
@@ -46,6 +48,7 @@ Core snippets work **without** LLM — enable this only when you want AI assista
   "dbiSurvivalKit.llm.endpoint": "http://localhost:1234/v1/chat/completions",
   "dbiSurvivalKit.llm.model": "qwen2.5-coder"
 }
+
 ```
 
 ---
@@ -66,12 +69,14 @@ CREATE TABLE students (
 -- Task: Find all students with grade above 80
 
 -- Place cursor below, press Ctrl+Alt+Shift+Q or use IntelliSense
+
 ```
 
 Result:
 
 ```sql
 SELECT * FROM students WHERE grade > 80;
+
 ```
 
 ### Recognized task comment formats
@@ -80,6 +85,7 @@ SELECT * FROM students WHERE grade > 80;
 -- Task: Write a JOIN query
 -- TODO: Implement trigger
 -- Question: How to aggregate by month?
+
 ```
 
 ---
@@ -112,20 +118,21 @@ See also [guides/smart_llm_features.md](guides/smart_llm_features.md) for parsin
 
 ## Troubleshooting
 
-**LLM not responding**
+LLM not responding
 
 ```bash
 curl http://localhost:1234/v1/models
+
 ```
 
-**No completion appears**
+No completion appears
 
 1. Confirm `dbiSurvivalKit.llm.enabled` is `true`
 2. Cursor is below the task comment
 3. Schema is in the same file
 4. Local server is running
 
-**Poor query quality**
+Poor query quality
 
 - Lower `temperature` (e.g. `0.0`)
 - Increase `maxTokens` for longer queries

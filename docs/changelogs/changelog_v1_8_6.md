@@ -1,7 +1,7 @@
 # 🔥 v1.8.6 - Keybinding Fix (Universal Keybindings)
 
-**Release Date:** 2025-11-09  
-**Type:** CRITICAL FIX (Keybindings not working)  
+**Release Date:** 2025-11-09
+**Type:** CRITICAL FIX (Keybindings not working)
 **Priority:** 🔥 HIGH (User-requested feature)
 
 ---
@@ -9,12 +9,13 @@
 ## 🎯 **PROBLEM:**
 
 Extension activated successfully in v1.8.5, BUT:
+
 - ❌ `Ctrl+Alt+Shift+Q` keybinding **NOT working**
 - ❌ Other keybindings also not responding
 - ✅ Commands worked via Command Palette
 - ✅ Extension activated correctly
 
-**User Feedback:**
+User Feedback:
 > "keybinding ist extrem wichtig"
 
 **Impact:** Commands accessible only via Command Palette, not via keyboard shortcuts.
@@ -23,7 +24,7 @@ Extension activated successfully in v1.8.5, BUT:
 
 ## 🔍 **ROOT CAUSE:**
 
-**v1.8.5 Keybinding Configuration:**
+v1.8.5 Keybinding Configuration:
 
 ```json
 {
@@ -31,22 +32,26 @@ Extension activated successfully in v1.8.5, BUT:
   "key": "ctrl+alt+shift+q",
   "when": "editorTextFocus && (editorLangId == sql || editorLangId == plsql)"
 }
+
 ```
 
-**Problems with this approach:**
+Problems with this approach:
 
 ### **1. Language ID Case Sensitivity** 🐛
+
 - Condition: `editorLangId == sql`
 - If VS Code reports: `"SQL"` (uppercase) → **Keybinding fails!**
 - If VS Code reports: `"sql"` (lowercase) → ✅ Works
 - **Inconsistent behavior across installations!**
 
 ### **2. Language ID Variations** 🐛
+
 - Some extensions register: `"postgresql"`, `"postgres"`, `"mysql"`, etc.
 - Our condition only checks: `"sql"` OR `"plsql"`
 - If file detected as `"postgresql"` → **Keybinding fails!**
 
 ### **3. Over-Restrictive Condition** 🐛
+
 - User wants to use keybinding → It should work!
 - Why restrict to SQL files only?
 - Extension has logic to handle non-SQL files (shows error message)
@@ -58,7 +63,7 @@ Extension activated successfully in v1.8.5, BUT:
 
 ## ✅ **FIX:**
 
-**Simplified "when" clause for ALL keybindings:**
+Simplified "when" clause for ALL keybindings:
 
 ```json
 // v1.8.6 - SIMPLIFIED & UNIVERSAL
@@ -67,9 +72,10 @@ Extension activated successfully in v1.8.5, BUT:
   "key": "ctrl+alt+shift+q",
   "when": "editorTextFocus"  // ✅ ONLY requirement: Editor focused!
 }
+
 ```
 
-**Changes Applied:**
+Changes Applied:
 
 | Keybinding | v1.8.5 Condition | v1.8.6 Condition |
 |------------|------------------|------------------|
@@ -79,7 +85,8 @@ Extension activated successfully in v1.8.5, BUT:
 | **Ctrl+Alt+Shift+D** (Dimension) | `editorTextFocus && (editorLangId == sql \|\| editorLangId == plsql)` | `editorTextFocus` |
 | **Ctrl+Alt+Shift+F** (Fact Table) | `editorTextFocus && (editorLangId == sql \|\| editorLangId == plsql)` | `editorTextFocus` |
 
-**Result:**
+Result:
+
 - ✅ Keybindings work in **ANY** file type (not just SQL)
 - ✅ No dependency on Language ID detection
 - ✅ Consistent behavior across all VS Code installations
@@ -104,21 +111,26 @@ Extension activated successfully in v1.8.5, BUT:
 ## 🎓 **DESIGN PHILOSOPHY:**
 
 ### **Old Approach (v1.8.5):** Defensive Keybindings
-```
+
+```text
 "Only allow keybinding in SQL files"
 → Problem: Language detection unreliable
 → Result: Keybindings don't work
+
 ```
 
 ### **New Approach (v1.8.6):** Permissive Keybindings + Validation
-```
+
+```text
 "Allow keybinding anywhere, validate in code"
 → User experience: Keybinding always responds
 → Extension: Shows helpful error if context invalid
 → Result: Better UX!
+
 ```
 
-**Example:**
+Example:
+
 - User presses `Ctrl+Alt+Shift+Q` in `.txt` file
 - v1.8.5: Nothing happens (keybinding disabled) ❌
 - v1.8.6: Extension activates, shows: "No SQL schema found" ✅
@@ -131,7 +143,7 @@ Extension activated successfully in v1.8.5, BUT:
 
 **File:** `dbi-test-survival-kit-1.8.6.vsix`
 
-**Installation:**
+Installation:
 
 ```bash
 # Uninstall old version
@@ -147,9 +159,11 @@ code --install-extension dbi-test-survival-kit-1.8.6.vsix
 # 1. Open ANY .sql file
 # 2. Press Ctrl+Alt+Shift+Q
 # 3. Should work instantly!
+
 ```
 
-**CRITICAL:** 
+CRITICAL:
+
 - Full reload or restart required!
 - Keybindings are cached by VS Code
 - `Developer: Reload Window` is fastest
@@ -198,7 +212,7 @@ code --install-extension dbi-test-survival-kit-1.8.6.vsix
 
 ## 📝 **FILES CHANGED:**
 
-```
+```text
 package.json
 ├── version: 1.8.5 → 1.8.6
 ├── keybindings: Simplified "when" clauses (5 entries)
@@ -206,21 +220,24 @@ package.json
 
 CHANGELOG_v1.8.6.md (NEW)
 └── Complete documentation
+
 ```
 
 ---
 
 ## 🐛 **KNOWN INFO:**
 
-**VS Code Warning (Non-Critical):**
-```
-"This activation event can be removed as VS Code generates these 
+VS Code Warning (Non-Critical):
+```text
+"This activation event can be removed as VS Code generates these
 automatically from your package.json contribution declarations."
+
 ```
 
 **About:** The `onCommand:...` activationEvents in v1.8.5+
 
-**Status:** 
+Status:
+
 - ⚠️ Informational only (not an error)
 - ✅ Redundant but harmless
 - ✅ Kept for explicitness and compatibility
@@ -243,10 +260,11 @@ automatically from your package.json contribution declarations."
 
 ## 💬 **USER FEEDBACK ADDRESSED:**
 
-**User Request:**
+User Request:
 > "keybinding ist extrem wichtig"
 
-**Response:**
+Response:
+
 - ✅ Identified root cause (Language ID condition)
 - ✅ Simplified keybinding conditions
 - ✅ Made keybindings universal (work everywhere)
@@ -266,9 +284,8 @@ automatically from your package.json contribution declarations."
 
 ---
 
-**Version:** 1.8.6  
-**Status:** ✅ Ready for deployment  
+**Version:** 1.8.6
+**Status:** ✅ Ready for deployment
 **Priority:** 🔥 HIGH - User-critical feature!
 
 **KEYBINDINGS WILL WORK!** 💪🚀
-

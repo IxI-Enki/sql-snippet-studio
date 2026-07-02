@@ -1,7 +1,7 @@
 # 🚀 v1.8.5 - Activation Events Enhancement
 
-**Release Date:** 2025-11-09  
-**Type:** CRITICAL FIX (Activation Issues)  
+**Release Date:** 2025-11-09
+**Type:** CRITICAL FIX (Activation Issues)
 **Priority:** 🔥 BLOCKING (Extension not activating)
 
 ---
@@ -10,7 +10,8 @@
 
 Extension remained "Not yet activated" even with v1.8.4 installed.
 
-**User Reports:**
+User Reports:
+
 - ✅ Extension installed (v1.8.4)
 - ✅ Settings configured correctly
 - ✅ Keyboard shortcuts visible
@@ -25,7 +26,7 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
 
 ## 🔍 **ROOT CAUSE:**
 
-**v1.8.4 activationEvents were too restrictive:**
+v1.8.4 activationEvents were too restrictive:
 
 ```json
 // package.json (v1.8.4)
@@ -33,15 +34,18 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
   "onLanguage:sql",     // ONLY activates on SQL files
   "onLanguage:plsql"    // OR PL/SQL files
 ]
+
 ```
 
-**Problem:**
+Problem:
+
 1. Extension **ONLY** activates when opening `.sql` or `.pls` files
 2. Commands (Ctrl+Alt+Shift+Q) **CANNOT** activate the extension
 3. If Language Mode is not detected as "SQL", extension stays dormant
 4. VS Code may detect files as "Plain Text" → Extension never activates
 
-**Why v1.8.4 didn't work:**
+Why v1.8.4 didn't work:
+
 - User opened `.sql` file ✅
 - BUT: VS Code didn't detect it as "SQL" language ❌
 - Extension waited for "sql" language → never activated ⚠️
@@ -51,7 +55,7 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
 
 ## ✅ **FIX:**
 
-**Added `onCommand` activation events:**
+Added `onCommand` activation events:
 
 ```json
 // package.json (v1.8.5)
@@ -65,15 +69,18 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
   "onCommand:dbiSurvivalKit.insertDimensionTable", // ✅ On dimension
   "onCommand:dbiSurvivalKit.insertFactTable"     // ✅ On fact table
 ]
+
 ```
 
-**Changes:**
+Changes:
+
 - ✅ Added 6 `onCommand` activation events
 - ✅ Extension now activates when ANY command is executed
 - ✅ Works even if Language Mode is wrong
 - ✅ Ctrl+Alt+Shift+Q now triggers activation!
 
-**Result:**
+Result:
+
 - ✅ Extension activates on `.sql` files (as before)
 - ✅ Extension activates when pressing Ctrl+Alt+Shift+Q
 - ✅ Extension activates via Command Palette
@@ -91,7 +98,8 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
 | **Command Palette → DBI commands** | ❌ Fails | ✅ **Activates + executes!** |
 | **Status Bar visibility** | ❌ Not shown | ✅ **Shows!** |
 
-**Expected Result:**
+Expected Result:
+
 - ✅ 100% activation success
 - ✅ Commands work immediately
 - ✅ No dependency on Language Mode detection
@@ -103,32 +111,36 @@ Extension remained "Not yet activated" even with v1.8.4 installed.
 
 ### **1. activationEvents are CRITICAL:**
 
-**Too restrictive:**
+Too restrictive:
 ```json
 "activationEvents": ["onLanguage:sql"]
-```
-→ Extension ONLY loads for SQL files  
-→ Commands don't work if extension not loaded  
 
-**Better:**
+```
+→ Extension ONLY loads for SQL files
+→ Commands don't work if extension not loaded
+
+Better:
 ```json
 "activationEvents": [
   "onLanguage:sql",
   "onCommand:myExtension.myCommand"
 ]
+
 ```
-→ Extension loads on SQL files OR when command executed  
+→ Extension loads on SQL files OR when command executed
 → Works in more scenarios!
 
 ### **2. Commands need activation events:**
 
 If your extension has commands that users trigger:
+
 - **MUST** add `onCommand:...` activation events
 - Otherwise: Command tries to execute → Extension not loaded → Fails!
 
 ### **3. Language Mode detection can fail:**
 
 VS Code may not detect `.sql` files as "SQL":
+
 - File associations overridden by other extensions
 - Cache issues
 - User manually set Language Mode to "Plain Text"
@@ -137,14 +149,16 @@ VS Code may not detect `.sql` files as "SQL":
 
 ### **4. User Experience:**
 
-**Bad UX (v1.8.4):**
+Bad UX (v1.8.4):
+
 1. User installs extension
 2. Opens .sql file
 3. Presses Ctrl+Alt+Shift+Q
 4. Nothing happens (extension not activated)
 5. User thinks: "Extension broken!" ❌
 
-**Good UX (v1.8.5):**
+Good UX (v1.8.5):
+
 1. User installs extension
 2. Presses Ctrl+Alt+Shift+Q (anywhere!)
 3. Extension activates + executes command
@@ -156,7 +170,7 @@ VS Code may not detect `.sql` files as "SQL":
 
 **File:** `dbi-test-survival-kit-1.8.5.vsix`
 
-**Installation:**
+Installation:
 
 ```bash
 # Uninstall old version
@@ -171,6 +185,7 @@ code --install-extension dbi-test-survival-kit-1.8.5.vsix
 # 1. Open ANY file (even empty!)
 # 2. Press Ctrl+Alt+Shift+Q
 # 3. Extension should activate + show in status bar!
+
 ```
 
 **CRITICAL:** Full restart required!
@@ -218,7 +233,7 @@ code --install-extension dbi-test-survival-kit-1.8.5.vsix
 
 ## 📝 **FILES CHANGED:**
 
-```
+```text
 package.json
 ├── version: 1.8.4 → 1.8.5
 ├── activationEvents: Added 6 onCommand entries (2 → 8 events)
@@ -226,6 +241,7 @@ package.json
 
 CHANGELOG_v1.8.5.md (NEW)
 └── Complete documentation
+
 ```
 
 ---
@@ -234,21 +250,24 @@ CHANGELOG_v1.8.5.md (NEW)
 
 ### **Still "Not yet activated"?**
 
-**Solution:**
+Solution:
+
 1. Press `Ctrl+Alt+Shift+Q` (forces activation)
 2. OR: Command Palette → "DBI: Show LLM Statistics"
 3. Check Runtime Status (should show "Activated")
 
 ### **Commands not found?**
 
-**Check:**
+Check:
+
 1. Extension installed? (Extensions view)
 2. Version = 1.8.5? (Check in Extension details)
 3. Full restart done? (Close ALL windows)
 
 ### **LLM not responding?**
 
-**After activation works, check:**
+After activation works, check:
+
 1. LM Studio running? (http://localhost:1234)
 2. Settings: `dbiSurvivalKit.llm.enabled` = true
 3. Output panel: "DBI Survival Kit" for errors
@@ -270,13 +289,15 @@ CHANGELOG_v1.8.5.md (NEW)
 
 **This is the REAL fix!** 💪
 
-**v1.8.4 vs v1.8.5:**
+v1.8.4 vs v1.8.5:
+
 - v1.8.4: Fixed unknown language error ✅ (but extension still didn't activate)
 - v1.8.5: Extension ACTUALLY activates ✅✅✅
 
 **Root Issue:** Not the `"postgresql"` language ID, but **missing `onCommand` activation events!**
 
-**Why we needed both:**
+Why we needed both:
+
 1. v1.8.4: Remove invalid language ID (fixes validation error)
 2. v1.8.5: Add command activation (fixes actual activation)
 
@@ -286,9 +307,8 @@ CHANGELOG_v1.8.5.md (NEW)
 
 ## 🚀 **PRODUCTION READY!**
 
-**Version:** 1.8.5  
-**Status:** ✅ Ready for immediate deployment  
+**Version:** 1.8.5
+**Status:** ✅ Ready for immediate deployment
 **Priority:** 🔥🔥🔥 CRITICAL
 
 **DEPLOY NOW!** 💪🚀
-

@@ -1,7 +1,7 @@
 # 🚀 CHANGELOG v1.8.0 - Phase 2: PostgreSQL Dialect Specifics & Enhanced Logic Validation
 
-**Release Date:** November 9, 2025  
-**Branch:** feature/production-ready-optimization  
+**Release Date:** November 9, 2025
+**Branch:** feature/production-ready-optimization
 **Status:** ✅ IMPLEMENTED & PACKAGED
 
 ---
@@ -10,11 +10,13 @@
 
 Version 1.8.0 implementiert **Phase 2 der Production-Ready Optimierungen** mit Fokus auf PostgreSQL-spezifische Syntax-Limitationen und erweiterte Logic Validation.
 
-**Basierend auf Test 5 Ergebnissen (qwen3-coder-30b, v1.7.1):**
+Basierend auf Test 5 Ergebnissen (qwen3-coder-30b, v1.7.1):
+
 - **Current Score:** 62.5% (5/8 tasks perfect)
 - **Remaining Issues:** 3 tasks broken due to PostgreSQL dialect issues and logic errors
 
-**Erwarteter Impact (v1.8.0):**
+Erwarteter Impact (v1.8.0):
+
 - **Test 5 MERGE:** 62.5% → **75-87.5%** (+12.5-25 Punkte!)
 - **All Tests:** +5-15 Punkte overall (dialect awareness + logic validation)
 
@@ -24,7 +26,8 @@ Version 1.8.0 implementiert **Phase 2 der Production-Ready Optimierungen** mit F
 
 ### 1. PostgreSQL MERGE Dialect Specifics (Impact: +10-15 Punkte!)
 
-**Problem (Test 5 Findings):**
+Problem (Test 5 Findings):
+
 - **Aufgabe 3:** Model generated `WHEN NOT MATCHED BY SOURCE THEN DELETE` (SQL Server syntax)
   - ❌ PostgreSQL does NOT support `BY SOURCE`!
 - **Aufgabe 8:** Model generated MERGE in CTE (WITH clause)
@@ -32,7 +35,7 @@ Version 1.8.0 implementiert **Phase 2 der Production-Ready Optimierungen** mit F
 - **Aufgabe 6:** Model used `OUTPUT` clause for logging
   - ❌ PostgreSQL does NOT support OUTPUT (use RETURNING)!
 
-**Lösung:**
+Lösung:
 Enhanced MERGE prompt mit PostgreSQL-spezifischen Warnungen:
 
 ```javascript
@@ -49,7 +52,7 @@ if (isMergeQuery) {
 2. ❌ MERGE in CTE (WITH clause) → NOT SUPPORTED in PostgreSQL!
    ✅ Alternative: Execute MERGE outside of WITH, use separate statements
    WRONG: WITH updated AS (MERGE INTO ...) SELECT * FROM updated;
-   CORRECT: 
+   CORRECT:
    -- Step 1: CTE for data prep
    WITH prep AS (SELECT ... FROM source)
    SELECT * FROM prep;
@@ -59,14 +62,16 @@ if (isMergeQuery) {
 3. ❌ OUTPUT clause → NOT SUPPORTED in PostgreSQL!
    ✅ Alternative: Use RETURNING clause or separate INSERT for logging
    WRONG: MERGE INTO ... OUTPUT inserted.*, deleted.* INTO log_table;
-   CORRECT: 
+   CORRECT:
    MERGE INTO target ... ;
    INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 3:** Model should generate separate DELETE statement (❌ → ✅)
 - **Aufgabe 8:** Model should generate MERGE outside of CTE (❌ → ✅)
 - **Aufgabe 6:** Already correct (separate INSERT), but now with explicit instructions
@@ -75,12 +80,13 @@ if (isMergeQuery) {
 
 ### 2. UPDATE/DELETE Logic Validation (Impact: +5-10 Punkte!)
 
-**Problem (Test 5 Findings):**
+Problem (Test 5 Findings):
+
 - **Aufgabe 7:** Model generated `WHERE product_id IN (SELECT ... FROM Staging WHERE stock < 10)`
   - ❌ This checks `stock` in STAGING, should check in TARGET (Products)!
   - Logic error: Updating products WHERE staging stock < 10, not WHERE products stock < 10
 
-**Lösung:**
+Lösung:
 New pattern detection + enhanced instructions for UPDATE/DELETE:
 
 ```javascript
@@ -95,7 +101,7 @@ if (isUpdateOrDelete) {
 1. Check WHERE clause on CORRECT table:
    WRONG: UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Staging WHERE stock < 10);
    → This checks stock in STAGING, not in Products!
-   
+
    CORRECT: UPDATE Products SET stock = stock - 1 WHERE product_id IN (SELECT id FROM Products WHERE stock < 10);
    → This checks stock in TARGET table!
 
@@ -106,9 +112,11 @@ if (isUpdateOrDelete) {
    UPDATE Products SET stock = stock - 1 WHERE stock < 10 RETURNING product_id, stock, last_updated;
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 7:** Model should check stock in Products, not Staging (⚠️ → ✅)
 - Other UPDATE/DELETE queries: Improved logic validation
 
@@ -116,12 +124,13 @@ if (isUpdateOrDelete) {
 
 ### 3. Multi-Stage ETL Process Hints (Impact: +5-10 Punkte!)
 
-**Problem (Test 5 Findings):**
+Problem (Test 5 Findings):
+
 - **Aufgabe 8:** Model generated complex CTE with MERGE inside WITH clause
   - ❌ PostgreSQL limitation: MERGE in CTE not supported
   - User had to increase timeout to 200000ms (model struggled with complexity)
 
-**Lösung:**
+Lösung:
 Detect multi-stage ETL patterns + provide structure hints:
 
 ```javascript
@@ -152,9 +161,11 @@ MERGE INTO target USING source ON (...) WHEN MATCHED THEN UPDATE ... WHEN NOT MA
 INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 `;
 }
+
 ```
 
-**Expected Fix:**
+Expected Fix:
+
 - **Aufgabe 8:** Model should structure ETL as separate statements (❌ → ✅)
 - Complex queries: Better structure, faster generation
 
@@ -162,7 +173,7 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 
 ## 📊 EXPECTED IMPACT
 
-### Test 5 (MERGE Statements) - Before/After:
+### Test 5 (MERGE Statements) - Before/After
 
 | **Task** | **v1.7.1** | **v1.8.0 (Expected)** | **Fix** |
 |----------|------------|----------------------|---------|
@@ -175,14 +186,15 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 | **7. UPDATE mit RETURNING** | ⚠️ 50% | ✅ **100%** | **Logic validation fix!** |
 | **8. Multi-Stage ETL** | ❌ 0% | ✅ **100%** | **MERGE in CTE fix!** |
 
-**Overall Score:**
+Overall Score:
+
 - **v1.7.1:** 62.5% (5/8)
 - **v1.8.0:** **87.5%** (7/8) or **100%** (8/8) if all fixes work
 - **Improvement:** **+25-37.5 percentage points!** 🚀
 
 ---
 
-### Overall Impact (All Tests):
+### Overall Impact (All Tests)
 
 | **Model** | **v1.7.1** | **v1.8.0 (Expected)** | **Improvement** |
 |-----------|------------|----------------------|-----------------|
@@ -190,7 +202,8 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 | **qwen3-vl-8b** | ~42% | **55-65%** | +13-23 pts |
 | **llama-3-sqlcoder-8b** | ~28% | **45-60%** | +17-32 pts |
 
-**Why Bigger Impact for Smaller Models:**
+Why Bigger Impact for Smaller Models:
+
 - Smaller models benefit MORE from explicit dialect instructions
 - They struggle more with implicit knowledge (PostgreSQL vs SQL Server)
 - Detailed hints compensate for smaller parameter count
@@ -199,7 +212,7 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 
 ## 🛠️ TECHNICAL CHANGES
 
-### Files Modified:
+### Files Modified
 
 | **File** | **Changes** | **LOC Changed** |
 |----------|-----------|-----------------|
@@ -212,17 +225,18 @@ INSERT INTO log_table SELECT ... FROM target JOIN source ...;
 
 ## 🔍 WHAT CHANGED IN DETAIL
 
-### Enhanced Pattern Detection:
+### Enhanced Pattern Detection
 
 ```javascript
 // New pattern detections in buildPrompt()
 const isUpdateOrDelete = /UPDATE|DELETE|aktualisier|lösch|entfern|update.*where|delete.*where/i.test(task);
 const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\)\s*.*(\d+)\)/i.test(task);
-```
-
-### Prompt Structure:
 
 ```
+
+### Prompt Structure
+
+```text
 1. Base Prompt (Critical Rules)
 2. Schema Awareness (Column Reference Validation)
 3. ✅ MERGE Instructions (Phase 1)
@@ -233,13 +247,14 @@ const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\
 7. 🔥 NEW: Multi-Stage ETL Hints (Phase 2.3)
 8. Few-Shot Examples (Context-Aware)
 9. Task
+
 ```
 
 ---
 
 ## 🎯 KEY INSIGHTS FROM TEST 5
 
-### What We Learned:
+### What We Learned
 
 1. **Parser Bug (v1.7.0 → v1.7.1):**
    - `MERGE` keyword missing in `responseParser.js`
@@ -260,13 +275,13 @@ const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\
 
 ## 🧪 TESTING RECOMMENDATIONS
 
-### Test Priority:
+### Test Priority
 
 1. **Test 5 (MERGE):** Re-test with qwen3-coder-30b
    - **Expected:** 62.5% → **87.5%+**
    - **Focus:** Aufgabe 3, 7, 8 (previously broken)
 
-2. **Test 2, 3, 10 (MERGE + Multi-Fact):** 
+2. **Test 2, 3, 10 (MERGE + Multi-Fact):**
    - **Expected:** +5-10 points (dialect awareness)
 
 3. **Test 6, 9 (UPDATE/DELETE):**
@@ -280,16 +295,19 @@ const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\
 ## 🚀 NEXT STEPS
 
 ### Phase 2 Complete ✅
+
 - PostgreSQL Dialect Specifics
 - Logic Validation
 - Multi-Stage ETL Hints
 
-### Phase 3 (Optional - Future):
+### Phase 3 (Optional - Future)
+
 - Query Complexity Detection + Model Routing
 - Dynamic Timeout Management
 - Advanced Schema Relationship Extraction
 
-### Recommended Testing Flow:
+### Recommended Testing Flow
+
 1. Install v1.8.0
 2. Re-test Test 5 (MERGE) with qwen3-coder-30b
 3. Verify fixes for Aufgabe 3, 7, 8
@@ -311,27 +329,29 @@ const isComplexETL = /mehrstufig|multiple.*step|multi.*stage|etl.*process|(\d+)\
 ## 🎉 CONCLUSION
 
 **Phase 2 is a TARGETED FIX** for the 3 remaining issues in Test 5:
+
 1. ✅ PostgreSQL dialect limitations (BY SOURCE, MERGE in CTE, OUTPUT)
 2. ✅ Logic validation (WHERE clause on correct table)
 3. ✅ Multi-stage ETL structure hints
 
-**Expected Impact:**
+Expected Impact:
+
 - **Test 5:** 62.5% → **87.5%+** (+25 points!)
 - **Overall:** +5-15 points across all tests
 
-**Installation:**
+Installation:
 ```bash
 code --install-extension dbi-test-survival-kit-1.8.0.vsix
 # Restart Cursor
 # Re-test Test 5 (MERGE statements)
+
 ```
 
 ---
 
-**Release Date:** November 9, 2025  
-**Version:** 1.8.0  
-**Phase:** 2 (Significant Improvements)  
+**Release Date:** November 9, 2025
+**Version:** 1.8.0
+**Phase:** 2 (Significant Improvements)
 **Package:** `dbi-test-survival-kit-1.8.0.vsix` (419.06 KB)
 
 **STATUS:** ✅ **PHASE 2 COMPLETE - READY FOR TESTING!** 🚀🔥💪
-

@@ -10,7 +10,7 @@ Create a **lightweight offline VSCode/Cursor extension** that provides intellige
 - ❌ Screen recording software prevents using external LLM
 - ✅ Tab-completion is allowed during tests
 
-**✅ ACHIEVED IN v1.6.0!**
+✅ ACHIEVED IN v1.6.0!
 
 The extension now provides:
 
@@ -106,7 +106,7 @@ Based on GitHub repos:
 - `responseParser.js` - Multi-stage SQL extraction (removes `<think>` tags)
 - `sqlValidator.js` - Syntax validation with quality scoring (0-100)
 
-**Features:**
+Features:
 
 - Connects to local LLM (e.g., LM Studio)
 - Automatic SQL generation from task descriptions
@@ -202,11 +202,12 @@ Based on GitHub repos:
 3. Type trigger → Tab → Get completion
 4. Modify template as needed
 
-**Example:**
+Example:
 
 ```sql
 -- Type: star-schema
 -- Tab → Complete Star-Schema with dimensions & fact table
+
 ```
 
 ### With Local LLM (Optional)
@@ -217,13 +218,14 @@ Based on GitHub repos:
 4. Press `Ctrl+Alt+Shift+Q` at task
 5. LLM generates SQL query automatically
 
-**Example:**
+Example:
 
 ```sql
 -- Schema: CREATE TABLE customers (...)
 -- Aufgabe 1: Zeige alle Kunden mit Bestellungen
 [Press Ctrl+Alt+Shift+Q here]
 -- → SELECT c.name, o.order_date FROM customers c JOIN orders o ...
+
 ```
 
 ### For Sharing
@@ -245,7 +247,7 @@ Based on GitHub repos:
 
 ## 🔑 Key Design Decisions
 
-### Why Extension vs Just Snippets?
+### Why Extension vs Just Snippets
 
 - Extensions can be context-aware
 - Can read current file and suggest relevant completions
@@ -253,14 +255,14 @@ Based on GitHub repos:
 - Can implement smart sharing system
 - Still works 100% offline
 
-### Why Lightweight?
+### Why Lightweight
 
 - Must work without internet
 - Must be installable quickly before test
 - Must not slow down editor
 - Must be simple enough for colleagues to extend
 
-### Why Separate DB Dialects?
+### Why Separate DB Dialects
 
 - Different syntax (e.g., SERIAL vs SEQUENCE)
 - Different data types
@@ -391,11 +393,12 @@ D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\
 ├── archive/project_context.md                        # This file
 ├── archive/next_steps.md                             # What's next
 └── dbi-test-survival-kit-1.6.0.vsix          # Ready for installation!
+
 ```
 
 ---
 
-**Last Updated:** 2025-11-08  
-**Status:** ✅ **PRODUCTION READY** (v1.6.0)  
-**Location:** `D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit`  
+**Last Updated:** 2025-11-08
+**Status:** ✅ **PRODUCTION READY** (v1.6.0)
+**Location:** `D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit`
 **GitHub:** `https://github.com/IxI-Enki/FUN_2025_dbi_survival_kit`

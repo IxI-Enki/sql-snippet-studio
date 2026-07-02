@@ -1,4 +1,21 @@
-# SQL Snippet Studio
+---
+title: SQL Snippet Studio
+description: Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL — VS Code/Cursor extension with optional local LLM assistance.
+dates:
+  - created: 2025
+  - updated: 2026-07-01
+version: 2.0.0
+status: published
+author:
+  - name: Jan Ritt
+    email: janritt.office@gmail.com
+    location: Österreich
+    github:
+      handle: IxI-Enki
+      userpage: 'https://github.com/IxI-Enki'
+tags: [ sql, vscode-extension, postgresql, oracle, offline, dbi ]
+repo: IxI-Enki/dbi-test-survival-kit
+---
 
 **Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL** — a VS Code / Cursor extension for writing database queries without depending on the web.
 
