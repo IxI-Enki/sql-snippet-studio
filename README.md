@@ -1,6 +1,6 @@
 <div align="center">
 
-# ${\color{royalblue}{\underline{\texttt{SQL Snippet Studio}}}}$ <br> $\tiny{^{\texttt{Cursor \& VS Code extension}}}$
+# ${\color{royalblue}{\underline{\texttt{SQL Snippet Studio}}}}$ <br> $\tiny{^{\texttt{Cursor / VS Code extension}}}$
 
 </div>
 
