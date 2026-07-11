@@ -1,74 +1,71 @@
----
-title: SQL Snippet Studio
-description: Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL — VS Code/Cursor extension with optional local LLM assistance.
-dates:
-  - created: 2025
-  - updated: 2026-07-01
-version: 2.0.0
-status: published
-author: IxI-Enki
-tags: [ sql, vscode-extension, cursor-extension, postgresql, oracle, offline ]
-repo: IxI-Enki/sql-snippet-studio
----
+# SQL Snippet Studio
 
-**Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL** — a VS Code / Cursor extension for writing database queries without depending on the web.
+Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL in VS Code and Cursor — with optional local LLM assistance.
 
----
+Originally built for a database course; now a focused offline SQL companion for day-to-day query work.
 
-## What it is
+## Features
 
-SQL Snippet Studio is a lightweight extension that brings **67 SQL snippets**, **star-schema templates**, and **optional local LLM assistance** into your editor. Core features work fully offline; connect a local model (LM Studio, Ollama, etc.) only when you want AI-generated query suggestions.
-
----
-
-## Origin
-
-Originally built for a school database course; now a focused offline SQL companion for PostgreSQL and Oracle.
-
----
-
-## Key features
-
-- **67 snippets** — PostgreSQL (22), Oracle PL/SQL (25), and shared SQL patterns (20): JOINs, CTEs, window functions, MERGE, and more
+- **67 snippets** — PostgreSQL (22), Oracle PL/SQL (25), shared SQL patterns (20): JOINs, CTEs, window functions, MERGE, and more
 - **Star-schema templates** — dimension tables, fact tables, and complete schemas via Tab completion or keyboard shortcuts
-- **100% offline core** — no internet required for snippets and IntelliSense
-- **Optional local LLM** — context-aware SQL suggestions from a local OpenAI-compatible endpoint
-- **Snippet sharing** — export and import custom snippets with colleagues
-- **Dialect support** — PostgreSQL, Oracle, or both (configurable)
+- **Fully offline core** — snippets and IntelliSense work without network access
+- **Optional local LLM** — context-aware SQL suggestions from an OpenAI-compatible endpoint (LM Studio, Ollama, etc.)
+- **Snippet sharing** — export and import custom snippets
+- **Dialect support** — PostgreSQL, Oracle, or both (configurable in settings)
 
----
+## Install
 
-## Quick install
+**From VSIX (recommended for local use)**
 
-1. Install from a `.vsix` package: **Extensions → Install from VSIX…** → reload the window.
-2. Or build from source: `npm install` → `vsce package` → install the generated `.vsix`.
+1. Open **Extensions** in VS Code or Cursor
+2. Choose **Install from VSIX…**
+3. Select `sql-snippet-studio-2.0.0.vsix`
+4. Reload the window when prompted
 
-Step-by-step setup: **[Quickstart](docs/guides/quickstart.md)**
+**From source**
 
----
+```bash
+npm install
+vsce package
+```
 
-## Documentation
+Install the generated `.vsix` the same way as above.
 
-Full documentation lives under **[docs/](docs/README.md)**:
+Step-by-step setup: [docs/guides/quickstart.md](docs/guides/quickstart.md)
 
-| Topic | Guide |
-| ----- | ----- |
-| Quick start | [docs/guides/quickstart.md](docs/guides/quickstart.md) |
-| Setup & troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
-| Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
+## Snippet library
 
----
+| File | Count | Focus |
+| ---- | ----- | ----- |
+| `postgres-snippets.json` | 22 | PostgreSQL-specific syntax |
+| `oracle-snippets.json` | 25 | Oracle PL/SQL patterns |
+| `shared-snippets.json` | 20 | Portable SQL (JOINs, CTEs, aggregates) |
+
+Type a snippet prefix (for example `star-schema`) and press **Tab** to expand.
 
 ## Keyboard shortcuts
 
-| Shortcut | Action |
-| -------- | ------ |
+| Shortcut | Command |
+| -------- | ------- |
 | `Ctrl+Alt+Shift+Q` | Query LLM for SQL solution |
 | `Ctrl+Alt+Shift+S` | Insert star schema template |
 | `Ctrl+Alt+Shift+D` | Insert dimension table |
 | `Ctrl+Alt+Shift+F` | Insert fact table |
 | `Ctrl+Alt+Shift+L` | Show LLM statistics |
 
----
+## Documentation
 
-**Author:** [IxI-Enki](https://github.com/IxI-Enki)
+| Topic | Guide |
+| ----- | ----- |
+| Quick start | [docs/guides/quickstart.md](docs/guides/quickstart.md) |
+| Setup and troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
+| Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
+| Full docs index | [docs/README.md](docs/README.md) |
+
+## Settings
+
+Search **SQL Snippet Studio** in editor settings. Keys use the `sqlSnippetStudio.*` namespace (for example `sqlSnippetStudio.databaseDialect`, `sqlSnippetStudio.llm.enabled`).
+
+## Author
+
+[IxI-Enki](https://github.com/IxI-Enki) — [github.com/IxI-Enki/sql-snippet-studio](https://github.com/IxI-Enki/sql-snippet-studio)

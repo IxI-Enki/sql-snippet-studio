@@ -1,5 +1,5 @@
 /**
- * Backward-compatible settings access for sqlSnippetStudio (new) and dbiSurvivalKit (legacy).
+ * Settings: sqlSnippetStudio (primary) with dbiSurvivalKit legacy fallback.
  */
 
 const vscode = require('vscode');

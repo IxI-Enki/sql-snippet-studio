@@ -141,7 +141,7 @@ If you only work with one database:
 
 ```json
 {
-  "dbiSurvivalKit.databaseDialect": "postgres"  // or "oracle"
+  "sqlSnippetStudio.databaseDialect": "postgres"  // or "oracle"
 }
 
 ```
@@ -210,7 +210,7 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 
 ```powershell
 # Uninstall both IDs if upgrading from v1.8.x or after a partial v2 install
-code --uninstall-extension dbi-team.sql-snippet-studio
+code --uninstall-extension IxI-Enki.sql-snippet-studio
 code --uninstall-extension dbi-team.dbi-test-survival-kit   # pre-v2 extension ID
 code --install-extension sql-snippet-studio-2.0.0.vsix
 

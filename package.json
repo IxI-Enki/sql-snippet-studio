@@ -3,8 +3,12 @@
   "displayName": "SQL Snippet Studio",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance.",
   "version": "2.0.0",
-  "publisher": "dbi-team",
+  "publisher": "IxI-Enki",
   "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1a2332",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -26,12 +30,12 @@
     "onStartupFinished",
     "onLanguage:sql",
     "onLanguage:plsql",
-    "onCommand:dbiSurvivalKit.queryLLM",
-    "onCommand:dbiSurvivalKit.showLLMStats",
-    "onCommand:dbiSurvivalKit.clearCache",
-    "onCommand:dbiSurvivalKit.insertStarSchema",
-    "onCommand:dbiSurvivalKit.insertDimensionTable",
-    "onCommand:dbiSurvivalKit.insertFactTable"
+    "onCommand:sqlSnippetStudio.queryLLM",
+    "onCommand:sqlSnippetStudio.showLLMStats",
+    "onCommand:sqlSnippetStudio.clearCache",
+    "onCommand:sqlSnippetStudio.insertStarSchema",
+    "onCommand:sqlSnippetStudio.insertDimensionTable",
+    "onCommand:sqlSnippetStudio.insertFactTable"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -49,28 +53,28 @@
         "configuration": "./language-configuration.json"
       }
     ],
-  "snippets": [
-    {
-      "language": "sql",
-      "path": "./snippets/postgres-snippets.json"
-    },
-    {
-      "language": "sql",
-      "path": "./snippets/oracle-snippets.json"
-    },
-    {
-      "language": "sql",
-      "path": "./snippets/shared-snippets.json"
-    },
-    {
-      "language": "plsql",
-      "path": "./snippets/oracle-snippets.json"
-    },
-    {
-      "language": "plsql",
-      "path": "./snippets/shared-snippets.json"
-    }
-  ],
+    "snippets": [
+      {
+        "language": "sql",
+        "path": "./snippets/postgres-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/shared-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/shared-snippets.json"
+      }
+    ],
     "configuration": {
       "title": "SQL Snippet Studio",
       "properties": {
@@ -146,65 +150,65 @@
     },
     "commands": [
       {
-        "command": "dbiSurvivalKit.insertStarSchema",
+        "command": "sqlSnippetStudio.insertStarSchema",
         "title": "SQL: Insert Star Schema Template"
       },
       {
-        "command": "dbiSurvivalKit.insertDimensionTable",
+        "command": "sqlSnippetStudio.insertDimensionTable",
         "title": "SQL: Insert Dimension Table"
       },
       {
-        "command": "dbiSurvivalKit.insertFactTable",
+        "command": "sqlSnippetStudio.insertFactTable",
         "title": "SQL: Insert Fact Table"
       },
       {
-        "command": "dbiSurvivalKit.shareSnippets",
+        "command": "sqlSnippetStudio.shareSnippets",
         "title": "SQL: Export Snippets"
       },
       {
-        "command": "dbiSurvivalKit.importSnippets",
+        "command": "sqlSnippetStudio.importSnippets",
         "title": "SQL: Import Snippets"
       },
       {
-        "command": "dbiSurvivalKit.showLLMStats",
+        "command": "sqlSnippetStudio.showLLMStats",
         "title": "SQL: Show LLM Statistics"
       },
-            {
-              "command": "dbiSurvivalKit.clearCache",
-              "title": "SQL: Clear LLM Cache"
-            },
-            {
-              "command": "dbiSurvivalKit.queryLLM",
-              "title": "SQL: Query LLM for SQL Solution"
-            }
+      {
+        "command": "sqlSnippetStudio.clearCache",
+        "title": "SQL: Clear LLM Cache"
+      },
+      {
+        "command": "sqlSnippetStudio.queryLLM",
+        "title": "SQL: Query LLM for SQL Solution"
+      }
     ],
     "keybindings": [
       {
-        "command": "dbiSurvivalKit.insertStarSchema",
+        "command": "sqlSnippetStudio.insertStarSchema",
         "key": "ctrl+alt+shift+s",
         "mac": "cmd+alt+shift+s",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.insertDimensionTable",
+        "command": "sqlSnippetStudio.insertDimensionTable",
         "key": "ctrl+alt+shift+d",
         "mac": "cmd+alt+shift+d",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.insertFactTable",
+        "command": "sqlSnippetStudio.insertFactTable",
         "key": "ctrl+alt+shift+f",
         "mac": "cmd+alt+shift+f",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.showLLMStats",
+        "command": "sqlSnippetStudio.showLLMStats",
         "key": "ctrl+alt+shift+l",
         "mac": "cmd+alt+shift+l",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.queryLLM",
+        "command": "sqlSnippetStudio.queryLLM",
         "key": "ctrl+alt+shift+q",
         "mac": "cmd+alt+shift+q",
         "when": "editorTextFocus"

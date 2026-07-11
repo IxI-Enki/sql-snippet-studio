@@ -30,8 +30,8 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 
 ```json
 {
-  "dbiSurvivalKit.llm.endpoint": "https://api.openai.com/v1/chat/completions",
-  "dbiSurvivalKit.llm.apiKey": "sk-..."
+  "sqlSnippetStudio.llm.endpoint": "https://api.openai.com/v1/chat/completions",
+  "sqlSnippetStudio.llm.apiKey": "sk-..."
 }
 
 ```
@@ -44,9 +44,9 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 
 ```json
 {
-  "dbiSurvivalKit.llm.enabled": true,
-  "dbiSurvivalKit.llm.endpoint": "http://localhost:1234/v1/chat/completions",
-  "dbiSurvivalKit.llm.model": "qwen2.5-coder"
+  "sqlSnippetStudio.llm.enabled": true,
+  "sqlSnippetStudio.llm.endpoint": "http://localhost:1234/v1/chat/completions",
+  "sqlSnippetStudio.llm.model": "qwen2.5-coder"
 }
 
 ```
@@ -94,15 +94,15 @@ SELECT * FROM students WHERE grade > 80;
 
 | Setting | Default | Description |
 | ------- | ------- | ----------- |
-| `dbiSurvivalKit.llm.enabled` | `false` | Enable LLM suggestions |
-| `dbiSurvivalKit.llm.endpoint` | `http://localhost:1234/v1/chat/completions` | OpenAI-compatible URL |
-| `dbiSurvivalKit.llm.model` | `qwen2.5-coder` | Model name |
-| `dbiSurvivalKit.llm.apiKey` | `""` | API key (empty for local) |
-| `dbiSurvivalKit.llm.maxTokens` | `500` | Max response tokens |
-| `dbiSurvivalKit.llm.temperature` | `0.1` | Lower = more deterministic |
-| `dbiSurvivalKit.llm.timeout` | `10000` | Request timeout (ms) |
-| `dbiSurvivalKit.llm.verboseLogging` | `false` | Log parser and validation stages to the output channel |
-| `dbiSurvivalKit.llm.showNotifications` | `true` | Show quality-score notifications after LLM insert |
+| `sqlSnippetStudio.llm.enabled` | `false` | Enable LLM suggestions |
+| `sqlSnippetStudio.llm.endpoint` | `http://localhost:1234/v1/chat/completions` | OpenAI-compatible URL |
+| `sqlSnippetStudio.llm.model` | `qwen2.5-coder` | Model name |
+| `sqlSnippetStudio.llm.apiKey` | `""` | API key (empty for local) |
+| `sqlSnippetStudio.llm.maxTokens` | `500` | Max response tokens |
+| `sqlSnippetStudio.llm.temperature` | `0.1` | Lower = more deterministic |
+| `sqlSnippetStudio.llm.timeout` | `10000` | Request timeout (ms) |
+| `sqlSnippetStudio.llm.verboseLogging` | `false` | Log parser and validation stages to the output channel |
+| `sqlSnippetStudio.llm.showNotifications` | `true` | Show quality-score notifications after LLM insert |
 
 ---
 
@@ -129,8 +129,8 @@ Enable verbose logging to inspect parser and validator output in the **SQL Snipp
 
 ```json
 {
-  "dbiSurvivalKit.llm.verboseLogging": true,
-  "dbiSurvivalKit.llm.showNotifications": true
+  "sqlSnippetStudio.llm.verboseLogging": true,
+  "sqlSnippetStudio.llm.showNotifications": true
 }
 ```
 
@@ -157,7 +157,7 @@ curl http://localhost:1234/v1/models
 
 No completion appears
 
-1. Confirm `dbiSurvivalKit.llm.enabled` is `true`
+1. Confirm `sqlSnippetStudio.llm.enabled` is `true`
 2. Cursor is below the task comment
 3. Schema is in the same file
 4. Local server is running

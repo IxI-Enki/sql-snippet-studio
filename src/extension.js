@@ -13,6 +13,20 @@ const extensionConfig = require('./config');
 let debugHelper = null;
 let queryCache = null;
 
+const LEGACY_COMMAND_NAMESPACE = 'dbiSurvivalKit';
+
+/**
+ * Register sqlSnippetStudio.* command with dbiSurvivalKit.* legacy alias (not in package.json).
+ */
+function registerCommand(context, commandName, handler) {
+    context.subscriptions.push(
+        vscode.commands.registerCommand(`sqlSnippetStudio.${commandName}`, handler)
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand(`${LEGACY_COMMAND_NAMESPACE}.${commandName}`, handler)
+    );
+}
+
 /**
  * Extension activation entry point
  */
@@ -33,25 +47,6 @@ function activate(context) {
     // Show welcome message on first activation
     showWelcomeMessage(context);
 
-    // Register show stats command
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.showLLMStats', () => {
-            if (debugHelper) {
-                debugHelper.showStats();
-            }
-        })
-    );
-
-    // Register clear cache command
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.clearCache', () => {
-            if (queryCache) {
-                queryCache.clear();
-                vscode.window.showInformationMessage('✅ LLM Cache cleared!');
-            }
-        })
-    );
-
     // Listen for config changes
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(e => {
@@ -68,47 +63,42 @@ function activate(context) {
  * Register all extension commands
  */
 function registerCommands(context) {
-    // Insert Star Schema Template
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.insertStarSchema', () => {
-            insertTemplate('star-schema');
-        })
-    );
+    registerCommand(context, 'insertStarSchema', () => {
+        insertTemplate('star-schema');
+    });
 
-    // Insert Dimension Table
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.insertDimensionTable', () => {
-            insertTemplate('dim-table');
-        })
-    );
+    registerCommand(context, 'insertDimensionTable', () => {
+        insertTemplate('dim-table');
+    });
 
-    // Insert Fact Table
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.insertFactTable', () => {
-            insertTemplate('fact-table');
-        })
-    );
+    registerCommand(context, 'insertFactTable', () => {
+        insertTemplate('fact-table');
+    });
 
-    // Share Snippets
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.shareSnippets', () => {
-            exportSnippets();
-        })
-    );
+    registerCommand(context, 'shareSnippets', () => {
+        exportSnippets();
+    });
 
-    // Import Snippets
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.importSnippets', () => {
-            importSnippets();
-        })
-    );
+    registerCommand(context, 'importSnippets', () => {
+        importSnippets();
+    });
 
-    // NEW: Direct LLM Query Command (Ctrl+Alt+Shift+Q)
-    context.subscriptions.push(
-        vscode.commands.registerCommand('dbiSurvivalKit.queryLLM', async () => {
-            await executeLLMQuery();
-        })
-    );
+    registerCommand(context, 'showLLMStats', () => {
+        if (debugHelper) {
+            debugHelper.showStats();
+        }
+    });
+
+    registerCommand(context, 'clearCache', () => {
+        if (queryCache) {
+            queryCache.clear();
+            vscode.window.showInformationMessage('LLM cache cleared.');
+        }
+    });
+
+    registerCommand(context, 'queryLLM', async () => {
+        await executeLLMQuery();
+    });
 }
 
 /**

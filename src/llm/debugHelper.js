@@ -24,7 +24,7 @@ class DebugHelper {
             vscode.StatusBarAlignment.Right,
             100
         );
-        this.statusBarItem.command = 'dbiSurvivalKit.showLLMStats';
+        this.statusBarItem.command = 'sqlSnippetStudio.showLLMStats';
         context.subscriptions.push(this.statusBarItem);
 
         // Output Channel
