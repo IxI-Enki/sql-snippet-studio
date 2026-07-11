@@ -8,7 +8,7 @@ version: 2.0.0
 status: published
 author: IxI-Enki
 tags: [ sql, vscode-extension, cursor-extension, postgresql, oracle, offline ]
-repo: IxI-Enki/offline-sql-snippets  # TODO: github repo name
+repo: IxI-Enki/sql-snippet-studio
 ---
 
 **Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL** — a VS Code / Cursor extension for writing database queries without depending on the web.
