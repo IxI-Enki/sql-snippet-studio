@@ -3,6 +3,7 @@
  */
 
 const crypto = require('crypto');
+const extensionConfig = require('../config');
 
 class QueryCache {
     constructor() {
@@ -17,8 +18,7 @@ class QueryCache {
      * Verhindert Cache-Kollisionen beim Model-Wechsel!
      */
     generateKey(context) {
-        const vscode = require('vscode');
-        const modelName = vscode.workspace.getConfiguration('dbiSurvivalKit.llm').get('model', 'unknown');
+        const modelName = extensionConfig.getSection('llm', 'model', 'unknown');
         
         // Erstelle einen eindeutigen Key aus:
         // 1. MODEL-NAME (NEU! Kritisch für Model-Wechsel!)

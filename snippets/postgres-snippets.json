@@ -24,7 +24,7 @@
       "EXECUTE FUNCTION update_${1/(.*)/${1:/downcase}/}_timestamp();",
       "$0"
     ],
-    "description": "Table with SERIAL and update trigger"
+    "description": "PostgreSQL Table with SERIAL and update trigger"
   },
 
   "PostgreSQL SERIAL Primary Key": {
@@ -32,7 +32,7 @@
     "body": [
       "${1:id} SERIAL PRIMARY KEY$0"
     ],
-    "description": "SERIAL primary key"
+    "description": "PostgreSQL SERIAL primary key"
   },
 
   "PostgreSQL BIGSERIAL Primary Key": {
@@ -40,7 +40,7 @@
     "body": [
       "${1:id} BIGSERIAL PRIMARY KEY$0"
     ],
-    "description": "BIGSERIAL primary key"
+    "description": "PostgreSQL BIGSERIAL primary key"
   },
 
   "PostgreSQL JSONB Column": {
@@ -48,7 +48,7 @@
     "body": [
       "${1:column_name} JSONB${2: NOT NULL DEFAULT '{}'}$0"
     ],
-    "description": "JSONB column"
+    "description": "PostgreSQL JSONB column"
   },
 
   "PostgreSQL Array Column": {
@@ -56,7 +56,7 @@
     "body": [
       "${1:column_name} ${2:VARCHAR(50)}[]${3: DEFAULT ARRAY[]::${2:VARCHAR(50)}[]}$0"
     ],
-    "description": "Array column"
+    "description": "PostgreSQL Array column"
   },
 
   "PostgreSQL ENUM Type": {
@@ -69,7 +69,7 @@
       ");",
       "$0"
     ],
-    "description": "CREATE ENUM type"
+    "description": "PostgreSQL CREATE ENUM type"
   },
 
   "PostgreSQL Materialized View": {
@@ -90,7 +90,7 @@
       "-- REFRESH MATERIALIZED VIEW ${1:ViewName};",
       "$0"
     ],
-    "description": "Materialized view"
+    "description": "PostgreSQL Materialized view"
   },
 
   "PostgreSQL Function": {
@@ -107,7 +107,7 @@
       "\\$\\$ LANGUAGE plpgsql;",
       "$0"
     ],
-    "description": "plpgsql function"
+    "description": "PostgreSQL plpgsql function"
   },
 
   "PostgreSQL Trigger": {
@@ -128,7 +128,7 @@
       "EXECUTE FUNCTION ${1:trigger_function}();",
       "$0"
     ],
-    "description": "Trigger with function"
+    "description": "PostgreSQL Trigger with function"
   },
 
   "PostgreSQL Window Function ROW_NUMBER": {
@@ -139,7 +139,7 @@
       "    ORDER BY ${2:order_column} ${3|ASC,DESC|}",
       ") AS ${4:row_num}$0"
     ],
-    "description": "ROW_NUMBER window function"
+    "description": "PostgreSQL ROW_NUMBER window function"
   },
 
   "PostgreSQL Window Function RANK": {
@@ -150,7 +150,7 @@
       "    ORDER BY ${2:order_column} ${3|ASC,DESC|}",
       ") AS ${4:rank}$0"
     ],
-    "description": "RANK window function"
+    "description": "PostgreSQL RANK window function"
   },
 
   "PostgreSQL UPSERT (ON CONFLICT)": {
@@ -162,7 +162,7 @@
       "SET ${3:column2} = EXCLUDED.${3:column2};",
       "$0"
     ],
-    "description": "INSERT ON CONFLICT (upsert)"
+    "description": "PostgreSQL UPSERT (ON CONFLICT) INSERT ON CONFLICT (upsert)"
   },
 
   "PostgreSQL Generate Series": {
@@ -175,7 +175,7 @@
       ") AS ${4:number};",
       "$0"
     ],
-    "description": "Generate series of numbers"
+    "description": "PostgreSQL Generate series of numbers"
   },
 
   "PostgreSQL Date Series": {
@@ -188,7 +188,7 @@
       ") AS ${4:date};",
       "$0"
     ],
-    "description": "Generate date series"
+    "description": "PostgreSQL Generate date series"
   },
 
   "PostgreSQL Recursive CTE": {
@@ -215,7 +215,7 @@
       "SELECT * FROM ${1:cte_name};",
       "$0"
     ],
-    "description": "Recursive CTE"
+    "description": "PostgreSQL Recursive CTE"
   },
 
   "PostgreSQL Full Text Search": {
@@ -238,7 +238,7 @@
       "WHERE ${2:search_vector} @@ to_tsquery('english', '${4:search_term}');",
       "$0"
     ],
-    "description": "Full-text search setup"
+    "description": "PostgreSQL Full-text search setup"
   },
 
   "PostgreSQL EXPLAIN ANALYZE": {
@@ -248,7 +248,7 @@
       "${1:SELECT statement};",
       "$0"
     ],
-    "description": "EXPLAIN ANALYZE for query performance"
+    "description": "PostgreSQL EXPLAIN ANALYZE for query performance"
   },
 
   "PostgreSQL Transaction with Savepoint": {
@@ -267,7 +267,7 @@
       "COMMIT;",
       "$0"
     ],
-    "description": "Transaction with savepoint"
+    "description": "PostgreSQL Transaction with savepoint"
   },
 
   "PostgreSQL Index (BTREE)": {
@@ -277,7 +277,7 @@
       "ON ${1:TableName} USING btree(${2:column_name});",
       "$0"
     ],
-    "description": "BTREE index"
+    "description": "PostgreSQL BTREE index"
   },
 
   "PostgreSQL Index (HASH)": {
@@ -287,7 +287,7 @@
       "ON ${1:TableName} USING hash(${2:column_name});",
       "$0"
     ],
-    "description": "HASH index"
+    "description": "PostgreSQL HASH index"
   },
 
   "PostgreSQL Index (GIN)": {
@@ -297,7 +297,7 @@
       "ON ${1:TableName} USING gin(${2:column_name});",
       "$0"
     ],
-    "description": "GIN index for arrays/JSONB"
+    "description": "PostgreSQL GIN index for arrays/JSONB"
   },
 
   "PostgreSQL Partition Table (Range)": {
@@ -315,6 +315,6 @@
       "FOR VALUES FROM ('${6:2024-01-01}') TO ('${7:2025-01-01}');",
       "$0"
     ],
-    "description": "Range partitioned table"
+    "description": "PostgreSQL Range partitioned table"
   }
 }

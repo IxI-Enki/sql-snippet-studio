@@ -7,6 +7,7 @@ const ContextBuilder = require('./llm/contextBuilder');
 const LLMProvider = require('./llm/llmProvider');
 const DebugHelper = require('./llm/debugHelper');
 const QueryCache = require('./llm/queryCache');
+const extensionConfig = require('./config');
 
 // Global instances
 let debugHelper = null;
@@ -54,7 +55,7 @@ function activate(context) {
     // Listen for config changes
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(e => {
-            if (e.affectsConfiguration('dbiSurvivalKit')) {
+            if (extensionConfig.affectsExtensionConfig(e)) {
                 if (debugHelper) {
                     debugHelper.updateConfig();
                 }
@@ -124,12 +125,11 @@ async function executeLLMQuery() {
         }
 
         // Check if LLM is enabled
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
-        const isEnabled = config.get('enabled', false);
-        const showNotifications = config.get('showNotifications', false);
+        const isEnabled = extensionConfig.getSection('llm', 'enabled', false);
+        const showNotifications = extensionConfig.getSection('llm', 'showNotifications', false);
         
         if (!isEnabled) {
-            vscode.window.showWarningMessage('🤖 LLM is disabled! Enable it in settings: dbiSurvivalKit.llm.enabled');
+            vscode.window.showWarningMessage('LLM is disabled. Enable it in Settings: SQL Snippet Studio > Llm: Enabled');
             return;
         }
 
@@ -153,7 +153,7 @@ async function executeLLMQuery() {
         
         if (!context || !context.task) {
             if (showNotifications) {
-                vscode.window.showWarningMessage('❌ No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Aufgabe 1: ...');
+                vscode.window.showWarningMessage('No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Task 1: ...');
             }
             if (debugHelper) {
                 debugHelper.log('[COMMAND] No task found');
@@ -303,8 +303,7 @@ function registerCompletionProvider(context) {
 async function getLLMCompletion(document, position, contextBuilder, llmProvider) {
     try {
         // Check if LLM is enabled in settings
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
-        const isEnabled = config.get('enabled', false);
+        const isEnabled = extensionConfig.getSection('llm', 'enabled', false);
         
         if (!isEnabled) {
             if (debugHelper) {
@@ -409,7 +408,7 @@ function insertTemplate(snippetPrefix) {
 async function exportSnippets() {
     const snippetsDir = path.join(__dirname, '..', 'snippets');
     const exportDir = await vscode.window.showSaveDialog({
-        defaultUri: vscode.Uri.file(path.join(require('os').homedir(), 'dbi-snippets-export.zip')),
+        defaultUri: vscode.Uri.file(path.join(require('os').homedir(), 'sql-snippet-studio-export.zip')),
         filters: { 'ZIP files': ['zip'] }
     });
 
@@ -431,7 +430,7 @@ async function exportSnippets() {
 
         vscode.window.showInformationMessage(
             `Snippets exported to: ${exportPath}\n` +
-            'Share this folder with your colleagues!'
+            'Share this folder to use the snippets elsewhere.'
         );
     } catch (error) {
         vscode.window.showErrorMessage(`Export failed: ${error.message}`);
@@ -439,7 +438,7 @@ async function exportSnippets() {
 }
 
 /**
- * Import snippets from colleagues
+ * Import snippets from an export folder
  */
 async function importSnippets() {
     const importUri = await vscode.window.showOpenDialog({

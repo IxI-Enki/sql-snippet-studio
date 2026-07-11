@@ -1,7 +1,7 @@
 {
   "name": "sql-snippet-studio",
   "displayName": "SQL Snippet Studio",
-  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance. Originally built for a school database course; now a focused offline SQL companion for PostgreSQL and Oracle.",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance.",
   "version": "2.0.0",
   "publisher": "dbi-team",
   "icon": "images/icon.png",
@@ -10,8 +10,7 @@
   },
   "categories": [
     "Snippets",
-    "Programming Languages",
-    "Education"
+    "Programming Languages"
   ],
   "keywords": [
     "sql",
@@ -21,8 +20,7 @@
     "database",
     "snippets",
     "dbi",
-    "offline",
-    "education"
+    "offline"
   ],
   "activationEvents": [
     "onStartupFinished",
@@ -76,70 +74,70 @@
     "configuration": {
       "title": "SQL Snippet Studio",
       "properties": {
-        "dbiSurvivalKit.enableAutoCompletion": {
+        "sqlSnippetStudio.enableAutoCompletion": {
           "type": "boolean",
           "default": true,
           "description": "Enable automatic completion suggestions"
         },
-        "dbiSurvivalKit.enableStarSchemaTemplates": {
+        "sqlSnippetStudio.enableStarSchemaTemplates": {
           "type": "boolean",
           "default": true,
           "description": "Enable Star-Schema templates and patterns"
         },
-        "dbiSurvivalKit.databaseDialect": {
+        "sqlSnippetStudio.databaseDialect": {
           "type": "string",
           "enum": ["postgres", "oracle", "both"],
           "default": "both",
           "description": "Select database dialect for snippets"
         },
-        "dbiSurvivalKit.llm.enabled": {
+        "sqlSnippetStudio.llm.enabled": {
           "type": "boolean",
           "default": false,
           "description": "Enable AI-powered query suggestions (requires local LLM or API)"
         },
-        "dbiSurvivalKit.llm.endpoint": {
+        "sqlSnippetStudio.llm.endpoint": {
           "type": "string",
           "default": "http://localhost:1234/v1/chat/completions",
           "description": "LLM API endpoint (OpenAI-compatible format)"
         },
-        "dbiSurvivalKit.llm.model": {
+        "sqlSnippetStudio.llm.model": {
           "type": "string",
           "default": "qwen2.5-coder",
           "description": "Model name to use for completions"
         },
-        "dbiSurvivalKit.llm.apiKey": {
+        "sqlSnippetStudio.llm.apiKey": {
           "type": "string",
           "default": "",
           "description": "API key for LLM service (leave empty for local LLMs)"
         },
-        "dbiSurvivalKit.llm.maxTokens": {
+        "sqlSnippetStudio.llm.maxTokens": {
           "type": "number",
           "default": 500,
           "description": "Maximum tokens for LLM response"
         },
-        "dbiSurvivalKit.llm.temperature": {
+        "sqlSnippetStudio.llm.temperature": {
           "type": "number",
           "default": 0.1,
           "minimum": 0,
           "maximum": 2,
           "description": "Temperature for LLM sampling (lower = more deterministic)"
         },
-        "dbiSurvivalKit.llm.timeout": {
+        "sqlSnippetStudio.llm.timeout": {
           "type": "number",
           "default": 10000,
           "description": "Request timeout in milliseconds"
         },
-        "dbiSurvivalKit.llm.showDebugInfo": {
+        "sqlSnippetStudio.llm.showDebugInfo": {
           "type": "boolean",
           "default": false,
           "description": "Show debug information (status bar, labels in completions)"
         },
-        "dbiSurvivalKit.llm.showNotifications": {
+        "sqlSnippetStudio.llm.showNotifications": {
           "type": "boolean",
           "default": false,
           "description": "Show toast notifications for LLM requests"
         },
-        "dbiSurvivalKit.llm.verboseLogging": {
+        "sqlSnippetStudio.llm.verboseLogging": {
           "type": "boolean",
           "default": false,
           "description": "Enable verbose logging to output channel"
@@ -161,11 +159,11 @@
       },
       {
         "command": "dbiSurvivalKit.shareSnippets",
-        "title": "SQL: Export Snippets for Colleagues"
+        "title": "SQL: Export Snippets"
       },
       {
         "command": "dbiSurvivalKit.importSnippets",
-        "title": "SQL: Import Snippets from Colleagues"
+        "title": "SQL: Import Snippets"
       },
       {
         "command": "dbiSurvivalKit.showLLMStats",

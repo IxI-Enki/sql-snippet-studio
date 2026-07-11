@@ -3,6 +3,7 @@
  */
 
 const vscode = require('vscode');
+const extensionConfig = require('../config');
 
 class DebugHelper {
     constructor() {
@@ -37,11 +38,10 @@ class DebugHelper {
      * Aktualisiert Konfiguration aus Settings
      */
     updateConfig() {
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit');
         this.config = {
-            showDebugInfo: config.get('llm.showDebugInfo', false),
-            showNotifications: config.get('llm.showNotifications', false),
-            verboseLogging: config.get('llm.verboseLogging', false)
+            showDebugInfo: extensionConfig.getSection('llm', 'showDebugInfo', false),
+            showNotifications: extensionConfig.getSection('llm', 'showNotifications', false),
+            verboseLogging: extensionConfig.getSection('llm', 'verboseLogging', false)
         };
     }
 
@@ -55,9 +55,8 @@ class DebugHelper {
         
         // ALWAYS show status bar (not just when debug is enabled)
         // Get current model from settings
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit.llm');
-        const currentModel = config.get('model', 'Not configured');
-        const endpoint = config.get('endpoint', 'Not configured');
+        const currentModel = extensionConfig.getSection('llm', 'model', 'Not configured');
+        const endpoint = extensionConfig.getSection('llm', 'endpoint', 'Not configured');
 
         switch (state) {
             case 'idle':

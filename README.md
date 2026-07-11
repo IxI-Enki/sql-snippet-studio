@@ -17,7 +17,7 @@ repo: IxI-Enki/offline-sql-snippets  # TODO: github repo name
 
 ## What it is
 
-SQL Snippet Studio is a lightweight extension that brings **300+ SQL snippets**, **star-schema templates**, and **optional local LLM assistance** into your editor. Core features work fully offline; connect a local model (LM Studio, Ollama, etc.) only when you want AI-generated query suggestions.
+SQL Snippet Studio is a lightweight extension that brings **67 SQL snippets**, **star-schema templates**, and **optional local LLM assistance** into your editor. Core features work fully offline; connect a local model (LM Studio, Ollama, etc.) only when you want AI-generated query suggestions.
 
 ---
 
@@ -29,7 +29,7 @@ Originally built for a school database course; now a focused offline SQL compani
 
 ## Key features
 
-- **300+ snippets** — PostgreSQL, Oracle PL/SQL, and shared SQL patterns (JOINs, CTEs, window functions, MERGE, and more)
+- **67 snippets** — PostgreSQL (22), Oracle PL/SQL (25), and shared SQL patterns (20): JOINs, CTEs, window functions, MERGE, and more
 - **Star-schema templates** — dimension tables, fact tables, and complete schemas via Tab completion or keyboard shortcuts
 - **100% offline core** — no internet required for snippets and IntelliSense
 - **Optional local LLM** — context-aware SQL suggestions from a local OpenAI-compatible endpoint

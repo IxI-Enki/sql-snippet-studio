@@ -2,11 +2,11 @@
  * LLM Provider - Verbindung zu lokalem oder Remote-LLM
  */
 
-const vscode = require('vscode');
 const https = require('https');
 const http = require('http');
 const ResponseParser = require('./responseParser');
 const SQLValidator = require('./sqlValidator');
+const extensionConfig = require('../config');
 
 class LLMProvider {
     constructor(debugHelper = null, queryCache = null) {
@@ -22,16 +22,14 @@ class LLMProvider {
      * Aktualisiert die Konfiguration aus VS Code Settings
      */
     updateConfig() {
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit');
-        
         this.config = {
-            enabled: config.get('llm.enabled', false),
-            endpoint: config.get('llm.endpoint', 'http://localhost:1234/v1/chat/completions'),
-            model: config.get('llm.model', 'qwen2.5-coder'),
-            apiKey: config.get('llm.apiKey', ''),
-            maxTokens: config.get('llm.maxTokens', 500),
-            temperature: config.get('llm.temperature', 0.1),
-            timeout: config.get('llm.timeout', 10000)
+            enabled: extensionConfig.getSection('llm', 'enabled', false),
+            endpoint: extensionConfig.getSection('llm', 'endpoint', 'http://localhost:1234/v1/chat/completions'),
+            model: extensionConfig.getSection('llm', 'model', 'qwen2.5-coder'),
+            apiKey: extensionConfig.getSection('llm', 'apiKey', ''),
+            maxTokens: extensionConfig.getSection('llm', 'maxTokens', 500),
+            temperature: extensionConfig.getSection('llm', 'temperature', 0.1),
+            timeout: extensionConfig.getSection('llm', 'timeout', 10000)
         };
     }
 
