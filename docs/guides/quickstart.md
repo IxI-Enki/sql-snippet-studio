@@ -13,7 +13,7 @@ Option A: From VSIX (recommended)
 Option B: From source
 
 ```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+cd <path-to-repo>
 npm install
 npx vsce package
 # Install the generated .vsix via Extensions → Install from VSIX…

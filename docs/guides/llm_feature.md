@@ -101,8 +101,38 @@ SELECT * FROM students WHERE grade > 80;
 | `dbiSurvivalKit.llm.maxTokens` | `500` | Max response tokens |
 | `dbiSurvivalKit.llm.temperature` | `0.1` | Lower = more deterministic |
 | `dbiSurvivalKit.llm.timeout` | `10000` | Request timeout (ms) |
+| `dbiSurvivalKit.llm.verboseLogging` | `false` | Log parser and validation stages to the output channel |
+| `dbiSurvivalKit.llm.showNotifications` | `true` | Show quality-score notifications after LLM insert |
 
-See also [guides/smart_llm_features.md](guides/smart_llm_features.md) for parsing, validation, and debug options.
+---
+
+## Advanced: response quality
+
+When LLM assistance is enabled, the extension cleans and validates generated SQL before inserting it.
+
+### Response cleaning
+
+Multi-stage extraction turns varied model output into executable SQL:
+
+1. **Remove reasoning blocks** — strips tags such as `<think>` and `<reasoning>`, plus leading explanation paragraphs.
+2. **Extract from code blocks** — prefers ` ```sql ` fenced blocks, then generic fenced blocks.
+3. **Locate SQL statements** — finds keywords (`SELECT`, `INSERT`, `UPDATE`, and others) through the closing semicolon.
+4. **Final cleanup** — trims trailing explanation text, normalizes whitespace, and ensures a terminating semicolon.
+
+### Validation and caching
+
+Each generated query is checked for common syntax issues (unmatched parentheses or quotes, missing `FROM` on `SELECT`, and similar). A quality score from 0–100 is shown when notifications are enabled. Validated responses are cached so repeat requests stay fast.
+
+### Debug settings
+
+Enable verbose logging to inspect parser and validator output in the **SQL Snippet Studio - LLM** output channel:
+
+```json
+{
+  "dbiSurvivalKit.llm.verboseLogging": true,
+  "dbiSurvivalKit.llm.showNotifications": true
+}
+```
 
 ---
 
@@ -142,6 +172,5 @@ Poor query quality
 
 ## Related docs
 
-- [guides/smart_llm_features.md](guides/smart_llm_features.md) — response cleaning and validation
 - [guides/setup_guide.md](guides/setup_guide.md) — full installation guide
 - [Documentation index](../README.md)

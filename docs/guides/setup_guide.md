@@ -17,7 +17,7 @@
 1. **Package or obtain VSIX:**
 
 ```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+cd <path-to-repo>
 npm install
 npx vsce package
 
@@ -43,7 +43,7 @@ npm install -g @vscode/vsce
 2. **Package Extension:**
 
 ```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+cd <path-to-repo>
 vsce package
 
 ```
@@ -67,7 +67,7 @@ code --install-extension sql-snippet-studio-2.0.0.vsix
 1. **Open Extension in VS Code:**
 
 ```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+cd <path-to-repo>
 code .
 
 ```
@@ -154,7 +154,7 @@ If you only work with one database:
 
 ```powershell
 # Or use: Ctrl+Shift+P → SQL: Export Snippets
-xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\snippets" "D:\dbi-backup\snippets" /E /I /Y
+xcopy "<path-to-repo>\snippets" "%USERPROFILE%\sql-snippet-studio-backup\snippets" /E /I /Y
 
 ```
 
@@ -239,7 +239,7 @@ code --install-extension sql-snippet-studio-2.0.0.vsix
 1. Push to GitHub:
 
 ```bash
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
+cd <path-to-repo>
 git init
 git add .
 git commit -m "Initial commit"
@@ -252,7 +252,7 @@ git push -u origin main
 
 ```bash
 git clone <repo-url>
-cd dbi-test-survival-kit
+cd sql-snippet-studio
 npm install
 vsce package
 code --install-extension sql-snippet-studio-2.0.0.vsix
@@ -327,17 +327,16 @@ Open:
 
 ---
 
-## 📊 Extension Structure
+## Extension structure
 
 ```file-tree
-04_dbi_test_survival_kit/
+sql-snippet-studio/
 ├── package.json
 ├── language-configuration.json
 ├── README.md
 ├── docs/
-│   ├── guides/          # Setup, quickstart, LLM
-│   ├── changelogs/
-│   └── archive/
+│   ├── README.md
+│   └── guides/
 ├── snippets/
 │   ├── shared-snippets.json
 │   ├── postgres-snippets.json

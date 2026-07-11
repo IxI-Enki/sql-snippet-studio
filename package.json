@@ -1,7 +1,7 @@
 {
   "name": "sql-snippet-studio",
   "displayName": "SQL Snippet Studio",
-  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance. Ideal for DBI courses and daily SQL work.",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance. Originally built for a school database course; now a focused offline SQL companion for PostgreSQL and Oracle.",
   "version": "2.0.0",
   "publisher": "dbi-team",
   "icon": "images/icon.png",

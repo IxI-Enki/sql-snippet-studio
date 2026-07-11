@@ -6,15 +6,9 @@ dates:
   - updated: 2026-07-01
 version: 2.0.0
 status: published
-author:
-  - name: Jan Ritt
-    email: janritt.office@gmail.com
-    location: Österreich
-    github:
-      handle: IxI-Enki
-      userpage: 'https://github.com/IxI-Enki'
-tags: [ sql, vscode-extension, postgresql, oracle, offline, dbi ]
-repo: IxI-Enki/dbi-test-survival-kit
+author: IxI-Enki
+tags: [ sql, vscode-extension, cursor-extension, postgresql, oracle, offline ]
+repo: IxI-Enki/offline-sql-snippets  # TODO: github repo name
 ---
 
 **Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL** — a VS Code / Cursor extension for writing database queries without depending on the web.
@@ -27,9 +21,9 @@ SQL Snippet Studio is a lightweight extension that brings **300+ SQL snippets**,
 
 ---
 
-## Built for HTL DBI — useful beyond the classroom
+## Origin
 
-Designed for database courses at HTL, but built as a daily SQL companion: offline snippets, star-schema templates, and optional local LLM work the same in class, internships, and professional projects. No emergency-kit vibe — just a focused snippet studio for PostgreSQL and Oracle.
+Originally built for a school database course; now a focused offline SQL companion for PostgreSQL and Oracle.
 
 ---
 
@@ -62,8 +56,6 @@ Full documentation lives under **[docs/](docs/README.md)**:
 | Quick start | [docs/guides/quickstart.md](docs/guides/quickstart.md) |
 | Setup & troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
 | Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
-| LLM features (v1.6+) | [docs/guides/smart_llm_features.md](docs/guides/smart_llm_features.md) |
-| Latest changes | [docs/changelogs/changelog_v2_0_0.md](docs/changelogs/changelog_v2_0_0.md) |
 
 ---
 

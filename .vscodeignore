@@ -9,6 +9,8 @@ AGENTS.md
 node_modules/**
 *.vsix
 docs/archive/**
+docs/changelogs/**
 docs/superpowers/**
+images/icon.svg
 package-lock.json
 _build.ps1

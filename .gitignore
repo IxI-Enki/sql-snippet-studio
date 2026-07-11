@@ -1,45 +1,60 @@
-# Dependencies
+# =============================================================================
+# SQL Snippet Studio — .gitignore
+# Public repo: README + docs/guides only. Internal paths below stay local.
+# =============================================================================
+
+# --- Dependencies ---
 node_modules/
 
-# Build / packaging
+# --- Build / packaging ---
 *.vsix
 *.tgz
 .dist/
+out/
 
-# Local test suite (keep locally, do not version)
+# --- Secrets / environment ---
+.env
+.env.*
+!.env.example
+credentials.json
+*.pem
+
+# --- Local dev / QA (never version) ---
 test/
+.archived_versions/
+bug-fixes/
+scriptfiles-probably-all-obsolete/
 
-# Tooling cache
+# --- Tooling / AI workspace ---
 .cache/
 graphify-out/
+.cursor/
 
-# OS
+# --- IDE (local settings only) ---
+.vscode/
+.idea/
+
+# --- OS junk ---
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# IDE (local settings only)
-.vscode/
-.idea/
-.cursor/
-
-# Local-only folders (not versioned)
-bug-fixes/
-scriptfiles-probably-all-obsolete/
-
-# Logs
+# --- Logs / temp ---
 *.log
 npm-debug.log*
-
-# Temp
 *.tmp
 
-# Root markdown (tracked docs live under docs/ only)
+# --- Internal documentation (private) ---
+docs/archive/
+docs/changelogs/
+docs/superpowers/
+
+# --- Agent metadata (Cursor-local) ---
+AGENTS.md
+
+# --- Root markdown: public README only ---
 /*.md
 !README.md
-!AGENTS.md
 
-# Test-era archive (local reference only)
-docs/archive/test_research_plan.md
-docs/archive/test_results_template.md
-docs/archive/testing_guide.md
+# --- Extension assets: marketplace uses PNG; SVG stays local ---
+images/icon.svg
