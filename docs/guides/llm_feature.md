@@ -8,7 +8,7 @@ Optional AI-powered query suggestions for **SQL Snippet Studio**. Works with any
 
 - Reads schema and task comments from your `.sql` file
 - Sends context to a configured LLM
-- Offers SQL as IntelliSense items or via `Ctrl+Alt+Shift+Q`
+- Offers SQL as IntelliSense items or via `<set-keybindings>`
 - Caches validated responses for faster repeat use
 
 Core snippets work **without** LLM — enable this only when you want AI assistance.
@@ -19,12 +19,9 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 
 ### Option A: Local LLM (recommended)
 
-```bash
-# Install LM Studio or Ollama
-# Load a code model (e.g. qwen2.5-coder)
-# Start server on localhost:1234
-
-```
+1. Install LM Studio or Ollama
+2. Load a code model (e.g. qwen2.5-coder)
+3. Start server on localhost:1234
 
 ### Option B: Remote API
 
@@ -33,7 +30,6 @@ Core snippets work **without** LLM — enable this only when you want AI assista
   "sqlSnippetStudio.llm.endpoint": "https://api.openai.com/v1/chat/completions",
   "sqlSnippetStudio.llm.apiKey": "sk-..."
 }
-
 ```
 
 ### Enable in VS Code / Cursor
@@ -48,7 +44,6 @@ Core snippets work **without** LLM — enable this only when you want AI assista
   "sqlSnippetStudio.llm.endpoint": "http://localhost:1234/v1/chat/completions",
   "sqlSnippetStudio.llm.model": "qwen2.5-coder"
 }
-
 ```
 
 ---
@@ -58,25 +53,22 @@ Core snippets work **without** LLM — enable this only when you want AI assista
 ### Workflow
 
 ```sql
--- Schema in the same file:
+/* Schema in the same file: */
 CREATE TABLE students (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     grade INTEGER
 );
 
--- Task as a comment:
+/* Task as a comment: */
 -- Task: Find all students with grade above 80
-
--- Place cursor below, press Ctrl+Alt+Shift+Q or use IntelliSense
-
+/* Place cursor below, press <set-keybindings> to use IntelliSense */
 ```
 
 Result:
 
 ```sql
 SELECT * FROM students WHERE grade > 80;
-
 ```
 
 ### Recognized task comment formats
@@ -85,7 +77,6 @@ SELECT * FROM students WHERE grade > 80;
 -- Task: Write a JOIN query
 -- TODO: Implement trigger
 -- Question: How to aggregate by month?
-
 ```
 
 ---
@@ -150,9 +141,8 @@ Enable verbose logging to inspect parser and validator output in the **SQL Snipp
 
 LLM not responding
 
-```bash
-curl http://localhost:1234/v1/models
-
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:1234/v1/models'
 ```
 
 No completion appears

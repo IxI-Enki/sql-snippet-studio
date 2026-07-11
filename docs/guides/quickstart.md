@@ -6,18 +6,17 @@
 
 Option A: From VSIX (recommended)
 
-1. Build or obtain `sql-snippet-studio-*.vsix`
+1. Build `sql-snippet-studio-*.vsix`
 2. In VS Code / Cursor: **Extensions → Install from VSIX…**
 3. Select the `.vsix` file
 
 Option B: From source
 
 ```powershell
-cd <path-to-repo>
+Set-Location '<path-to-repo>'
 npm install
-npx vsce package
-# Install the generated .vsix via Extensions → Install from VSIX…
-
+npx @vscode/vsce package
+# Install the generated .vsix via Extensions -> Install from VSIX...
 ```
 
 ### 2. Reload IDE

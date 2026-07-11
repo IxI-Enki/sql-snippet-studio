@@ -13,6 +13,20 @@ Originally built for a database course; now a focused offline SQL companion for 
 - **Snippet sharing** — export and import custom snippets
 - **Dialect support** — PostgreSQL, Oracle, or both (configurable in settings)
 
+## In the editor
+
+### Oracle snippet IntelliSense
+
+Type an Oracle prefix (for example `ora-`) in a `.sql` or `.plsql` file to open the snippet picker. Each entry shows the trigger and a short description — select one and press **Tab** to expand.
+
+![Oracle PL/SQL snippet autocomplete in the editor](images/oracle-snippets.png)
+
+### Settings
+
+Search **SQL Snippet Studio** in editor settings. All options use the `sqlSnippetStudio.*` namespace — dialect, completion, star-schema templates, and optional LLM integration in one place.
+
+![SQL Snippet Studio settings panel](images/settings.png)
+
 ## Install
 
 **From VSIX (recommended for local use)**
@@ -24,24 +38,15 @@ Originally built for a database course; now a focused offline SQL companion for 
 
 **From source**
 
-```bash
+```powershell
+Set-Location '<path-to-repo>'
 npm install
-vsce package
+npx @vscode/vsce package
 ```
 
 Install the generated `.vsix` the same way as above.
 
 Step-by-step setup: [docs/guides/quickstart.md](docs/guides/quickstart.md)
-
-## Snippet library
-
-| File | Count | Focus |
-| ---- | ----- | ----- |
-| `postgres-snippets.json` | 22 | PostgreSQL-specific syntax |
-| `oracle-snippets.json` | 25 | Oracle PL/SQL patterns |
-| `shared-snippets.json` | 20 | Portable SQL (JOINs, CTEs, aggregates) |
-
-Type a snippet prefix (for example `star-schema`) and press **Tab** to expand.
 
 ## Keyboard shortcuts
 
@@ -61,10 +66,6 @@ Type a snippet prefix (for example `star-schema`) and press **Tab** to expand.
 | Setup and troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
 | Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
 | Full docs index | [docs/README.md](docs/README.md) |
-
-## Settings
-
-Search **SQL Snippet Studio** in editor settings. Keys use the `sqlSnippetStudio.*` namespace (for example `sqlSnippetStudio.databaseDialect`, `sqlSnippetStudio.llm.enabled`).
 
 ## Author
 

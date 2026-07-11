@@ -3,8 +3,7 @@
 ## 📋 Prerequisites
 
 - VS Code or Cursor IDE
-- Node.js (optional, only for development)
-- Git (optional, for version control)
+- Optional: LM Studio or Ollama
 
 ---
 
@@ -14,70 +13,63 @@
 
 <!-- markdownlint-disable MD029 -->
 
-1. **Package or obtain VSIX:**
+1. **Package VSIX:**
+   ```powershell
+   Set-Location '<path-to-repo>'
+   npm install
+   npx @vscode/vsce package
+   ```
 
-```powershell
-cd <path-to-repo>
-npm install
-npx vsce package
+2. **Install:**
+   Extensions → Install from VSIX… → select the `.vsix` file
+   or drag and drop the `.vsix` file into the Extensions view
 
-```
+3. **Reload IDE:**
+   `Ctrl+Shift+P` → `Reload Window`
 
-2. **Install:** Extensions → Install from VSIX… → select the `.vsix` file
-
-3. **Reload VS Code:** `Ctrl+Shift+P` → Reload Window
-
-4. **Verify:** Open a `.sql` file, type `star-schema`, press Tab
+4. **Verify:**
+   Open a `.sql` file, type `star-schema`, press Tab
 
 ---
 
-### Method 2: Package as VSIX (Recommended for Sharing)
+### Method 2: Package as VSIX (for sharing)
 
-1. **Install vsce (VS Code Extension Manager):**
-
-```powershell
-npm install -g @vscode/vsce
-
-```
+1. **Install vsce:**
+   ```powershell
+   npm install -g @vscode/vsce
+   ```
 
 2. **Package Extension:**
-
-```powershell
-cd <path-to-repo>
-vsce package
-
-```
+   ```powershell
+   Set-Location '<path-to-repo>'
+   npx @vscode/vsce package
+   ```
 
 3. **Install VSIX:**
-
-```powershell
-code --install-extension sql-snippet-studio-2.0.0.vsix
-
-```
+   ```powershell
+   code --install-extension sql-snippet-studio-2.0.0.vsix
+   ```
 
 4. **Share with colleagues:**
-
-- Send them the `.vsix` file
-- They run: `code --install-extension sql-snippet-studio-2.0.0.vsix`
+   - Send them the `.vsix` file
+   - They run: `code --install-extension sql-snippet-studio-2.0.0.vsix`
+     or drag and drop the `.vsix` file into the Extensions view
 
 ---
 
 ### Method 3: Development Mode
 
 1. **Open Extension in VS Code:**
-
-```powershell
-cd <path-to-repo>
-code .
-
-```
+   ```powershell
+   Set-Location '<path-to-repo>'
+   code .
+   ```
 
 2. **Run Extension:**
-
-- Press `F5`
-- A new VS Code window opens with extension loaded
-- Test your snippets
-- Make changes and reload
+   - Press `F5`
+   - A new VS Code window opens with extension loaded
+   - Test your snippets
+   - Make changes and reload
 
 <!-- markdownlint-enable MD029 -->
 
@@ -120,7 +112,6 @@ code .
 ### Enable Tab Completion
 
 Add to your `settings.json`:
-
 ```json
 {
   "editor.tabCompletion": "on",
@@ -132,18 +123,15 @@ Add to your `settings.json`:
     "strings": true
   }
 }
-
 ```
 
 ### Database-Specific Mode
 
 If you only work with one database:
-
 ```json
 {
   "sqlSnippetStudio.databaseDialect": "postgres"  // or "oracle"
 }
-
 ```
 
 ---
@@ -153,9 +141,10 @@ If you only work with one database:
 ### Export your snippets
 
 ```powershell
-# Or use: Ctrl+Shift+P → SQL: Export Snippets
-xcopy "<path-to-repo>\snippets" "%USERPROFILE%\sql-snippet-studio-backup\snippets" /E /I /Y
-
+# Or use: Ctrl+Shift+P -> SQL: Export Snippets
+$dest = Join-Path $env:USERPROFILE 'sql-snippet-studio-backup/snippets'
+New-Item -ItemType Directory -Path $dest -Force | Out-Null
+Copy-Item -Path '<path-to-repo>/snippets/*' -Destination $dest -Recurse -Force
 ```
 
 Keep a copy of your customized snippets and the latest `.vsix` for reinstall or sharing.
@@ -166,13 +155,13 @@ Keep a copy of your customized snippets and the latest `.vsix` for reinstall or 
 
 ### Issue: Snippets Don't Show Up
 
-**Solution 1:** Check file extension
+**Solution 1:**
+  > Check file extension
+  - File must be `.sql` or `.plsql`
 
-- File must be `.sql` or `.plsql`
-
-**Solution 2:** Reload window
-
-- `Ctrl+Shift+P` → "Reload Window"
+**Solution 2:**
+  > Reload window
+  - `Ctrl+Shift+P` → "Reload Window"
 
 **Solution 3:** Check extension is active
 
@@ -222,7 +211,7 @@ code --install-extension sql-snippet-studio-2.0.0.vsix
 
 ### Method 1: Share VSIX File
 
-1. Package extension: `vsce package`
+1. Package extension: `npx @vscode/vsce package`
 2. Send `.vsix` file to colleagues
 3. They install: `code --install-extension <file>.vsix`
 
@@ -238,25 +227,23 @@ code --install-extension sql-snippet-studio-2.0.0.vsix
 
 1. Push to GitHub:
 
-```bash
-cd <path-to-repo>
+```powershell
+Set-Location '<path-to-repo>'
 git init
 git add .
 git commit -m "Initial commit"
 git remote add origin <your-repo-url>
 git push -u origin main
-
 ```
 
 2. colleagues clone and install:
 
-```bash
+```powershell
 git clone <repo-url>
-cd sql-snippet-studio
+Set-Location sql-snippet-studio
 npm install
-vsce package
+npx @vscode/vsce package
 code --install-extension sql-snippet-studio-2.0.0.vsix
-
 ```
 
 <!-- markdownlint-enable MD029 -->
