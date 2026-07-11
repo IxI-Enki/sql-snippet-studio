@@ -352,6 +352,6 @@ sql-snippet-studio/
 
 ## Related documentation
 
-- [guides/quickstart.md](guides/quickstart.md)
-- [guides/llm_feature.md](guides/llm_feature.md)
+- [guides/quickstart.md](quickstart.md)
+- [guides/llm_feature.md](llm_feature.md)
 - [Documentation index](../README.md)

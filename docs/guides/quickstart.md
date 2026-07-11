@@ -88,7 +88,7 @@ npx vsce package
 1. Open a `.sql` file with your schema
 2. Type a snippet trigger (e.g. `star-schema`) and press **Tab**
 3. Fill in placeholders
-4. Optionally enable [local LLM assistance](guides/llm_feature.md) for query suggestions
+4. Optionally enable [local LLM assistance](llm_feature.md) for query suggestions
 
 ---
 
@@ -111,6 +111,6 @@ npx vsce package
 
 ## More documentation
 
-- [Setup guide](guides/setup_guide.md) — installation, configuration, troubleshooting
-- [LLM feature](guides/llm_feature.md) — optional local LLM setup
+- [Setup guide](setup_guide.md) — installation, configuration, troubleshooting
+- [LLM feature](llm_feature.md) — optional local LLM setup
 - [Documentation index](../README.md)

@@ -172,5 +172,5 @@ Poor query quality
 
 ## Related docs
 
-- [guides/setup_guide.md](guides/setup_guide.md) — full installation guide
+- [guides/setup_guide.md](setup_guide.md) — full installation guide
 - [Documentation index](../README.md)
