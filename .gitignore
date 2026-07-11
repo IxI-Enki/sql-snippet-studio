@@ -8,6 +8,7 @@ node_modules/
 
 # --- Build / packaging ---
 *.vsix
+!current_version/*.vsix
 *.tgz
 .dist/
 out/
@@ -20,7 +21,8 @@ credentials.json
 *.pem
 
 # --- Local dev / QA (never version) ---
-test/
+test/*
+!test/*.test.js
 .archived_versions/
 bug-fixes/
 scriptfiles-probably-all-obsolete/
@@ -58,3 +60,10 @@ AGENTS.md
 
 # --- Extension assets: marketplace uses PNG; SVG stays local ---
 images/icon.svg
+test/completion_coordinator.test.js
+test/config.test.js
+test/llm_provider.test.js
+test/manifest.test.js
+test/provider_errors.test.js
+test/query_cache.test.js
+test/secret_storage.test.js

@@ -1,23 +1,23 @@
 const vscode = require('vscode');
-const fs = require('fs');
-const path = require('path');
 
-// LLM-Integration
 const ContextBuilder = require('./llm/contextBuilder');
 const LLMProvider = require('./llm/llmProvider');
 const DebugHelper = require('./llm/debugHelper');
 const QueryCache = require('./llm/queryCache');
+const CompletionCoordinator = require('./llm/completionCoordinator');
 const extensionConfig = require('./config');
+const secretStorage = require('./llm/secretStorage');
+const { LlmError } = require('./llm/llmErrors');
 
-// Global instances
 let debugHelper = null;
 let queryCache = null;
+let llmProvider = null;
+
+const AUTO_DEBOUNCE_MS = 800;
+const completionCoordinator = new CompletionCoordinator(AUTO_DEBOUNCE_MS);
 
 const LEGACY_COMMAND_NAMESPACE = 'dbiSurvivalKit';
 
-/**
- * Register sqlSnippetStudio.* command with dbiSurvivalKit.* legacy alias (not in package.json).
- */
 function registerCommand(context, commandName, handler) {
     context.subscriptions.push(
         vscode.commands.registerCommand(`sqlSnippetStudio.${commandName}`, handler)
@@ -27,107 +27,136 @@ function registerCommand(context, commandName, handler) {
     );
 }
 
-/**
- * Extension activation entry point
- */
-function activate(context) {
+function createLlmProvider() {
+    return new LLMProvider(debugHelper, queryCache, {
+        tokenProvider: () => secretStorage.getApiToken()
+    });
+}
+
+function refreshRuntimeState() {
+    if (debugHelper) {
+        debugHelper.updateConfig();
+    }
+    if (llmProvider) {
+        llmProvider.updateConfig();
+    }
+}
+
+function formatLlmError(error) {
+    if (error instanceof LlmError) {
+        return error.remediation ? `${error.message}\n\n${error.remediation}` : error.message;
+    }
+    return error.message;
+}
+
+async function activate(context) {
     console.log('SQL Snippet Studio is now active!');
 
-    // Initialize global instances
     debugHelper = new DebugHelper();
     debugHelper.initialize(context);
     queryCache = new QueryCache();
+    secretStorage.initialize(context);
+    llmProvider = createLlmProvider();
 
-    // Register commands
     registerCommands(context);
-    
-    // Register completion provider
     registerCompletionProvider(context);
-    
-    // Show welcome message on first activation
     showWelcomeMessage(context);
 
-    // Listen for config changes
     context.subscriptions.push(
-        vscode.workspace.onDidChangeConfiguration(e => {
-            if (extensionConfig.affectsExtensionConfig(e)) {
-                if (debugHelper) {
-                    debugHelper.updateConfig();
-                }
+        vscode.workspace.onDidChangeConfiguration(event => {
+            if (extensionConfig.affectsExtensionConfig(event)) {
+                refreshRuntimeState();
             }
         })
     );
+
+    await secretStorage.migratePlaintextApiKeyIfNeeded();
+    refreshRuntimeState();
 }
 
-/**
- * Register all extension commands
- */
 function registerCommands(context) {
-    registerCommand(context, 'insertStarSchema', () => {
-        insertTemplate('star-schema');
-    });
-
-    registerCommand(context, 'insertDimensionTable', () => {
-        insertTemplate('dim-table');
-    });
-
-    registerCommand(context, 'insertFactTable', () => {
-        insertTemplate('fact-table');
-    });
-
-    registerCommand(context, 'shareSnippets', () => {
-        exportSnippets();
-    });
-
-    registerCommand(context, 'importSnippets', () => {
-        importSnippets();
-    });
-
+    registerCommand(context, 'insertStarSchema', () => insertTemplate('star-schema'));
+    registerCommand(context, 'insertDimensionTable', () => insertTemplate('dim-table'));
+    registerCommand(context, 'insertFactTable', () => insertTemplate('fact-table'));
     registerCommand(context, 'showLLMStats', () => {
         if (debugHelper) {
             debugHelper.showStats();
         }
     });
-
     registerCommand(context, 'clearCache', () => {
         if (queryCache) {
             queryCache.clear();
             vscode.window.showInformationMessage('LLM cache cleared.');
         }
     });
-
-    registerCommand(context, 'queryLLM', async () => {
-        await executeLLMQuery();
-    });
+    registerCommand(context, 'queryLLM', async () => executeLLMQuery());
+    registerCommand(context, 'setLlmApiToken', async () => setLlmApiToken());
+    registerCommand(context, 'clearLlmApiToken', async () => clearLlmApiToken());
+    registerCommand(context, 'testLlmConnection', async () => testLlmConnection());
 }
 
-/**
- * Execute LLM Query on current cursor position
- * This is the MAIN function that users will trigger via keyboard shortcut
- */
+async function setLlmApiToken() {
+    const token = await vscode.window.showInputBox({
+        prompt: 'Paste your LM Studio API token',
+        password: true,
+        ignoreFocusOut: true,
+        placeHolder: 'sk-lm-...'
+    });
+
+    if (!token || !token.trim()) {
+        return;
+    }
+
+    await secretStorage.setApiToken(token.trim());
+    vscode.window.showInformationMessage('LLM API token stored securely.');
+}
+
+async function clearLlmApiToken() {
+    await secretStorage.clearApiToken();
+    vscode.window.showInformationMessage('LLM API token cleared.');
+}
+
+async function testLlmConnection() {
+    const config = extensionConfig.getLlmConfig();
+    if (!config.enabled) {
+        vscode.window.showWarningMessage('Enable sqlSnippetStudio.llm.enabled before testing the connection.');
+        return;
+    }
+
+    try {
+        await llmProvider.testConnection();
+        if (debugHelper) {
+            debugHelper.markConnectionReady();
+        }
+        vscode.window.showInformationMessage('LLM connection successful.');
+    } catch (error) {
+        vscode.window.showErrorMessage(formatLlmError(error), 'Show Log').then(selection => {
+            if (selection === 'Show Log' && debugHelper) {
+                debugHelper.logRequestError(error);
+            }
+        });
+    }
+}
+
 async function executeLLMQuery() {
+    const config = extensionConfig.getLlmConfig();
+
     try {
         const editor = vscode.window.activeTextEditor;
-        
         if (!editor) {
-            vscode.window.showErrorMessage('No active editor!');
+            vscode.window.showErrorMessage('No active editor.');
             return;
         }
 
-        // Check if LLM is enabled
-        const isEnabled = extensionConfig.getSection('llm', 'enabled', false);
-        const showNotifications = extensionConfig.getSection('llm', 'showNotifications', false);
-        
-        if (!isEnabled) {
-            vscode.window.showWarningMessage('LLM is disabled. Enable it in Settings: SQL Snippet Studio > Llm: Enabled');
+        if (!config.enabled) {
+            vscode.window.showWarningMessage('LLM is disabled. Enable sqlSnippetStudio.llm.enabled in settings.');
             return;
         }
 
-        // Show immediate feedback (only if notifications enabled)
-        if (showNotifications) {
-            vscode.window.showInformationMessage('🤖 Querying LLM...');
+        if (config.showNotifications) {
+            vscode.window.showInformationMessage('Querying LLM...');
         }
-        
+
         if (debugHelper) {
             debugHelper.updateStatusBar('requesting');
             debugHelper.log('[COMMAND] LLM Query triggered by user');
@@ -136,143 +165,108 @@ async function executeLLMQuery() {
         const document = editor.document;
         const position = editor.selection.active;
         const documentText = document.getText();
-        
-        // Build context
         const contextBuilder = new ContextBuilder();
-        const context = contextBuilder.buildContext(documentText, position.line);
-        
-        if (!context || !context.task) {
-            if (showNotifications) {
-                vscode.window.showWarningMessage('No task found at cursor position!\n\nPlace cursor after a task comment like:\n-- Task 1: ...');
+        const llmContext = contextBuilder.buildContext(documentText, position.line);
+
+        if (!llmContext || !llmContext.task) {
+            if (config.showNotifications) {
+                vscode.window.showWarningMessage('No task found at cursor position.\n\nPlace the cursor below a comment like:\n-- Task: ...');
             }
             if (debugHelper) {
                 debugHelper.log('[COMMAND] No task found');
-                debugHelper.updateStatusBar('idle');
+                debugHelper.refreshStatusBar();
             }
             return;
         }
 
         if (debugHelper) {
-            debugHelper.log(`[COMMAND] Task found: "${context.task}"`);
-            debugHelper.log(`[COMMAND] Schemas found: ${context.schemas.length}`);
+            debugHelper.log(`[COMMAND] Task found: "${llmContext.task}"`);
+            debugHelper.log(`[COMMAND] Schemas found: ${llmContext.schemas.length}`);
         }
 
-        // Add stop sequences to context
-        context.stopSequences = contextBuilder.getStopSequences();
-
-        // Query LLM (returns { sql, validation })
-        const llmProvider = new LLMProvider(debugHelper, queryCache);
-        const result = await llmProvider.query(context.prompt, context);
+        llmContext.stopSequences = contextBuilder.getStopSequences();
+        const result = await llmProvider.query(llmContext.prompt, llmContext);
 
         if (!result || !result.sql) {
-            if (showNotifications) {
-                vscode.window.showErrorMessage('❌ LLM returned empty response!\n\nCheck:\n- LM Studio is running\n- Model is loaded\n- Server is on port 1234');
+            if (config.showNotifications) {
+                vscode.window.showErrorMessage('LLM returned an empty response. Check the output channel for details.');
             }
             if (debugHelper) {
                 debugHelper.log('[COMMAND] LLM returned empty query');
-                debugHelper.updateStatusBar('error');
+                debugHelper.refreshStatusBar();
             }
             return;
         }
 
-        const sqlQuery = result.sql;
-        const validation = result.validation;
+        const { sql: sqlQuery, validation } = result;
 
         if (debugHelper) {
             debugHelper.log(`[COMMAND] LLM returned query: ${sqlQuery.substring(0, 200)}...`);
             debugHelper.log(`[COMMAND] Validation score: ${validation.score}/100`);
-            debugHelper.updateStatusBar('idle');
+            debugHelper.refreshStatusBar();
         }
 
-        // Insert the query at cursor position
         await editor.edit(editBuilder => {
             editBuilder.insert(position, '\n' + sqlQuery + '\n');
         });
 
-        // Show appropriate feedback based on validation
-        if (showNotifications) {
+        if (config.showNotifications) {
             if (validation.isValid) {
                 if (validation.warnings.length > 0) {
-                    vscode.window.showWarningMessage(
-                        `⚠️ Query inserted with warnings (Score: ${validation.score}/100)\n${validation.warnings[0]}`
-                    );
+                    vscode.window.showWarningMessage(`Query inserted with warnings (Score: ${validation.score}/100)\n${validation.warnings[0]}`);
                 } else {
-                    vscode.window.showInformationMessage(
-                        `✅ Perfect query inserted! (Score: ${validation.score}/100)`
-                    );
+                    vscode.window.showInformationMessage(`Query inserted (Score: ${validation.score}/100)`);
                 }
             } else {
-                vscode.window.showWarningMessage(
-                    `⚠️ Query may have issues (Score: ${validation.score}/100)\n${validation.errors[0]}`
-                );
+                vscode.window.showWarningMessage(`Query may have issues (Score: ${validation.score}/100)\n${validation.errors[0]}`);
             }
         }
-
     } catch (error) {
-        if (showNotifications) {
-            vscode.window.showErrorMessage(`❌ LLM Error: ${error.message}`);
+        if (config.showNotifications) {
+            const authenticationCodes = new Set(['AUTH_TOKEN_MISSING', 'AUTH_UNAUTHORIZED']);
+            vscode.window.showErrorMessage(
+                formatLlmError(error),
+                ...(authenticationCodes.has(error.code) ? ['Set API Token'] : [])
+            ).then(selection => {
+                if (selection === 'Set API Token') {
+                    vscode.commands.executeCommand('sqlSnippetStudio.setLlmApiToken');
+                }
+            });
         }
         if (debugHelper) {
             debugHelper.log(`[COMMAND] Error: ${error.message}`);
-            debugHelper.logError(error);
-            debugHelper.updateStatusBar('error');
+            debugHelper.logRequestError(error);
         }
     }
 }
 
-/**
- * Register intelligent completion provider (with LLM support)
- */
 function registerCompletionProvider(context) {
     const contextBuilder = new ContextBuilder();
-    const llmProvider = new LLMProvider(debugHelper, queryCache);
 
     const provider = vscode.languages.registerCompletionItemProvider(
         ['sql', 'plsql'],
         {
             async provideCompletionItems(document, position) {
-                // DEBUG: Log every invocation
-                if (debugHelper) {
-                    debugHelper.log(`[TRIGGER] provideCompletionItems called at line ${position.line}, char ${position.character}`);
-                }
-
+                const config = extensionConfig.getLlmConfig();
                 const linePrefix = document.lineAt(position).text.substr(0, position.character);
                 const completions = [];
 
-                if (debugHelper) {
-                    debugHelper.log(`[TRIGGER] Line prefix: "${linePrefix}"`);
-                }
-
-                // Standard completions (existing)
                 if (linePrefix.includes('CREATE TABLE')) {
-                    completions.push(createCompletion('DIM_ (Dimension Table)', 'DIM_', 
-                        'Start of a dimension table name'));
-                    completions.push(createCompletion('FACT_ (Fact Table)', 'FACT_', 
-                        'Start of a fact table name'));
+                    completions.push(createCompletion('DIM_ (Dimension Table)', 'DIM_', 'Start of a dimension table name'));
+                    completions.push(createCompletion('FACT_ (Fact Table)', 'FACT_', 'Start of a fact table name'));
                 }
 
                 if (linePrefix.includes('FOREIGN KEY')) {
-                    completions.push(createCompletion('ON DELETE CASCADE', 
-                        'ON DELETE CASCADE', 'Cascade delete to child records'));
-                    completions.push(createCompletion('ON DELETE SET NULL', 
-                        'ON DELETE SET NULL', 'Set foreign key to NULL on delete'));
+                    completions.push(createCompletion('ON DELETE CASCADE', 'ON DELETE CASCADE', 'Cascade delete to child records'));
+                    completions.push(createCompletion('ON DELETE SET NULL', 'ON DELETE SET NULL', 'Set foreign key to NULL on delete'));
                 }
 
                 if (linePrefix.match(/DIM_\w+\s*\(/)) {
-                    completions.push(createCompletion('Surrogate Key', 
-                        '${1:dim}_key INTEGER PRIMARY KEY,\n    ', 
-                        'Standard surrogate key for dimension'));
+                    completions.push(createCompletion('Surrogate Key', '${1:dim}_key INTEGER PRIMARY KEY,\n    ', 'Standard surrogate key for dimension'));
                 }
 
-                // LLM-based completion (NEW!)
-                if (contextBuilder.shouldTriggerCompletion(linePrefix, position.character)) {
-                    const llmCompletion = await getLLMCompletion(
-                        document, 
-                        position, 
-                        contextBuilder, 
-                        llmProvider
-                    );
-
+                if (config.enabled && config.autoCompletion && contextBuilder.shouldTriggerCompletion(linePrefix, position.character)) {
+                    const llmCompletion = await getLLMCompletion(document, position, contextBuilder);
                     if (llmCompletion) {
                         completions.push(llmCompletion);
                     }
@@ -281,94 +275,74 @@ function registerCompletionProvider(context) {
                 return completions;
             }
         },
-        '.', ' ', ';', '-', 'S', 'E', 'L', 'C', 'T'  // Trigger on: dot, space, semicolon, dash, SQL keywords
+        '.', ' ', ';', '-'
     );
 
     context.subscriptions.push(provider);
 }
 
-/**
- * Get LLM-based completion for current context
- */
-async function getLLMCompletion(document, position, contextBuilder, llmProvider) {
+async function getLLMCompletion(document, position, contextBuilder) {
+    const config = extensionConfig.getLlmConfig();
+
+    if (!config.enabled || !config.autoCompletion) {
+        return null;
+    }
+
+    const documentText = document.getText();
+    const cursorLine = position.line;
+    const llmContext = contextBuilder.buildContext(documentText, cursorLine);
+
+    if (!llmContext || !llmContext.task) {
+        return null;
+    }
+
     try {
-        // Check if LLM is enabled in settings
-        const isEnabled = extensionConfig.getSection('llm', 'enabled', false);
-        
-        if (!isEnabled) {
-            if (debugHelper) {
-                debugHelper.log('LLM is disabled in settings');
+        return await completionCoordinator.schedule(
+            document.uri.toString(),
+            llmContext.task,
+            async signal => {
+                if (debugHelper) {
+                    debugHelper.log(`[AUTO] Task found: "${llmContext.task}"`);
+                }
+
+                llmContext.stopSequences = contextBuilder.getStopSequences();
+                const result = await llmProvider.query(
+                    llmContext.prompt,
+                    llmContext,
+                    { signal }
+                );
+
+                if (!result || !result.sql) {
+                    return null;
+                }
+
+                const sqlQuery = result.sql;
+                const debugLabel = debugHelper ? debugHelper.getDebugLabel('llm') : '';
+                const completion = new vscode.CompletionItem(
+                    `${debugLabel} AI: ${llmContext.task.substring(0, 50)}...`,
+                    vscode.CompletionItemKind.Snippet
+                );
+
+                completion.insertText = sqlQuery;
+                completion.detail = 'AI-generated SQL query';
+                completion.documentation = new vscode.MarkdownString(
+                    `**Task:** ${llmContext.task}\n\n` +
+                    `**Schema:**\n\`\`\`sql\n${llmContext.schemaText}\n\`\`\`\n\n` +
+                    `**Generated Query:**\n\`\`\`sql\n${sqlQuery}\n\`\`\``
+                );
+                completion.sortText = '0000';
+                completion.preselect = true;
+                return completion;
             }
-            return null;
-        }
-
-        const documentText = document.getText();
-        const cursorLine = position.line;
-
-        if (debugHelper) {
-            debugHelper.log(`LLM triggered at line ${cursorLine}`);
-        }
-
-        // Build context from document
-        const context = contextBuilder.buildContext(documentText, cursorLine);
-        
-        if (!context || !context.task) {
-            if (debugHelper) {
-                debugHelper.log('No task found at cursor position');
-            }
-            return null; // No task found
-        }
-
-        if (debugHelper) {
-            debugHelper.log(`Task found: "${context.task}"`);
-            debugHelper.log(`Schemas found: ${context.schemas.length}`);
-        }
-
-        // Query LLM (with context for caching)
-        const sqlQuery = await llmProvider.query(context.prompt, context);
-
-        if (!sqlQuery) {
-            if (debugHelper) {
-                debugHelper.log('LLM returned empty query');
-            }
-            return null;
-        }
-
-        if (debugHelper) {
-            debugHelper.log(`LLM generated query: ${sqlQuery.substring(0, 100)}...`);
-        }
-
-        // Create completion item with debug label
-        const debugLabel = debugHelper ? debugHelper.getDebugLabel('llm') : '';
-        const completion = new vscode.CompletionItem(
-            debugLabel + ' AI: ' + context.task.substring(0, 50) + '...',
-            vscode.CompletionItemKind.Snippet
         );
-        
-        completion.insertText = sqlQuery;
-        completion.detail = 'AI-generated SQL query';
-        completion.documentation = new vscode.MarkdownString(
-            `**Task:** ${context.task}\n\n` +
-            `**Schema:**\n\`\`\`sql\n${context.schemaText}\n\`\`\`\n\n` +
-            `**Generated Query:**\n\`\`\`sql\n${sqlQuery}\n\`\`\`\n\n` +
-            `_Powered by LLM_`
-        );
-        
-        // Higher sort priority so it appears first
-        completion.sortText = '0000';
-        completion.preselect = true;
-
-        return completion;
-
     } catch (error) {
-        console.error('[SQL Snippet Studio] LLM completion failed:', error);
+        if (error.code !== 'ABORTED' && debugHelper) {
+            debugHelper.logRequestError(error);
+        }
         return null;
     }
 }
 
-/**
- * Create a completion item
- */
 function createCompletion(label, insertText, documentation) {
     const completion = new vscode.CompletionItem(label);
     completion.insertText = new vscode.SnippetString(insertText);
@@ -376,9 +350,6 @@ function createCompletion(label, insertText, documentation) {
     return completion;
 }
 
-/**
- * Insert a template at cursor position
- */
 function insertTemplate(snippetPrefix) {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -386,128 +357,38 @@ function insertTemplate(snippetPrefix) {
         return;
     }
 
-    // Trigger snippet
     vscode.commands.executeCommand('editor.action.insertSnippet', {
         name: snippetPrefix
     });
 }
 
-/**
- * Export snippets for sharing
- */
-async function exportSnippets() {
-    const snippetsDir = path.join(__dirname, '..', 'snippets');
-    const exportDir = await vscode.window.showSaveDialog({
-        defaultUri: vscode.Uri.file(path.join(require('os').homedir(), 'sql-snippet-studio-export.zip')),
-        filters: { 'ZIP files': ['zip'] }
-    });
-
-    if (!exportDir) return;
-
-    try {
-        // Simple export (in production, use a proper ZIP library)
-        const exportPath = exportDir.fsPath.replace('.zip', '');
-        fs.mkdirSync(exportPath, { recursive: true });
-        
-        // Copy snippet files
-        const files = fs.readdirSync(snippetsDir);
-        files.forEach(file => {
-            fs.copyFileSync(
-                path.join(snippetsDir, file),
-                path.join(exportPath, file)
-            );
-        });
-
-        vscode.window.showInformationMessage(
-            `Snippets exported to: ${exportPath}\n` +
-            'Share this folder to use the snippets elsewhere.'
-        );
-    } catch (error) {
-        vscode.window.showErrorMessage(`Export failed: ${error.message}`);
-    }
-}
-
-/**
- * Import snippets from an export folder
- */
-async function importSnippets() {
-    const importUri = await vscode.window.showOpenDialog({
-        canSelectFiles: false,
-        canSelectFolders: true,
-        canSelectMany: false,
-        openLabel: 'Select snippets folder'
-    });
-
-    if (!importUri || importUri.length === 0) return;
-
-    try {
-        const importPath = importUri[0].fsPath;
-        const snippetsDir = path.join(__dirname, '..', 'snippets');
-        
-        // Copy and merge snippets
-        const files = fs.readdirSync(importPath);
-        let imported = 0;
-        
-        files.forEach(file => {
-            if (file.endsWith('.json')) {
-                const sourcePath = path.join(importPath, file);
-                const targetPath = path.join(snippetsDir, file);
-                
-                if (fs.existsSync(targetPath)) {
-                    // Merge snippets
-                    const existingSnippets = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
-                    const newSnippets = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
-                    const merged = { ...existingSnippets, ...newSnippets };
-                    fs.writeFileSync(targetPath, JSON.stringify(merged, null, 2));
-                } else {
-                    // Copy new file
-                    fs.copyFileSync(sourcePath, targetPath);
-                }
-                imported++;
-            }
-        });
-
-        vscode.window.showInformationMessage(
-            `Successfully imported ${imported} snippet file(s)!\n` +
-            'Reload VS Code to see the new snippets.'
-        );
-    } catch (error) {
-        vscode.window.showErrorMessage(`Import failed: ${error.message}`);
-    }
-}
-
-/**
- * Show welcome message on first use
- */
 function showWelcomeMessage(context) {
     const hasShownWelcome = context.globalState.get('hasShownWelcome');
-    
+
     if (!hasShownWelcome) {
         vscode.window.showInformationMessage(
-            'SQL Snippet Studio activated! Type "star-schema" and press Tab to get started.',
+            'SQL Snippet Studio activated. Type "star-schema" and press Tab to get started.',
             'Show Commands'
         ).then(selection => {
             if (selection === 'Show Commands') {
                 vscode.commands.executeCommand('workbench.action.showCommands');
             }
         });
-        
+
         context.globalState.update('hasShownWelcome', true);
     }
 }
 
-/**
- * Extension deactivation
- */
 function deactivate() {
     console.log('SQL Snippet Studio deactivated');
-    
+
     if (debugHelper) {
         debugHelper.dispose();
     }
     if (queryCache) {
         queryCache.clear();
     }
+    completionCoordinator.dispose();
 }
 
 module.exports = {

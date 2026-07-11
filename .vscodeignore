@@ -8,6 +8,8 @@ AGENTS.md
 .gitignore
 node_modules/**
 *.vsix
+current_version/**
+.archived_versions/**
 docs/archive/**
 docs/changelogs/**
 docs/superpowers/**

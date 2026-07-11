@@ -1,43 +1,10 @@
-# SQL Snippet Studio
+# Snippet reference
 
-Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL in VS Code and Cursor, with optional local LLM assistance.
+SQL Snippet Studio 2.0.1 includes 67 snippets: 20 shared SQL and dimensional-modeling patterns, 22 PostgreSQL snippets, and 25 Oracle PL/SQL snippets. Prefixes and descriptions below are copied from the packaged JSON snippet definitions.
 
-## Install (recommended)
+Type a prefix in a SQL editor and press **Tab**. Use `Ctrl+Space` first if the suggestion list is not visible.
 
-1. Download [`current_version/sql-snippet-studio-2.0.1.vsix`](current_version/sql-snippet-studio-2.0.1.vsix)
-2. Open **Extensions** in VS Code or Cursor
-3. Choose **Install from VSIX...**
-4. Reload the window when prompted
-
-Extension ID: `IxI-Enki.sql-snippet-studio`
-
-## Features
-
-- **67 snippets** — PostgreSQL (22), Oracle PL/SQL (25), shared SQL patterns (20)
-- **Star-schema templates** — dimension tables, fact tables, and complete schemas
-- **Fully offline core** — snippets work without network access
-- **Optional local LLM** — manual `Ctrl+Alt+Shift+Q` workflow with secure token storage
-- **Snippet export** — copy bundled snippet JSON to a folder for sharing
-
-## In the editor
-
-### Oracle snippet IntelliSense
-
-Type an Oracle prefix (for example `ora-`) in a `.sql` or `.plsql` file to open the snippet picker.
-
-![Oracle PL/SQL snippet autocomplete in the editor](images/oracle-snippets.png)
-
-### Settings
-
-Search **SQL Snippet Studio** in editor settings. LLM tokens are stored through **SQL: Set LLM API Token**, not in `settings.json`.
-
-![SQL Snippet Studio settings panel](images/settings.png)
-
-## Snippet catalog (67)
-
-Type a prefix and press **Tab**. Full reference: [docs/guides/snippet_reference.md](docs/guides/snippet_reference.md)
-
-### Shared SQL and dimensional modeling (20)
+## Shared SQL and dimensional modeling (20)
 
 | Prefix | Description |
 | ------ | ----------- |
@@ -62,7 +29,7 @@ Type a prefix and press **Tab**. Full reference: [docs/guides/snippet_reference.
 | `trans` | Transaction block with COMMIT/ROLLBACK |
 | `comment-block` | Formatted comment block |
 
-### PostgreSQL (22)
+## PostgreSQL (22)
 
 | Prefix | Description |
 | ------ | ----------- |
@@ -77,7 +44,7 @@ Type a prefix and press **Tab**. Full reference: [docs/guides/snippet_reference.
 | `pg-trigger` | PostgreSQL Trigger with function |
 | `pg-row-number` | PostgreSQL ROW_NUMBER window function |
 | `pg-rank` | PostgreSQL RANK window function |
-| `pg-upsert` | PostgreSQL UPSERT (ON CONFLICT) |
+| `pg-upsert` | PostgreSQL UPSERT (ON CONFLICT) INSERT ON CONFLICT (upsert) |
 | `pg-series` | PostgreSQL Generate series of numbers |
 | `pg-date-series` | PostgreSQL Generate date series |
 | `pg-recursive` | PostgreSQL Recursive CTE |
@@ -89,7 +56,7 @@ Type a prefix and press **Tab**. Full reference: [docs/guides/snippet_reference.
 | `pg-idx-gin` | PostgreSQL GIN index for arrays/JSONB |
 | `pg-partition-range` | PostgreSQL Range partitioned table |
 
-### Oracle PL/SQL (25)
+## Oracle PL/SQL (25)
 
 | Prefix | Description |
 | ------ | ----------- |
@@ -119,47 +86,8 @@ Type a prefix and press **Tab**. Full reference: [docs/guides/snippet_reference.
 | `ora-matview` | Oracle materialized view |
 | `ora-partition-range` | Oracle partitioned table (RANGE) |
 
-## Optional local LLM
+## Related guides
 
-1. Enable LM Studio API-token authentication and create a token
-2. Run **SQL: Set LLM API Token**
-3. Set `sqlSnippetStudio.llm.enabled` to `true`
-4. Load `qwen2.5-coder-32b-instruct` in LM Studio
-5. Run **SQL: Test LLM Connection**
-6. Place the cursor below `-- Task: ...` and press `Ctrl+Alt+Shift+Q`
-
-Details: [docs/guides/llm_feature.md](docs/guides/llm_feature.md)
-
-## Keyboard shortcuts
-
-| Shortcut | Command |
-| -------- | ------- |
-| `Ctrl+Alt+Shift+Q` | Query LLM for SQL solution |
-| `Ctrl+Alt+Shift+S` | Insert star schema template |
-| `Ctrl+Alt+Shift+D` | Insert dimension table |
-| `Ctrl+Alt+Shift+F` | Insert fact table |
-| `Ctrl+Alt+Shift+L` | Show LLM statistics |
-
-## Build from source (optional)
-
-```powershell
-Set-Location '<path-to-repo>'
-npm ci
-.\_build.ps1
-```
-
-The release artifact is written to `current_version/sql-snippet-studio-2.0.1.vsix`.
-
-## Documentation
-
-| Topic | Guide |
-| ----- | ----- |
-| Quick start | [docs/guides/quickstart.md](docs/guides/quickstart.md) |
-| Snippet reference | [docs/guides/snippet_reference.md](docs/guides/snippet_reference.md) |
-| Setup and troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
-| Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
-| Full docs index | [docs/README.md](docs/README.md) |
-
-## Author
-
-[IxI-Enki](https://github.com/IxI-Enki) — [github.com/IxI-Enki/sql-snippet-studio](https://github.com/IxI-Enki/sql-snippet-studio)
+- [Quick start](quickstart.md)
+- [Setup guide](setup_guide.md)
+- [Optional LLM assistance](llm_feature.md)

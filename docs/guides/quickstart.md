@@ -1,75 +1,34 @@
-# Quick Start — SQL Snippet Studio
+# Quick start - SQL Snippet Studio
 
-## 5-minute setup
+## Install version 2.0.1
 
-### 1. Install
+1. Download [`sql-snippet-studio-2.0.1.vsix`](../../current_version/sql-snippet-studio-2.0.1.vsix).
+2. In VS Code or Cursor, open **Extensions**.
+3. Choose **Install from VSIX...** and select the downloaded file.
+4. Run **Developer: Reload Window** from the Command Palette.
 
-Option A: From VSIX (recommended)
+## Verify offline snippets
 
-1. Build `sql-snippet-studio-*.vsix`
-2. In VS Code / Cursor: **Extensions → Install from VSIX…**
-3. Select the `.vsix` file
+1. Create `example.sql`.
+2. Type `star-schema`.
+3. Press **Tab**.
+4. Tab through the generated placeholders.
 
-Option B: From source
+If no suggestion appears, press `Ctrl+Space`, select `star-schema`, and then check that `editor.tabCompletion` is set to `on`.
 
-```powershell
-Set-Location '<path-to-repo>'
-npm install
-npx @vscode/vsce package
-# Install the generated .vsix via Extensions -> Install from VSIX...
-```
+## Common triggers
 
-### 2. Reload IDE
+| Trigger | Description |
+| ------- | ----------- |
+| `star-schema` | Complete Star Schema with dimensions and fact table |
+| `dim-table` | Dimension table with SCD Type 2 support |
+| `fact-table` | Fact table with measures and FK references |
+| `sel-join` | JOIN query with aliases |
+| `with-cte` | Common Table Expression (WITH clause) |
+| `pg-function` | PostgreSQL plpgsql function |
+| `ora-procedure` | Oracle stored procedure |
 
-- Press `Ctrl+Shift+P`
-- Type: **Reload Window**
-- Press Enter
-
-### 3. Verify it works
-
-- Create a file: `example.sql`
-- Type: `star-schema`
-- Press **Tab**
-- A template should appear
-
----
-
-## Essential snippets
-
-### Star schema
-
-| Trigger | Result |
-| ------- | ------ |
-| `star-schema` | Complete star schema |
-| `dim-table` | Dimension table |
-| `fact-table` | Fact table |
-
-### Common SQL
-
-| Trigger | Result |
-| ------- | ------ |
-| `sel` | SELECT statement |
-| `sel-join` | JOIN query |
-| `sel-agg` | Aggregate with GROUP BY |
-| `with-cte` | Common Table Expression |
-
-### PostgreSQL
-
-| Trigger | Result |
-| ------- | ------ |
-| `pg-function` | plpgsql function |
-| `pg-trigger` | Trigger with function |
-| `pg-serial` | SERIAL primary key |
-
-### Oracle
-
-| Trigger | Result |
-| ------- | ------ |
-| `ora-procedure` | Stored procedure |
-| `ora-trigger-bi` | BEFORE INSERT trigger |
-| `ora-sequence` | CREATE SEQUENCE |
-
----
+See the [complete reference](snippet_reference.md) for all 67 triggers and their canonical descriptions.
 
 ## Keyboard shortcuts
 
@@ -78,38 +37,14 @@ npx @vscode/vsce package
 | `Ctrl+Alt+Shift+S` | Insert star schema |
 | `Ctrl+Alt+Shift+D` | Insert dimension table |
 | `Ctrl+Alt+Shift+F` | Insert fact table |
-| `Ctrl+Alt+Shift+Q` | Query LLM for SQL solution |
+| `Ctrl+Alt+Shift+Q` | Manually query the optional LLM |
+| `Ctrl+Alt+Shift+L` | Show LLM statistics |
 
----
-
-## Typical workflow
-
-1. Open a `.sql` file with your schema
-2. Type a snippet trigger (e.g. `star-schema`) and press **Tab**
-3. Fill in placeholders
-4. Optionally enable [local LLM assistance](llm_feature.md) for query suggestions
-
----
-
-## Share snippets
-
-- **Export:** `Ctrl+Shift+P` → **SQL: Export Snippets**
-- **Import:** `Ctrl+Shift+P` → **SQL: Import Snippets** → reload window
-
----
-
-## Quick fixes
-
-| Problem | Fix |
-| ------- | --- |
-| Snippets not showing | Reload window (`Ctrl+Shift+P` → Reload Window) |
-| Tab not working | Set `"editor.tabCompletion": "on"` |
-| Wrong suggestions | Type the full trigger (e.g. `star-schema`) |
-
----
+The snippets remain fully functional without LM Studio or an API token. To enable local LLM suggestions, continue with the [LLM guide](llm_feature.md).
 
 ## More documentation
 
-- [Setup guide](setup_guide.md) — installation, configuration, troubleshooting
-- [LLM feature](llm_feature.md) — optional local LLM setup
+- [Setup and troubleshooting](setup_guide.md)
+- [Complete snippet reference](snippet_reference.md)
+- [Optional local LLM assistance](llm_feature.md)
 - [Documentation index](../README.md)

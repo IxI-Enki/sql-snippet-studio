@@ -2,7 +2,7 @@
   "name": "sql-snippet-studio",
   "displayName": "SQL Snippet Studio",
   "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "publisher": "IxI-Enki",
   "icon": "images/icon.png",
   "galleryBanner": {
@@ -33,6 +33,9 @@
     "onCommand:sqlSnippetStudio.queryLLM",
     "onCommand:sqlSnippetStudio.showLLMStats",
     "onCommand:sqlSnippetStudio.clearCache",
+    "onCommand:sqlSnippetStudio.setLlmApiToken",
+    "onCommand:sqlSnippetStudio.clearLlmApiToken",
+    "onCommand:sqlSnippetStudio.testLlmConnection",
     "onCommand:sqlSnippetStudio.insertStarSchema",
     "onCommand:sqlSnippetStudio.insertDimensionTable",
     "onCommand:sqlSnippetStudio.insertFactTable"
@@ -42,14 +45,27 @@
     "languages": [
       {
         "id": "sql",
-        "aliases": ["SQL", "sql"],
-        "extensions": [".sql", ".ddl", ".dml"],
+        "aliases": [
+          "SQL",
+          "sql"
+        ],
+        "extensions": [
+          ".sql",
+          ".ddl",
+          ".dml"
+        ],
         "configuration": "./language-configuration.json"
       },
       {
         "id": "plsql",
-        "aliases": ["PL/SQL", "plsql"],
-        "extensions": [".pls", ".plsql"],
+        "aliases": [
+          "PL/SQL",
+          "plsql"
+        ],
+        "extensions": [
+          ".pls",
+          ".plsql"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -78,22 +94,6 @@
     "configuration": {
       "title": "SQL Snippet Studio",
       "properties": {
-        "sqlSnippetStudio.enableAutoCompletion": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable automatic completion suggestions"
-        },
-        "sqlSnippetStudio.enableStarSchemaTemplates": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Star-Schema templates and patterns"
-        },
-        "sqlSnippetStudio.databaseDialect": {
-          "type": "string",
-          "enum": ["postgres", "oracle", "both"],
-          "default": "both",
-          "description": "Select database dialect for snippets"
-        },
         "sqlSnippetStudio.llm.enabled": {
           "type": "boolean",
           "default": false,
@@ -106,13 +106,8 @@
         },
         "sqlSnippetStudio.llm.model": {
           "type": "string",
-          "default": "qwen2.5-coder",
-          "description": "Model name to use for completions"
-        },
-        "sqlSnippetStudio.llm.apiKey": {
-          "type": "string",
-          "default": "",
-          "description": "API key for LLM service (leave empty for local LLMs)"
+          "default": "qwen2.5-coder-32b-instruct",
+          "description": "Model identifier loaded in LM Studio or your API provider"
         },
         "sqlSnippetStudio.llm.maxTokens": {
           "type": "number",
@@ -130,6 +125,11 @@
           "type": "number",
           "default": 10000,
           "description": "Request timeout in milliseconds"
+        },
+        "sqlSnippetStudio.llm.autoCompletion": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically query the LLM while typing after task comments (manual Ctrl+Alt+Shift+Q remains the default workflow)"
         },
         "sqlSnippetStudio.llm.showDebugInfo": {
           "type": "boolean",
@@ -162,14 +162,6 @@
         "title": "SQL: Insert Fact Table"
       },
       {
-        "command": "sqlSnippetStudio.shareSnippets",
-        "title": "SQL: Export Snippets"
-      },
-      {
-        "command": "sqlSnippetStudio.importSnippets",
-        "title": "SQL: Import Snippets"
-      },
-      {
         "command": "sqlSnippetStudio.showLLMStats",
         "title": "SQL: Show LLM Statistics"
       },
@@ -180,6 +172,18 @@
       {
         "command": "sqlSnippetStudio.queryLLM",
         "title": "SQL: Query LLM for SQL Solution"
+      },
+      {
+        "command": "sqlSnippetStudio.setLlmApiToken",
+        "title": "SQL: Set LLM API Token"
+      },
+      {
+        "command": "sqlSnippetStudio.clearLlmApiToken",
+        "title": "SQL: Clear LLM API Token"
+      },
+      {
+        "command": "sqlSnippetStudio.testLlmConnection",
+        "title": "SQL: Test LLM Connection"
       }
     ],
     "keybindings": [
@@ -216,13 +220,14 @@
     ]
   },
   "scripts": {
-    "test": "node ./test/runTest.js",
-    "package": "vsce package",
-    "install-local": "code --install-extension sql-snippet-studio-2.0.0.vsix"
+    "test": "node --test test/*.test.js",
+    "package": "npx @vscode/vsce package --no-dependencies",
+    "install-local": "code --install-extension current_version/sql-snippet-studio-2.0.1.vsix"
   },
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "@types/vscode": "^1.80.0",
-    "@types/node": "^18.0.0"
+    "@vscode/vsce": "3.9.2"
   },
   "repository": {
     "type": "git",

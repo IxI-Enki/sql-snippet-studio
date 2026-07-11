@@ -1,5 +1,3 @@
-const vscode = require('vscode');
-
 /**
  * Advanced LLM Response Parser
  * Multi-stage pipeline to extract clean SQL from various response formats
