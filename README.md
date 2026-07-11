@@ -1,13 +1,11 @@
 <div align="center">
 
-# ${\color{royalblue}{\underline{\texttt{SQL Snippet Studio}}}}$ <br> $\tiny{^{\texttt{Cursor / VS Code extension}}}$
+# ${\Huge{\color{royalblue}{\texttt{SQL Snippet Studio}}}}$ <hr> $\tiny{^{\texttt{Cursor / VS Code extension}}}$
 
+<br><br>
 </div>
 
-> <small>
-> 
-> *Offline SQL **snippets** and **IntelliSense** for PostgreSQL and Oracle PL/SQL in **Cursor** and **VS Code**, with **optional local LLM assistance**.*
-> </small>
+> ##### *Offline SQL **snippets** and **IntelliSense** for PostgreSQL and Oracle PL/SQL in **Cursor** and **VS Code**, with **optional local LLM assistance**.*
 
 ## Features
 
@@ -27,6 +25,7 @@ Slowed for demonstration (real-time speed at the end).
 <div align="center">
 
 
+
 </div>
 
 ---
@@ -36,28 +35,22 @@ Slowed for demonstration (real-time speed at the end).
 ### Settings
 
 <details>
-<summary><small>show</small> <u>Settings</u> & <u>Token configuration</u></summary>
+  <summary><small>show</small> <u>Settings</u> & <u>Token configuration</u></summary>
 
+<small>
 
-<div style="font-size: 0.8em;">
+> *Search **SQL Snippet Studio** in editor settings*  
+>  
+> &nbsp;⚠️ &nbsp; &nbsp; **API tokens**  
+> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; are stored through <kbd>> SQL: Set LLM API Token</kbd>,  
+> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *not* as plain text in `settings.json`.  
 
-Search **SQL Snippet Studio** in editor settings.
+</small>
 
-<div style="text-align: left; margin-left: 3rem; width: 66%;">
-
-<blockquote class="warning">
-
-⚠️ &nbsp; &nbsp; **API tokens** 
-: are stored through <kbd>> SQL: Set LLM API Token</kbd>,
-*not* as plain text in `settings.json`.
-
-</blockquote>
-
+<div align="center">
+  <img src="images/settings.png" alt="SQL Snippet Studio settings panel" width="88%">
 </div>
 
-<img src="images/settings.png" alt="SQL Snippet Studio settings panel" style="width: 88%; margin-left: 3rem;">
-
-</div>
 </details>
 
 ### Oracle snippet IntelliSense
@@ -65,13 +58,12 @@ Search **SQL Snippet Studio** in editor settings.
 Type an Oracle prefix (for example `ora-`) in `.sql` or `.plsql` file to open the snippet picker.
 
 <details>
-<summary><small>show</small> Oracle snippets <u>dropdown example</u></summary>
+  <summary><small>show</small> Oracle snippets <u>dropdown example</u></summary>
 
-<div style="font-size: 0.8em; margin-left: 3rem;">
-
-<img src="images/oracle-snippets.png" alt="Oracle PL/SQL snippet autocomplete in the editor" style="width: 66%">
-
+<div align="center">
+  <img src="images/oracle-snippets.png" alt="Oracle PL/SQL snippet autocomplete in the editor" width="66%">
 </div>
+
 </details>
 
 ## Full Snippet catalog <sup><small> ${{\scriptsize\boxed{\texttt{67}}}} $</small></sup>
@@ -197,35 +189,24 @@ Type a prefix and press **Tab**.
 
 ## Optional local LLM
 
-<div style="text-align: left; margin-left: 5rem;">
+> ℹ️ &nbsp; &nbsp; **Full Local LLM guide**: [Detailed_Guide.md](docs/guides/Detailed_Guide.md)  
 
-<blockquote class="info">
+<br>  
 
-ℹ️ &nbsp; &nbsp; **Full Local LLM guide**: [Detailed_Guide.md](docs/guides/Detailed_Guide.md)
-
-</blockquote>
-
-</div>
-
-<div style="text-align: left; margin-left: 5rem;">
-<br>
-
-> <div style="font-size: 1.1em;"> 💡 <u>Example integration with LM Studio</u></div><br>
->
-> **1.** &nbsp; Enable LM Studio API-token authentication and create a token
-> **2.** &nbsp; Run **SQL: Set LLM API Token**
-> **3.** &nbsp; Set `sqlSnippetStudio.llm.enabled` to `true`
-> **4.** &nbsp; Load `qwen2.5-coder-32b-instruct` in LM Studio
-> **5.** &nbsp; Run **SQL: Test LLM Connection**
-> **6.** &nbsp; Place the cursor below `-- Task: ...` and press `Ctrl+Alt+Shift+Q`
+> <div style="font-size: 1.1em;"> 💡 <u>Example integration with LM Studio</u></div>  
+>  
+> **1.** &nbsp; Enable LM Studio API-token authentication and create a token  
+> **2.** &nbsp; Run **SQL: Set LLM API Token**  
+> **3.** &nbsp; Set `sqlSnippetStudio.llm.enabled` to `true`  
+> **4.** &nbsp; Load `qwen2.5-coder-32b-instruct` in LM Studio  
+> **5.** &nbsp; Run **SQL: Test LLM Connection**  
+> **6.** &nbsp; Place the cursor below `-- Task: ...` and press `Ctrl+Alt+Shift+Q`  
 
 </div>
 
 ---
 
 ## Keyboard shortcuts
-
-<div style="text-align: left; margin-left: 5rem; width: 66%;">
 
 | Shortcut | Command |
 | -------: | ------- |
@@ -234,8 +215,6 @@ Type a prefix and press **Tab**.
 | `Ctrl+Alt+Shift+D` | Insert dimension table |
 | `Ctrl+Alt+Shift+F` | Insert fact table |
 | `Ctrl+Alt+Shift+L` | Show LLM statistics |
-
-</div>
 
 ---
 
@@ -248,21 +227,18 @@ Type a prefix and press **Tab**.
 
 ## Build from source <sup><small> ${{\scriptsize\color{lightgray}{\texttt{(\color{yellow}{\texttt{optional}}\color{lightgray}{)}}}}}$</small></sup>
 
-<div style="text-align: left; margin-left: 5rem; width: 66%;">
-
 ```powershell
 git clone https://github.com/IxI-Enki/sql-snippet-studio.git
 Set-Location -LiteralPath .\sql-snippet-studio; npm ci; .\_build.ps1
 ```
 
-</div>
-
 ---
 
 ## Documentation
 
-<div style="text-align: left; margin-left: 5rem; width: 66%;">
-
+<div align="center">
+  <small>
+  
 | Topic | Guide |
 | ----- | ----- |
 | Quick start | [docs/guides/quickstart.md](docs/guides/quickstart.md) |
@@ -271,16 +247,20 @@ Set-Location -LiteralPath .\sql-snippet-studio; npm ci; .\_build.ps1
 | Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
 | Full docs index | [docs/README.md](docs/README.md) |
 
+  </small>
 </div>
 
 ---
 
-## Maintainer
+### Maintainer
 
-<div style="width: 66%;" align="center">
+<div width="66%" align="center">
 
-| <div style="text-align: center; font-size: 1.2em;"> <a href="https://github.com/IxI-Enki/sql-snippet-studio" title="SQL Snippet Studio Repository">  ${{\color{royalblue}\small{\underline{\qquad\texttt{SQL Snippet Studio}\qquad}}}}$ </a> </div> | | |
+| <div align="center"> <h2><a href="https://github.com/IxI-Enki/sql-snippet-studio" title="SQL Snippet Studio Repository"> SQL Snippet Studio  </h2> </a> </div> |
+| --------------------------------------------------------------------------------------- |
+| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="300px"> </a> </div> |
+
+| <div align="center"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div align="center"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div align="center"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
 | ------ | --------------------------------------------------------------------------------------- | ------ |
-| <div style="text-align: center;"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="60%"> </a> </div> | | |
-| <div style="font-size: 0.8em;"> <hr style="margin: 0.001em; background-color: #d8d8d8ff; box-shadow: 0 0 13px #00fff377;"> </div> |
-| <div style="text-align: center; align-items: center;"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div style="text-align: center; align-items: center;"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div style="text-align: center; align-items: center;"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
+
+</div>
