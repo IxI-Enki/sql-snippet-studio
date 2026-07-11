@@ -68,3 +68,4 @@ test/provider_errors.test.js
 test/query_cache.test.js
 test/secret_storage.test.js
 README.pdf
+images/convert_cartouche_text_to_paths.py

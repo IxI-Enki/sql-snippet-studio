@@ -1,12 +1,6 @@
-$$
-\fcolorbox{navy}{white}{%
-  $\begin{array}{c}\LARGE{%
-    \textcolor{royalblue}{\texttt{\underline{%
-      SQL Snippet Studio}}}} \\[1em]
-    \scriptsize\textcolor{black}{\texttt{%
-      Cursor \& VS Code extension}}
-  \end{array}$
-}$$
+<div align="center">
+
+# ${\color{royalblue}{\underline{\texttt{SQL Snippet Studio}}}}$ <br> $\tiny{^{\texttt{Cursor \& VS Code extension}}}$
 
 > <small>
 > 
@@ -26,14 +20,17 @@ $$
 
 ### Local LLM Demo (LM Studio)
 
-- slowed down for demonstration purposes 
-  > (real-time speed at demo end)
+Slowed for demonstration (real-time speed at the end).
 
 <div align="center">
 
-<video controls src="clips/local-llm-demo.mp4" title="LM Studio local LLM Demo" alt="LM Studio local LLM Demo Video" style="width: 66%;"></video>
+<a href="clips/local-llm-demo.mp4">
+<img src="https://img.shields.io/badge/Watch-Demo_MP4-21262d?style=for-the-badge&logo=visualstudiocode&logoColor=58a6ff" alt="Watch local LLM demo (MP4)">
+</a>
 
 </div>
+
+<small>GitHub does not embed repo-hosted video players in README files. The link opens the recording. For inline playback on GitHub, upload the MP4 via the web editor (drag-and-drop) and use the generated <code>github.com/user-attachments/assets/...</code> URL.</small>
 
 
 ---
@@ -282,60 +279,12 @@ Set-Location -LiteralPath .\sql-snippet-studio; npm ci; .\_build.ps1
 
 ---
 
-<div align="center">
-
 ## Maintainer
 
-<table cellpadding="0" cellspacing="0" style="margin: 2rem auto 0; border-collapse: collapse; border: 6px solid #ffffff00; border-radius: 12px; box-shadow: 0 0 28px rgba(159, 199, 255, 0.24), inset 0 0.2em 0 2px rgba(255, 255, 255, 0.2); width: 400px;">
-<tr>
-<td colspan="2" style="height: 0.05rem; padding: 0; background: linear-gradient(90deg, #0d1117, #388bfd55 18%, #79c0ff 25% , #ffffff 50%, #79c0ff 75%, #388bfd55 82%, #0d1117); border-radius: 13px 13px 0 0;"></td>
-</tr>
-<tr>
-<td style="padding-top: 0.5rem; margin-bottom: 0; vertical-align: middle; text-align: center; border-bottom: 2px solid #388bfd22;">
+<div style="width: 66%;" align="center">
 
-<a href="https://github.com/IxI-Enki" style="text-decoration: none; display: inline-block; line-height: 0;">
-<img src="images/000_ixi_enki_cartouche.svg" alt="IxI-Enki on GitHub" height="54" style="display: block; margin: 0; pointer-events: none; border: 0;">
-</a>
-
-</td>
-<!-- <td style="padding: 0.55rem 0.9rem 0.45rem 0.75rem; vertical-align: middle; text-align: center; width: 38%;"> -->
-<a href="https://github.com/IxI-Enki" style="text-decoration: none; color: #8b949e;">
-<!-- <img src="https://img.shields.io/badge/-GitHub-161b22?style=flat-square&logo=github&logoColor=58a6ff" alt="GitHub profile" height="28"> -->
-</a>
-</td>
-
-</tr>
-<tr>
-<td colspan="2" style="padding: 0.7rem 1rem 0.85rem; border-top: 1px solid #21262d; text-align: left;">
-<a href="https://github.com/IxI-Enki/sql-snippet-studio" style="text-decoration: none; color: #58a6ff; font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.92rem; font-weight: 600;">SQL Snippet Studio</a>
-<span style="display: block; margin-top: 0.35rem; color: #8b949e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 0.76rem; line-height: 1.5;">
-<img src="images/signoff_vscode.svg" width="12" height="12" alt="" style="vertical-align: -2px;"> VS Code
-<span style="color: #484f58;"> &#183; </span>
-<img src="images/signoff_cursor.svg" width="12" height="12" alt="" style="vertical-align: -2px;"> Cursor
-<span style="color: #484f58;"> &#183; </span>
-offline snippets
-<span style="color: #484f58;"> &#183; </span>
-<img src="images/signoff_lmstudio.svg" width="12" height="12" alt="" style="vertical-align: -2px;"> LM Studio
-</span>
-</td>
-<tr>
-<td colspan="2" style="height: 1px; padding: 0; background: linear-gradient(90deg, #0d1117, #388bfd55 18%, #79c0ff 25% , #ffffff 50%, #79c0ff 75%, #388bfd55 82%, #0d1117); border-radius: 11px 11px 0 0;"></td>
-</tr>
-</table>
-
-<table cellpadding="0" cellspacing="0" style="margin: 0.65rem auto 0; border-collapse: collapse;">
-<tr>
-<!-- <td style="text-align: center;">
-<a href="https://github.com/IxI-Enki" style="text-decoration: none;">
-<img src="https://img.shields.io/badge/IxI--Enki-GitHub_Profile-21262d?style=flat-square&logo=github&logoColor=e6edf3" alt="GitHub profile" height="22">
-</a>
-&nbsp;
-<a href="https://github.com/IxI-Enki/sql-snippet-studio" style="text-decoration: none;">
-<img src="https://img.shields.io/badge/SQL_Snippet_Studio-Repository-21262d?style=flat-square&logo=postgresql&logoColor=58a6ff" alt="Repository" height="22">
-</a>
-</td> -->
-
-</tr>
-</table>
-
-</div>
+| <div style="text-align: center; font-size: 1.2em;"> <a href="https://github.com/IxI-Enki/sql-snippet-studio" title="SQL Snippet Studio Repository">  ${{\color{royalblue}\small{\underline{\qquad\texttt{SQL Snippet Studio}\qquad}}}}$ </a> </div> | | |
+| ------ | --------------------------------------------------------------------------------------- | ------ |
+| <div style="text-align: center;"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="60%"> </a> </div> | | |
+| <div style="font-size: 0.8em;"> <hr style="margin: 0.001em; background-color: #d8d8d8ff; box-shadow: 0 0 13px #00fff377;"> </div> |
+| <div style="text-align: center; align-items: center;"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div style="text-align: center; align-items: center;"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div style="text-align: center; align-items: center;"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
