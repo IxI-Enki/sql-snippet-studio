@@ -1,5 +1,3 @@
-const vscode = require('vscode');
-
 /**
  * Basic SQL Validator
  * Performs syntax checks and returns validation results

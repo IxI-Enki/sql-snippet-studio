@@ -1,17 +1,20 @@
 {
-  "name": "dbi-test-survival-kit",
-  "displayName": "DBI Survival Kit",
-  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance",
-  "version": "1.8.7",
-  "publisher": "dbi-team",
+  "name": "sql-snippet-studio",
+  "displayName": "SQL Snippet Studio",
+  "description": "Offline SQL snippets and IntelliSense for PostgreSQL and Oracle PL/SQL with optional local LLM assistance.",
+  "version": "2.0.1",
+  "publisher": "IxI-Enki",
   "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#1a2332",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
     "Snippets",
-    "Programming Languages",
-    "Education"
+    "Programming Languages"
   ],
   "keywords": [
     "sql",
@@ -21,125 +24,124 @@
     "database",
     "snippets",
     "dbi",
-    "offline",
-    "education"
+    "offline"
   ],
   "activationEvents": [
     "onStartupFinished",
     "onLanguage:sql",
     "onLanguage:plsql",
-    "onCommand:dbiSurvivalKit.queryLLM",
-    "onCommand:dbiSurvivalKit.showLLMStats",
-    "onCommand:dbiSurvivalKit.clearCache",
-    "onCommand:dbiSurvivalKit.insertStarSchema",
-    "onCommand:dbiSurvivalKit.insertDimensionTable",
-    "onCommand:dbiSurvivalKit.insertFactTable"
+    "onCommand:sqlSnippetStudio.queryLLM",
+    "onCommand:sqlSnippetStudio.showLLMStats",
+    "onCommand:sqlSnippetStudio.clearCache",
+    "onCommand:sqlSnippetStudio.setLlmApiToken",
+    "onCommand:sqlSnippetStudio.clearLlmApiToken",
+    "onCommand:sqlSnippetStudio.testLlmConnection",
+    "onCommand:sqlSnippetStudio.insertStarSchema",
+    "onCommand:sqlSnippetStudio.insertDimensionTable",
+    "onCommand:sqlSnippetStudio.insertFactTable"
   ],
   "main": "./src/extension.js",
   "contributes": {
     "languages": [
       {
         "id": "sql",
-        "aliases": ["SQL", "sql"],
-        "extensions": [".sql", ".ddl", ".dml"],
+        "aliases": [
+          "SQL",
+          "sql"
+        ],
+        "extensions": [
+          ".sql",
+          ".ddl",
+          ".dml"
+        ],
         "configuration": "./language-configuration.json"
       },
       {
         "id": "plsql",
-        "aliases": ["PL/SQL", "plsql"],
-        "extensions": [".pls", ".plsql"],
+        "aliases": [
+          "PL/SQL",
+          "plsql"
+        ],
+        "extensions": [
+          ".pls",
+          ".plsql"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
-  "snippets": [
-    {
-      "language": "sql",
-      "path": "./snippets/postgres-snippets.json"
-    },
-    {
-      "language": "sql",
-      "path": "./snippets/oracle-snippets.json"
-    },
-    {
-      "language": "sql",
-      "path": "./snippets/shared-snippets.json"
-    },
-    {
-      "language": "plsql",
-      "path": "./snippets/oracle-snippets.json"
-    },
-    {
-      "language": "plsql",
-      "path": "./snippets/shared-snippets.json"
-    }
-  ],
+    "snippets": [
+      {
+        "language": "sql",
+        "path": "./snippets/postgres-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "sql",
+        "path": "./snippets/shared-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/oracle-snippets.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./snippets/shared-snippets.json"
+      }
+    ],
     "configuration": {
-      "title": "DBI Survival Kit",
+      "title": "SQL Snippet Studio",
       "properties": {
-        "dbiSurvivalKit.enableAutoCompletion": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable automatic completion suggestions"
-        },
-        "dbiSurvivalKit.enableStarSchemaTemplates": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Star-Schema templates and patterns"
-        },
-        "dbiSurvivalKit.databaseDialect": {
-          "type": "string",
-          "enum": ["postgres", "oracle", "both"],
-          "default": "both",
-          "description": "Select database dialect for snippets"
-        },
-        "dbiSurvivalKit.llm.enabled": {
+        "sqlSnippetStudio.llm.enabled": {
           "type": "boolean",
           "default": false,
           "description": "Enable AI-powered query suggestions (requires local LLM or API)"
         },
-        "dbiSurvivalKit.llm.endpoint": {
+        "sqlSnippetStudio.llm.endpoint": {
           "type": "string",
           "default": "http://localhost:1234/v1/chat/completions",
           "description": "LLM API endpoint (OpenAI-compatible format)"
         },
-        "dbiSurvivalKit.llm.model": {
+        "sqlSnippetStudio.llm.model": {
           "type": "string",
-          "default": "qwen2.5-coder",
-          "description": "Model name to use for completions"
+          "default": "qwen2.5-coder-32b-instruct",
+          "description": "Model identifier loaded in LM Studio or your API provider"
         },
-        "dbiSurvivalKit.llm.apiKey": {
-          "type": "string",
-          "default": "",
-          "description": "API key for LLM service (leave empty for local LLMs)"
-        },
-        "dbiSurvivalKit.llm.maxTokens": {
+        "sqlSnippetStudio.llm.maxTokens": {
           "type": "number",
           "default": 500,
           "description": "Maximum tokens for LLM response"
         },
-        "dbiSurvivalKit.llm.temperature": {
+        "sqlSnippetStudio.llm.temperature": {
           "type": "number",
           "default": 0.1,
           "minimum": 0,
           "maximum": 2,
           "description": "Temperature for LLM sampling (lower = more deterministic)"
         },
-        "dbiSurvivalKit.llm.timeout": {
+        "sqlSnippetStudio.llm.timeout": {
           "type": "number",
           "default": 10000,
           "description": "Request timeout in milliseconds"
         },
-        "dbiSurvivalKit.llm.showDebugInfo": {
+        "sqlSnippetStudio.llm.autoCompletion": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically query the LLM while typing after task comments (manual Ctrl+Alt+Shift+Q remains the default workflow)"
+        },
+        "sqlSnippetStudio.llm.showDebugInfo": {
           "type": "boolean",
           "default": false,
           "description": "Show debug information (status bar, labels in completions)"
         },
-        "dbiSurvivalKit.llm.showNotifications": {
+        "sqlSnippetStudio.llm.showNotifications": {
           "type": "boolean",
           "default": false,
           "description": "Show toast notifications for LLM requests"
         },
-        "dbiSurvivalKit.llm.verboseLogging": {
+        "sqlSnippetStudio.llm.verboseLogging": {
           "type": "boolean",
           "default": false,
           "description": "Enable verbose logging to output channel"
@@ -148,65 +150,69 @@
     },
     "commands": [
       {
-        "command": "dbiSurvivalKit.insertStarSchema",
-        "title": "DBI: Insert Star Schema Template"
+        "command": "sqlSnippetStudio.insertStarSchema",
+        "title": "SQL: Insert Star Schema Template"
       },
       {
-        "command": "dbiSurvivalKit.insertDimensionTable",
-        "title": "DBI: Insert Dimension Table"
+        "command": "sqlSnippetStudio.insertDimensionTable",
+        "title": "SQL: Insert Dimension Table"
       },
       {
-        "command": "dbiSurvivalKit.insertFactTable",
-        "title": "DBI: Insert Fact Table"
+        "command": "sqlSnippetStudio.insertFactTable",
+        "title": "SQL: Insert Fact Table"
       },
       {
-        "command": "dbiSurvivalKit.shareSnippets",
-        "title": "DBI: Export Snippets for Colleagues"
+        "command": "sqlSnippetStudio.showLLMStats",
+        "title": "SQL: Show LLM Statistics"
       },
       {
-        "command": "dbiSurvivalKit.importSnippets",
-        "title": "DBI: Import Snippets from Colleagues"
+        "command": "sqlSnippetStudio.clearCache",
+        "title": "SQL: Clear LLM Cache"
       },
       {
-        "command": "dbiSurvivalKit.showLLMStats",
-        "title": "DBI: Show LLM Statistics"
+        "command": "sqlSnippetStudio.queryLLM",
+        "title": "SQL: Query LLM for SQL Solution"
       },
-            {
-              "command": "dbiSurvivalKit.clearCache",
-              "title": "DBI: Clear LLM Cache"
-            },
-            {
-              "command": "dbiSurvivalKit.queryLLM",
-              "title": "DBI: Query LLM for SQL Solution"
-            }
+      {
+        "command": "sqlSnippetStudio.setLlmApiToken",
+        "title": "SQL: Set LLM API Token"
+      },
+      {
+        "command": "sqlSnippetStudio.clearLlmApiToken",
+        "title": "SQL: Clear LLM API Token"
+      },
+      {
+        "command": "sqlSnippetStudio.testLlmConnection",
+        "title": "SQL: Test LLM Connection"
+      }
     ],
     "keybindings": [
       {
-        "command": "dbiSurvivalKit.insertStarSchema",
+        "command": "sqlSnippetStudio.insertStarSchema",
         "key": "ctrl+alt+shift+s",
         "mac": "cmd+alt+shift+s",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.insertDimensionTable",
+        "command": "sqlSnippetStudio.insertDimensionTable",
         "key": "ctrl+alt+shift+d",
         "mac": "cmd+alt+shift+d",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.insertFactTable",
+        "command": "sqlSnippetStudio.insertFactTable",
         "key": "ctrl+alt+shift+f",
         "mac": "cmd+alt+shift+f",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.showLLMStats",
+        "command": "sqlSnippetStudio.showLLMStats",
         "key": "ctrl+alt+shift+l",
         "mac": "cmd+alt+shift+l",
         "when": "editorTextFocus"
       },
       {
-        "command": "dbiSurvivalKit.queryLLM",
+        "command": "sqlSnippetStudio.queryLLM",
         "key": "ctrl+alt+shift+q",
         "mac": "cmd+alt+shift+q",
         "when": "editorTextFocus"
@@ -214,16 +220,17 @@
     ]
   },
   "scripts": {
-    "test": "node ./test/runTest.js",
-    "package": "vsce package",
-    "install-local": "code --install-extension dbi-test-survival-kit-1.8.7.vsix"
+    "test": "node --test test/*.test.js",
+    "package": "npx @vscode/vsce package --no-dependencies",
+    "install-local": "code --install-extension current_version/sql-snippet-studio-2.0.1.vsix"
   },
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "@types/vscode": "^1.80.0",
-    "@types/node": "^18.0.0"
+    "@vscode/vsce": "3.9.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/IxI-Enki/dbi-test-survival-kit"
+    "url": "https://github.com/IxI-Enki/sql-snippet-studio"
   }
 }

@@ -415,7 +415,7 @@
       "ON ${1:TableName}(${2:column_name});",
       "$0"
     ],
-    "description": "BTREE index (Oracle default)"
+    "description": "Oracle BTREE index (default)"
   },
 
   "Oracle Index (BITMAP)": {
@@ -425,7 +425,7 @@
       "ON ${1:TableName}(${2:column_name});",
       "$0"
     ],
-    "description": "BITMAP index for low-cardinality columns (Oracle)"
+    "description": "Oracle BITMAP index for low-cardinality columns"
   },
 
   "Oracle Materialized View": {
@@ -461,6 +461,6 @@
       ");",
       "$0"
     ],
-    "description": "Oracle range partitioned table"
+    "description": "Oracle partitioned table (RANGE)"
   }
 }

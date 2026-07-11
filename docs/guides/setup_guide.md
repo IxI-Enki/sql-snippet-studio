@@ -1,339 +1,102 @@
-# 🚀 Setup Guide - DBI Survival Kit
+# Setup guide - SQL Snippet Studio
 
-## 📋 Prerequisites
+## Requirements
 
-- VS Code or Cursor IDE
-- Node.js (optional, only for development)
-- Git (optional, for version control)
+- VS Code or Cursor
+- PowerShell 7 only when using the optional command-line or source-build steps
+- LM Studio 0.4+ only for optional local LLM assistance
 
----
+## Install the release VSIX
 
-## 🎯 Installation Methods
+1. Download [`sql-snippet-studio-2.0.1.vsix`](../../current_version/sql-snippet-studio-2.0.1.vsix).
+2. Open **Extensions** in VS Code or Cursor.
+3. Choose **Install from VSIX...** and select the file.
+4. Run **Developer: Reload Window** from the Command Palette.
 
-### Method 1: Install from VSIX (recommended)
-
-<!-- markdownlint-disable MD029 -->
-1. **Package or obtain VSIX:**
-
-```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
-npm install
-npx vsce package
-```
-
-2. **Install:** Extensions → Install from VSIX… → select the `.vsix` file
-
-3. **Reload VS Code:** `Ctrl+Shift+P` → Reload Window
-
-4. **Verify:** Open a `.sql` file, type `star-schema`, press Tab
-
----
-
-### Method 2: Package as VSIX (Recommended for Sharing)
-
-1. **Install vsce (VS Code Extension Manager):**
+You can also install the same downloaded file from PowerShell 7:
 
 ```powershell
-npm install -g @vscode/vsce
+$vsixPath = Read-Host 'Path to sql-snippet-studio-2.0.1.vsix'
+code --install-extension $vsixPath
 ```
 
-2. **Package Extension:**
+## Verify the offline features
 
-```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
-vsce package
-```
+Create `example.sql` and verify these triggers with **Tab**:
 
-3. **Install VSIX:**
+| Trigger | Expected template |
+| ------- | ----------------- |
+| `create-table` | Shared CREATE TABLE |
+| `star-schema` | Complete star schema |
+| `pg-function` | PostgreSQL PL/pgSQL function |
+| `ora-procedure` | Oracle stored procedure |
 
-```powershell
-code --install-extension dbi-test-survival-kit-1.0.0.vsix
-```
+The [snippet reference](snippet_reference.md) lists all 67 canonical triggers.
 
-4. **Share with colleagues:**
+## Editor configuration
 
-- Send them the `.vsix` file
-- They run: `code --install-extension dbi-test-survival-kit-1.0.0.vsix`
-
----
-
-### Method 3: Development Mode
-
-1. **Open Extension in VS Code:**
-
-```powershell
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
-code .
-```
-
-2. **Run Extension:**
-
-- Press `F5`
-- A new VS Code window opens with extension loaded
-- Test your snippets
-- Make changes and reload
-
-<!-- markdownlint-enable MD029 -->
-
----
-
-## Verify your installation
-
-### Check 1: Basic snippets
-
-1. Create a new file: `example.sql`
-2. Type: `create-table` + Tab
-3. You should see a CREATE TABLE template
-
-### Check 2: Star schema
-
-1. Type: `star-schema` + Tab
-2. You should see a complete star-schema template
-3. Tab through placeholders
-
-### Check 3: PostgreSQL
-
-1. Type: `pg-function` + Tab
-2. You should see a PL/pgSQL function template
-
-### Check 4: Oracle
-
-1. Type: `ora-procedure` + Tab
-2. You should see an Oracle procedure template
-
-### Check 5: Commands
-
-1. Press `Ctrl+Shift+P`
-2. Type: `DBI:`
-3. All DBI commands should be listed
-
----
-
-## ⚙️ Configuration
-
-### Enable Tab Completion
-
-Add to your `settings.json`:
+The snippets normally appear in the suggestion list without extra configuration. If **Tab** does not expand a selected snippet, add:
 
 ```json
 {
   "editor.tabCompletion": "on",
   "editor.snippetSuggestions": "top",
-  "editor.suggest.showSnippets": true,
-  "editor.quickSuggestions": {
-    "other": true,
-    "comments": false,
-    "strings": true
-  }
+  "editor.suggest.showSnippets": true
 }
 ```
 
-### Database-Specific Mode
+## Optional local LLM
 
-If you only work with one database:
+Offline snippets need no token. For local LLM suggestions, follow the [LM Studio guide](llm_feature.md). Tokens are set and cleared through commands backed by VS Code SecretStorage; do not place a token in `settings.json`.
 
-```json
-{
-  "dbiSurvivalKit.databaseDialect": "postgres"  // or "oracle"
-}
-```
+## Optional source build
 
----
-
-## Backup and export
-
-### Export your snippets
+Use this route only for development:
 
 ```powershell
-# Or use: Ctrl+Shift+P → DBI: Export Snippets
-xcopy "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit\snippets" "D:\dbi-backup\snippets" /E /I /Y
+$repositoryPath = Read-Host 'Repository path'
+Set-Location $repositoryPath
+npm ci
+npm run package
 ```
 
-Keep a copy of your customized snippets and the latest `.vsix` for reinstall or sharing.
+Install the generated `.vsix` through **Extensions > Install from VSIX...**.
 
----
+## Troubleshooting
 
-## 🔧 Troubleshooting
+### Snippets do not appear
 
-### Issue: Snippets Don't Show Up
+1. Use a supported SQL or PL/SQL editor.
+2. Type the complete trigger.
+3. Press `Ctrl+Space` to open suggestions.
+4. Run **Developer: Reload Window**.
+5. Confirm SQL Snippet Studio is enabled in the Extensions view.
 
-**Solution 1:** Check file extension
+### Tab does not expand a snippet
 
-- File must be `.sql` or `.plsql`
+Set `"editor.tabCompletion": "on"`, select the snippet in the suggestion list, and press **Tab**.
 
-**Solution 2:** Reload window
+### Reinstall version 2.0.1
 
-- `Ctrl+Shift+P` → "Reload Window"
-
-**Solution 3:** Check extension is active
-
-- `Ctrl+Shift+P` → "Show Installed Extensions"
-- Search for "DBI Survival Kit"
-- Should show "Active"
-
-### Issue: Wrong Suggestions Appearing
-
-**Solution:** Adjust trigger context
-
-- Type full prefix (e.g., `star-schema`)
-- Don't rely on partial matches
-- Use `Ctrl+Space` to force suggestion
-
-### Issue: Tab Not Working
-
-**Solution:** Check tab completion settings
-
-```json
-{
-  "editor.tabCompletion": "on"
-}
+```powershell
+code --uninstall-extension IxI-Enki.sql-snippet-studio
+$vsixPath = Read-Host 'Path to sql-snippet-studio-2.0.1.vsix'
+code --install-extension $vsixPath
 ```
 
-### Issue: Extension Not Loading
-
-**Solution 1:** Check logs
-
-- Help → Toggle Developer Tools
-- Check Console for errors
-
-**Solution 2:** Reinstall
+The old `dbi-team.dbi-test-survival-kit` ID belongs to pre-2.0 releases. Remove it only if it is still installed:
 
 ```powershell
 code --uninstall-extension dbi-team.dbi-test-survival-kit
-code --install-extension dbi-test-survival-kit-1.0.0.vsix
 ```
 
----
+### LLM connection fails
 
-## 🤝 Sharing with colleagues
-
-### Method 1: Share VSIX File
-
-1. Package extension: `vsce package`
-2. Send `.vsix` file to colleagues
-3. They install: `code --install-extension <file>.vsix`
-
-### Method 2: Share Snippets Only
-
-1. Export snippets: `Ctrl+Shift+P` → `DBI: Export Snippets`
-2. Send folder to colleagues
-3. They import: `Ctrl+Shift+P` → `DBI: Import Snippets`
-
-### Method 3: Git Repository
-
-<!-- markdownlint-disable MD029 -->
-
-1. Push to GitHub:
-
-```bash
-cd "D:\_Repositories\00_Die_Farm\04_dbi_test_survival_kit"
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin <your-repo-url>
-git push -u origin main
-```
-
-2. colleagues clone and install:
-
-```bash
-git clone <repo-url>
-cd dbi-test-survival-kit
-code --install-extension .
-```
-
-<!-- markdownlint-enable MD029 -->
-
----
-
-## 📝 Adding Custom Snippets
-
-### 1. Edit Snippet Files
-
-Open:
-
-- `snippets/shared-snippets.json` - For both databases
-- `snippets/postgres-snippets.json` - PostgreSQL only
-- `snippets/oracle-snippets.json` - Oracle only
-
-### 2. Add Your Snippet
-
-```json
-{
-  "Your Custom Snippet": {
-    "prefix": "your-trigger",
-    "body": [
-      "-- Your custom SQL",
-      "SELECT ${1:columns}",
-      "FROM ${2:table}",
-      "WHERE ${3:condition};",
-      "$0"
-    ],
-    "description": "What your snippet does"
-  }
-}
-```
-
-### 3. Reload VS Code
-
-- `Ctrl+Shift+P` → "Reload Window"
-
-### 4. Try it
-
-- Type `your-trigger` + Tab
-- Your custom snippet should appear
-
----
-
-## Tips for daily use
-
-### Know common triggers
-
-- `star-schema` — Complete schema
-- `dim-table` — Dimension table
-- `fact-table` — Fact table
-- `sel-join` — JOIN query
-- `with-cte` — CTE
-
-### Use keyboard shortcuts
-
-- `Ctrl+Alt+Shift+S` — Insert star schema
-- `Ctrl+Alt+Shift+D` — Insert dimension table
-- `Ctrl+Alt+Shift+F` — Insert fact table
-- `Ctrl+Alt+Shift+Q` — Query LLM for SQL solution
-
-### Customize snippets
-
-- Add patterns you use often under `snippets/`
-- Export a backup via **DBI: Export Snippets**
-
----
-
-## 📊 Extension Structure
-
-```file-tree
-04_dbi_test_survival_kit/
-├── package.json
-├── language-configuration.json
-├── README.md
-├── docs/
-│   ├── guides/          # Setup, quickstart, LLM
-│   ├── changelogs/
-│   └── archive/
-├── snippets/
-│   ├── shared-snippets.json
-│   ├── postgres-snippets.json
-│   └── oracle-snippets.json
-├── src/
-│   └── extension.js
-└── images/
-    └── icon.png
-```
-
----
+Use the token-safe checks and status-specific guidance in [LLM troubleshooting](llm_feature.md#troubleshooting).
 
 ## Related documentation
 
-- [guides/quickstart.md](guides/quickstart.md)
-- [guides/llm_feature.md](guides/llm_feature.md)
+- [Quick start](quickstart.md)
+- [Complete snippet reference](snippet_reference.md)
+- [Optional local LLM assistance](llm_feature.md)
 - [Documentation index](../README.md)

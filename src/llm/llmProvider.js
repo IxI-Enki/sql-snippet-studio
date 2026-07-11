@@ -2,46 +2,44 @@
  * LLM Provider - Verbindung zu lokalem oder Remote-LLM
  */
 
-const vscode = require('vscode');
 const https = require('https');
 const http = require('http');
 const ResponseParser = require('./responseParser');
 const SQLValidator = require('./sqlValidator');
+const extensionConfig = require('../config');
+const {
+    LlmError,
+    AuthenticationError,
+    TimeoutError,
+    ResponseError,
+    EndpointError,
+    mapHttpStatusToError
+} = require('./llmErrors');
 
 class LLMProvider {
-    constructor(debugHelper = null, queryCache = null) {
+    constructor(debugHelper = null, queryCache = null, tokenOrOptions = null) {
         this.config = null;
         this.debugHelper = debugHelper;
         this.queryCache = queryCache;
+        const options = tokenOrOptions && typeof tokenOrOptions === 'object'
+            ? tokenOrOptions
+            : {};
+        this.configOverride = options.config || null;
+        this.getApiToken = options.tokenProvider
+            || (typeof tokenOrOptions === 'function' ? tokenOrOptions : async () => '');
         this.responseParser = new ResponseParser(debugHelper);
         this.sqlValidator = new SQLValidator(debugHelper);
         this.updateConfig();
     }
 
-    /**
-     * Aktualisiert die Konfiguration aus VS Code Settings
-     */
     updateConfig() {
-        const config = vscode.workspace.getConfiguration('dbiSurvivalKit');
-        
-        this.config = {
-            enabled: config.get('llm.enabled', false),
-            endpoint: config.get('llm.endpoint', 'http://localhost:1234/v1/chat/completions'),
-            model: config.get('llm.model', 'qwen2.5-coder'),
-            apiKey: config.get('llm.apiKey', ''),
-            maxTokens: config.get('llm.maxTokens', 500),
-            temperature: config.get('llm.temperature', 0.1),
-            timeout: config.get('llm.timeout', 10000)
-        };
+        this.config = this.configOverride || extensionConfig.getLLMConfig();
     }
 
     /**
-     * Sendet Query an LLM
-     * @param {string} prompt - Der Prompt für das LLM
-     * @param {Object} context - Context für Caching
-     * @returns {Promise<Object>} Object mit { sql, validation }
+     * @returns {Promise<{sql: string, validation: object}|null>}
      */
-    async query(prompt, context = null) {
+    async query(prompt, context = null, options = {}) {
         if (!this.config.enabled) {
             return null;
         }
@@ -49,9 +47,8 @@ class LLMProvider {
         const startTime = Date.now();
 
         try {
-            // Check cache first
             if (this.queryCache && context) {
-                const cached = this.queryCache.get(context);
+                const cached = this.queryCache.get(context, this.config);
                 if (cached) {
                     if (this.debugHelper) {
                         this.debugHelper.logCacheHit(context.task);
@@ -60,29 +57,29 @@ class LLMProvider {
                 }
             }
 
-            // Log request start
             if (this.debugHelper && context) {
                 this.debugHelper.logRequestStart(context.task, context.schemas);
             }
 
-            // Query LLM with stop sequences
             const stopSequences = context?.stopSequences || [];
-            const response = await this.sendRequest(prompt, stopSequences);
-            
+            const response = await this.sendRequest(prompt, stopSequences, options.signal);
+
             if (this.debugHelper) {
                 this.debugHelper.log(`[LLM] Raw response length: ${response.length} chars`);
             }
 
-            // Parse response with advanced parser
             const sqlQuery = this.responseParser.parse(response);
-            
+
             if (!sqlQuery) {
-                throw new Error('Failed to extract SQL from LLM response');
+                throw new ResponseError(
+                    'EMPTY_RESPONSE',
+                    'Failed to extract SQL from LLM response.',
+                    'Try a code-focused model or lower temperature.'
+                );
             }
 
-            // Validate SQL
             const validation = this.sqlValidator.validate(sqlQuery);
-            
+
             if (this.debugHelper) {
                 this.debugHelper.log(`[LLM] Validation score: ${validation.score}/100`);
                 if (!validation.isValid) {
@@ -90,48 +87,48 @@ class LLMProvider {
                 }
             }
 
-            const result = {
-                sql: sqlQuery,
-                validation: validation
-            };
+            const result = { sql: sqlQuery, validation };
 
-            // Cache result (only if validation passes)
             if (this.queryCache && context && validation.isValid) {
-                this.queryCache.set(context, result);
+                this.queryCache.set(context, result, this.config);
             }
 
-            // Log success
             if (this.debugHelper) {
                 const duration = Date.now() - startTime;
                 this.debugHelper.logRequestSuccess(sqlQuery, duration);
             }
 
             return result;
-
         } catch (error) {
-            console.error('[DBI Survival Kit] LLM query failed:', error.message);
-            
             if (this.debugHelper) {
                 this.debugHelper.logRequestError(error);
             }
-            
-            return null;
+            throw error;
         }
     }
 
-    /**
-     * Sendet HTTP-Request an LLM-Endpoint
-     * @param {string} prompt - Der Prompt
-     * @param {Array} stopSequences - Optional stop sequences
-     * @returns {Promise<string>} Die Antwort vom LLM
-     */
-    async sendRequest(prompt, stopSequences = []) {
+    async sendRequest(prompt, stopSequences = [], signal) {
+        const apiToken = await this.getApiToken();
+        if (!apiToken || !String(apiToken).trim()) {
+            throw new AuthenticationError(
+                'AUTH_TOKEN_MISSING',
+                'No LLM API token is configured.',
+                'Run SQL: Set LLM API Token and paste the token from LM Studio Developer > Server Settings.'
+            );
+        }
+        return this.sendRequestWithToken(prompt, stopSequences, apiToken, signal);
+    }
+
+    sendRequestWithToken(prompt, stopSequences = [], apiToken = '', signal) {
         return new Promise((resolve, reject) => {
+            if (signal?.aborted) {
+                reject(new LlmError('ABORTED', 'LLM request was cancelled.'));
+                return;
+            }
             const url = new URL(this.config.endpoint);
             const isHttps = url.protocol === 'https:';
             const client = isHttps ? https : http;
 
-            // Enhanced system message with strict instructions
             const systemMessage = `You are an expert SQL code generator. Generate ONLY valid SQL queries.
 RULES: 
 - No explanations, no markdown, no comments
@@ -142,21 +139,14 @@ RULES:
             const requestBody = {
                 model: this.config.model,
                 messages: [
-                    {
-                        role: 'system',
-                        content: systemMessage
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
+                    { role: 'system', content: systemMessage },
+                    { role: 'user', content: prompt }
                 ],
                 max_tokens: this.config.maxTokens,
                 temperature: this.config.temperature,
                 stream: false
             };
 
-            // Add stop sequences if provided
             if (stopSequences && stopSequences.length > 0) {
                 requestBody.stop = stopSequences;
             }
@@ -175,9 +165,8 @@ RULES:
                 timeout: this.config.timeout
             };
 
-            // API Key hinzufügen wenn vorhanden
-            if (this.config.apiKey) {
-                options.headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+            if (apiToken) {
+                options.headers.Authorization = `Bearer ${apiToken}`;
             }
 
             const req = client.request(options, (res) => {
@@ -192,23 +181,50 @@ RULES:
                         try {
                             const json = JSON.parse(data);
                             const content = json.choices?.[0]?.message?.content || '';
+                            if (!content) {
+                                reject(new ResponseError(
+                                    'EMPTY_RESPONSE',
+                                    'LLM returned an empty response body.',
+                                    'Check that the model is loaded and the endpoint is correct.'
+                                ));
+                                return;
+                            }
                             resolve(content);
                         } catch (error) {
-                            reject(new Error(`Failed to parse LLM response: ${error.message}`));
+                            reject(new ResponseError(
+                                'INVALID_RESPONSE',
+                                `Failed to parse LLM response: ${error.message}`,
+                                'Inspect the SQL Snippet Studio - LLM output channel.'
+                            ));
                         }
-                    } else {
-                        reject(new Error(`LLM request failed with status ${res.statusCode}: ${data}`));
+                        return;
                     }
+
+                    reject(mapHttpStatusToError(res.statusCode, data));
                 });
             });
 
+            const abortRequest = () => {
+                req.destroy();
+                reject(new LlmError('ABORTED', 'LLM request was cancelled.'));
+            };
+            signal?.addEventListener('abort', abortRequest, { once: true });
+            req.on('close', () => signal?.removeEventListener('abort', abortRequest));
+
             req.on('error', (error) => {
-                reject(error);
+                reject(new EndpointError(
+                    'NETWORK_ERROR',
+                    `Could not reach LLM endpoint: ${error.message}`,
+                    'Start LM Studio server on port 1234 or verify sqlSnippetStudio.llm.endpoint.'
+                ));
             });
 
             req.on('timeout', () => {
                 req.destroy();
-                reject(new Error('LLM request timeout'));
+                reject(new TimeoutError(
+                    'LLM request timed out.',
+                    'Increase sqlSnippetStudio.llm.timeout or use a smaller model.'
+                ));
             });
 
             req.write(requestData);
@@ -216,26 +232,69 @@ RULES:
         });
     }
 
-    /**
-     * DEPRECATED: Use responseParser.parse() instead
-     * Kept for backward compatibility
-     */
     extractSQL(response) {
         return this.responseParser.parse(response);
     }
 
-    /**
-     * Test-Methode um LLM-Verbindung zu prüfen
-     * @returns {Promise<boolean>} true wenn LLM erreichbar ist
-     */
     async testConnection() {
-        try {
-            const response = await this.query('SELECT 1 as test;');
-            return response !== null;
-        } catch (error) {
-            return false;
+        const url = new URL(this.config.endpoint);
+        const modelsUrl = `${url.protocol}//${url.hostname}:${url.port || (url.protocol === 'https:' ? 443 : 80)}/v1/models`;
+        const apiToken = await this.getApiToken();
+        if (!apiToken || !String(apiToken).trim()) {
+            throw new AuthenticationError(
+                'AUTH_TOKEN_MISSING',
+                'No LLM API token is configured.',
+                'Run SQL: Set LLM API Token before testing the connection.'
+            );
         }
+        const isHttps = url.protocol === 'https:';
+        const client = isHttps ? https : http;
+        const parsed = new URL(modelsUrl);
+
+        return new Promise((resolve, reject) => {
+            const options = {
+                hostname: parsed.hostname,
+                port: parsed.port || (isHttps ? 443 : 80),
+                path: parsed.pathname + parsed.search,
+                method: 'GET',
+                headers: {},
+                timeout: this.config.timeout
+            };
+
+            if (apiToken) {
+                options.headers.Authorization = `Bearer ${apiToken}`;
+            }
+
+            const req = client.request(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => { data += chunk; });
+                res.on('end', () => {
+                    if (res.statusCode === 200) {
+                        resolve(true);
+                        return;
+                    }
+                    reject(mapHttpStatusToError(res.statusCode, data));
+                });
+            });
+
+            req.on('error', (error) => {
+                reject(new EndpointError(
+                    'NETWORK_ERROR',
+                    `Could not reach LLM endpoint: ${error.message}`,
+                    'Start LM Studio and verify the server port.'
+                ));
+            });
+
+            req.on('timeout', () => {
+                req.destroy();
+                reject(new TimeoutError('Connection test timed out.', 'Increase sqlSnippetStudio.llm.timeout.'));
+            });
+
+            req.end();
+        });
     }
 }
 
 module.exports = LLMProvider;
+module.exports.LLMProvider = LLMProvider;
+module.exports.LLMProviderError = LlmError;
