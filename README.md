@@ -2,6 +2,8 @@
 
 # ${\color{royalblue}{\underline{\texttt{SQL Snippet Studio}}}}$ <br> $\tiny{^{\texttt{Cursor \& VS Code extension}}}$
 
+</div>
+
 > <small>
 > 
 > *Offline SQL **snippets** and **IntelliSense** for PostgreSQL and Oracle PL/SQL in **Cursor** and **VS Code**, with **optional local LLM assistance**.*
@@ -24,14 +26,8 @@ Slowed for demonstration (real-time speed at the end).
 
 <div align="center">
 
-<a href="clips/local-llm-demo.mp4">
-<img src="https://img.shields.io/badge/Watch-Demo_MP4-21262d?style=for-the-badge&logo=visualstudiocode&logoColor=58a6ff" alt="Watch local LLM demo (MP4)">
-</a>
 
 </div>
-
-<small>GitHub does not embed repo-hosted video players in README files. The link opens the recording. For inline playback on GitHub, upload the MP4 via the web editor (drag-and-drop) and use the generated <code>github.com/user-attachments/assets/...</code> URL.</small>
-
 
 ---
 
