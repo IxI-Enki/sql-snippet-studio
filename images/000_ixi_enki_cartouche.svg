@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="220 356 560 165" width="560" height="165" preserveAspectRatio="xMidYMid meet" role="img" aria-label="IxI-Enki cartouche">
+  <defs>
+    <style>
+      :root{ --ix000T:11s; --ix000Th:5.5s; --ix000Tq:2.75s }
+      .pap{ font-family:'Papyrus-Regular','Papyrus',fantasy }
+      .ave{ font-family:'AvertasteviaPERSONALUSEONLY-Reg','Avertastevia PERSONAL USE ONLY',cursive }
+      .f74{ font-size:74px } .f60{ font-size:60px }
+      .ix000ink{ fill:#ffffff; stroke:#768eac; stroke-width:1.1; paint-order:stroke fill }
+      .ix000ink-deep{ fill:none; stroke:#5a6d85; stroke-width:2.8; opacity:.45; paint-order:stroke }
+      .ix000ink-shim{ fill:#ffffff; stroke:#eaf2fc; stroke-width:2; paint-order:stroke fill }
+      .ix000edge{ fill:none; stroke:#bbcbe4; stroke-width:2.4 }
+      .ix000wash{ transform-origin:500px 437px; animation:ix000washb var(--ix000T) ease-in-out infinite; animation-delay:-1.82s; animation-fill-mode:both }
+      .ix000shim{ animation:ix000shmove var(--ix000Th) linear infinite, ix000shfade var(--ix000Th) ease-in-out infinite }
+      .ix000shclip{ animation:ix000shmove var(--ix000Th) linear infinite }
+      .ix000scroll{ animation:ix000scr var(--ix000T) linear infinite; animation-delay:-2.75s }
+      .ix000sh1{ animation:ix000shoot var(--ix000Th) ease-in infinite }
+      .ix000sh2{ animation:ix000shoot var(--ix000Th) ease-in 1.83s infinite }
+      .ix000sh3{ animation:ix000shoot var(--ix000T) ease-in 3.67s infinite }
+      .ix000edgeglow{ transform-origin:500px 437px; animation:ix000washb var(--ix000T) ease-in-out infinite; animation-delay:-1.82s; animation-fill-mode:both }
+      .ix000rosepulse{ transform-origin:0 0; animation:ix000roseb var(--ix000T) ease-in-out infinite }
+      @keyframes ix000washb{ 0%,100%{ opacity:.2 } 50%{ opacity:.38 } }
+      @keyframes ix000shmove{ 0%{ transform:translateX(-80px) } 66%{ transform:translateX(329px) } 100%{ transform:translateX(540px) } }
+      @keyframes ix000shfade{ 0%{ opacity:0 } 8%{ opacity:1 } 66%{ opacity:1 } 100%{ opacity:0 } }
+      @keyframes ix000scr{ to{ transform:translate(-28px,-28px) } }
+      @keyframes ix000shoot{ 0%{ transform:translate(-30px,-16px); opacity:0 } 12%{ opacity:.78 } 32%{ transform:translate(170px,58px); opacity:0 } 100%{ opacity:0 } }
+      @keyframes ix000roseb{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.04) } }
+      @media (prefers-reduced-motion:reduce){
+        *, *::before, *::after{ animation:none !important }
+        animate, animateTransform, set{ display:none }
+      }
+    </style>
+    <radialGradient id="ix000-glow" cx="50%" cy="40%" r="62%"><stop offset="0" stop-color="#bbcbe4" stop-opacity=".19"/><stop offset="100%" stop-color="#bbcbe4" stop-opacity="0"/></radialGradient>
+    <linearGradient id="ix000-warm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7f8f5"/><stop offset=".5" stop-color="#f4f5f1"/><stop offset="1" stop-color="#ccd9ef"/></linearGradient>
+    <linearGradient id="ix000-cdk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#35404d"/><stop offset="1" stop-color="#1a1f26"/></linearGradient>
+    <linearGradient id="ix000-sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="ix000-cardsheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".28"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+    <radialGradient id="ix000-wash" cx="50%" cy="44%" r="66%"><stop offset="0" stop-color="#c6d6f4" stop-opacity=".24"/><stop offset="100%" stop-color="#c6d6f4" stop-opacity="0"/></radialGradient>
+    <linearGradient id="ix000-shimg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#dce6f7" stop-opacity="0"/>
+      <stop offset=".18" stop-color="#ffffff" stop-opacity=".16"/>
+      <stop offset=".42" stop-color="#ffffff" stop-opacity=".58"/>
+      <stop offset=".5" stop-color="#f4f7fc" stop-opacity=".72"/>
+      <stop offset=".58" stop-color="#ffffff" stop-opacity=".55"/>
+      <stop offset=".82" stop-color="#ccd9ef" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#889fba" stop-opacity="0"/>
+      <animate attributeName="x1" values="0;.08;0" keyTimes="0;.5;1" calcMode="linear" dur="5.5s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="1;.92;1" keyTimes="0;.5;1" calcMode="linear" dur="5.5s" begin="0s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="ix000-shimg2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".35" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset=".65" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ix000-shoot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".6" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>
+    <radialGradient id="ix000-bloba" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#889fba" stop-opacity=".62"/><stop offset="100%" stop-color="#889fba" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ix000-blobb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bbcbe4" stop-opacity=".52"/><stop offset="100%" stop-color="#bbcbe4" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ix000-neb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#889fba" stop-opacity=".54"/><stop offset="100%" stop-color="#889fba" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ix000-nebb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bbcbe4" stop-opacity=".48"/><stop offset="100%" stop-color="#bbcbe4" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ix000-nebc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bbcbe4" stop-opacity=".42"/><stop offset="100%" stop-color="#889fba" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ix000-nebd" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#dce6f7" stop-opacity=".32"/><stop offset="100%" stop-color="#889fba" stop-opacity="0"/></radialGradient>
+    <filter id="ix000-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="0.78"/></filter>
+    <filter id="ix000-shblur" x="-40%" y="-20%" width="180%" height="140%"><feGaussianBlur stdDeviation="3.4" edgeMode="duplicate"/></filter>
+    <filter id="ix000-shbright" x="-8%" y="-8%" width="116%" height="116%"><feGaussianBlur in="SourceGraphic" stdDeviation=".42" result="b"/><feComponentTransfer in="b" result="br"><feFuncA type="linear" slope="1.5"/></feComponentTransfer><feMerge><feMergeNode in="br"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="ix000-inkwarp" x="-4%" y="-8%" width="108%" height="116%"><feTurbulence type="fractalNoise" baseFrequency="0.038 0.055" numOctaves="2" seed="4" result="n"><animate attributeName="baseFrequency" values="0.034 0.048;0.044 0.062;0.034 0.048" dur="11s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale=".9" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="ix000-emboss" x="-12%" y="-14%" width="124%" height="128%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".6" result="blur"/>
+      <feOffset in="blur" dx="0" dy="1.2" result="off"/>
+      <feFlood flood-color="#2a3542" flood-opacity=".55" result="shadow"/>
+      <feComposite in="shadow" in2="off" operator="in" result="drop"/>
+      <feOffset in="SourceAlpha" dx="0" dy="-.7" result="off2"/>
+      <feFlood flood-color="#ffffff" flood-opacity=".42" result="hi"/>
+      <feComposite in="hi" in2="off2" operator="in" result="lift"/>
+      <feMerge><feMergeNode in="drop"/><feMergeNode in="lift"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="ix000-diffuse" x="-8%" y="-10%" width="116%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".4" result="a"/>
+      <feDiffuseLighting in="a" surfaceScale="2.2" diffuseConstant=".85" lighting-color="#eef3fa" result="lit"><feDistantLight azimuth="225" elevation="48"/></feDiffuseLighting>
+      <feComposite in="lit" in2="SourceAlpha" operator="in" result="mask"/>
+      <feBlend in="SourceGraphic" in2="mask" mode="soft-light"/>
+    </filter>
+    <filter id="ix000-edgeshadow" x="-6%" y="-6%" width="112%" height="112%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2.2" flood-color="#889fba" flood-opacity=".35"/>
+      <feDropShadow dx="0" dy="-.8" stdDeviation="1" flood-color="#ffffff" flood-opacity=".18"/>
+    </filter>
+    <filter id="ix000-edgespec" x="-8%" y="-8%" width="116%" height="116%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".5" result="a"/>
+      <feSpecularLighting in="a" surfaceScale="3" specularConstant=".65" specularExponent="22" lighting-color="#f4f7fc" result="spec"><fePointLight x="320" y="360"><animate attributeName="x" values="320;680;320" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/><animate attributeName="y" values="360;470;360" keyTimes="0;.5;1" calcMode="linear" dur="5.5s" begin="-1.82s" repeatCount="indefinite"/></fePointLight></feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="sm"/>
+      <feBlend in="SourceGraphic" in2="sm" mode="screen"/>
+    </filter>
+    <filter id="ix000-rosespec" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation=".35" result="a"/>
+      <feSpecularLighting in="a" surfaceScale="4" specularConstant=".7" specularExponent="18" lighting-color="#eef2f7" result="rs"><feDistantLight azimuth="210" elevation="55"><animate attributeName="azimuth" values="200;240;200" dur="11s" repeatCount="indefinite"/></feDistantLight></feSpecularLighting>
+      <feComposite in="rs" in2="SourceAlpha" operator="in" result="rm"/>
+      <feBlend in="SourceGraphic" in2="rm" mode="screen"/>
+    </filter>
+    <clipPath id="ix000-cclip"><rect x="286" y="372" width="428" height="130" rx="12"/></clipPath>
+    <clipPath id="ix000-shclip" clipPathUnits="userSpaceOnUse"><g class="ix000shclip"><rect x="228" y="418" width="108" height="108" rx="4" transform="skewX(-16)"/></g></clipPath>
+    <pattern id="ix000-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#889fba" stroke-width="1" opacity=".17"/></pattern>
+    <linearGradient id="ix000-fill" x1="0" y1="0" x2="1" y2="1" spreadMethod="reflect" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e4ebf6"><animate attributeName="stop-color" values="#e4ebf6;#f8fafc;#dce6f4;#e4ebf6" keyTimes="0;.33;.66;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/></stop>
+      <stop offset=".22" stop-color="#ffffff"/>
+      <stop offset=".45" stop-color="#d0dcf0"><animate attributeName="stop-color" values="#d0dcf0;#eef3fa;#c4d4ea;#d0dcf0" keyTimes="0;.33;.66;1" calcMode="linear" dur="11s" begin="-3.67s" repeatCount="indefinite"/></stop>
+      <stop offset=".68" stop-color="#ffffff"/>
+      <stop offset=".86" stop-color="#c8d6ea"/>
+      <stop offset="1" stop-color="#f4f6fa"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-0.65,-0.55;0.65,0.55;-0.65,-0.55" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="ix000-fill-shim" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset=".38" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#ffffff" stop-opacity=".98"/>
+      <stop offset=".62" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-1.2,0;1.2,0;-1.2,0" keyTimes="0;.5;1" calcMode="linear" dur="5.5s" begin="0s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="ix000-ct" x1="0" y1="0" x2="1" y2="1" spreadMethod="reflect" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#5a6d85"><animate attributeName="offset" values="0;.04;0" keyTimes="0;.5;1" calcMode="linear" dur="5.5s" begin="-1.82s" repeatCount="indefinite"/></stop>
+      <stop offset=".18" stop-color="#eef2f7"/>
+      <stop offset=".36" stop-color="#768eac"><animate attributeName="stop-color" values="#768eac;#8fa3bc;#667a94;#768eac" keyTimes="0;.33;.66;1" calcMode="linear" dur="5.5s" begin="-1.82s" repeatCount="indefinite"/></stop>
+      <stop offset=".54" stop-color="#f4f7fc"/>
+      <stop offset=".72" stop-color="#8fa3bc"/>
+      <stop offset=".9" stop-color="#c8d6ea"><animate attributeName="stop-color" values="#c8d6ea;#f4f7fc;#a8bcd4;#c8d6ea" keyTimes="0;.33;.66;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/></stop>
+      <stop offset="1" stop-color="#667a94"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-1,-0.85;1,0.85;-1,-0.85" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/>
+      <animateTransform attributeName="gradientTransform" type="rotate" values="0 0.5 0.5;360 0.5 0.5" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite" additive="sum"/>
+    </linearGradient>
+    <linearGradient id="ix000-ct-rot" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect">
+      <stop offset="0" stop-color="#4d6678"/>
+      <stop offset=".2" stop-color="#768eac"/>
+      <stop offset=".4" stop-color="#eef2f7"/>
+      <stop offset=".6" stop-color="#a8bcd4"/>
+      <stop offset=".8" stop-color="#f4f7fc"/>
+      <stop offset="1" stop-color="#667a94"/>
+      <animateTransform attributeName="gradientTransform" type="rotate" values="360 0.5 0.5;0 0.5 0.5;360 0.5 0.5" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="ix000-ct-mid" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="1" spreadMethod="reflect">
+      <stop offset="0" stop-color="#667a94" stop-opacity=".92"/>
+      <stop offset=".33" stop-color="#eef2f7" stop-opacity=".88"/>
+      <stop offset=".66" stop-color="#768eac" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#8fa3bc" stop-opacity=".88"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-0.85,-0.65;0.85,0.65;-0.85,-0.65" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="0.45,0.35;-0.45,-0.35;0.45,0.35" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-1.82s" repeatCount="indefinite" additive="sum"/>
+    </linearGradient>
+    <linearGradient id="ix000-ct-slow" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="1" spreadMethod="reflect">
+      <stop offset="0" stop-color="#667a94" stop-opacity=".7"/>
+      <stop offset=".5" stop-color="#eef2f7" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#768eac" stop-opacity=".65"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="1,0.7;-1,-0.7;1,0.7" keyTimes="0;.5;1" calcMode="linear" dur="11s" begin="-2.75s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="ix000-rose-metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2f7"><animate attributeName="stop-color" values="#eef2f7;#ffffff;#c8d6ea;#eef2f7" dur="11s" repeatCount="indefinite"/></stop>
+      <stop offset=".35" stop-color="#c8d6ea"><animate attributeName="stop-color" values="#c8d6ea;#eef2f7;#a8bcd4;#c8d6ea" dur="5.5s" begin="-2.75s" repeatCount="indefinite"/></stop>
+      <stop offset=".65" stop-color="#768eac"/>
+      <stop offset="1" stop-color="#5a6d85"><animate attributeName="stop-color" values="#5a6d85;#768eac;#667a94;#5a6d85" dur="11s" begin="-5.5s" repeatCount="indefinite"/></stop>
+    </linearGradient>
+    <radialGradient id="ix000-rose-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#eef2f7" stop-opacity=".45"/><stop offset=".7" stop-color="#bbcbe4" stop-opacity=".12"/><stop offset="1" stop-color="#889fba" stop-opacity="0"/></radialGradient>
+    <style>
+      .ix000ink-deep{stroke:url(#ix000-ct-rot)!important;stroke-width:3.2!important;fill:none!important;opacity:.5!important}
+      .ix000ink{fill:url(#ix000-fill)!important;stroke:url(#ix000-ct)!important;stroke-width:1.6!important;filter:url(#ix000-diffuse)!important}
+      .ix000ink-warp{fill:url(#ix000-fill)!important;stroke:url(#ix000-ct)!important;stroke-width:1.6!important;filter:url(#ix000-inkwarp)!important;opacity:.88!important}
+      .ix000ink-mid{fill:none!important;stroke:url(#ix000-ct-mid)!important;stroke-width:2.4!important;opacity:.72!important}
+      .ix000ink-shim{fill:url(#ix000-fill-shim)!important;stroke:#ffffff!important;stroke-width:2.5!important;filter:url(#ix000-shbright)!important;mix-blend-mode:screen!important}
+      .ix000ink-shadow{fill:none!important;stroke:#3d4d5e!important;stroke-width:3.6!important;opacity:.32!important;transform:translate(.6px,1.1px)!important}
+      .ix000ink-hi{fill:none!important;stroke:#ffffff!important;stroke-width:1.1!important;opacity:.38!important;transform:translate(-.4px,-.7px)!important;mix-blend-mode:screen!important}
+      .ix000ink-rim{fill:none!important;stroke:url(#ix000-ct)!important;stroke-width:1.05!important;opacity:.55!important;transform:translate(-.25px,-.45px)!important}
+      .ix000edge{stroke:url(#ix000-ct)!important;stroke-width:2.75!important;fill:none!important;filter:url(#ix000-edgespec)!important}
+      .ix000edgehair{stroke:url(#ix000-ct-slow)!important;stroke-width:.85!important;fill:none!important;opacity:.68!important}
+    </style>
+    <g id="ix000-txt" transform="translate(15.13 72.54) scale(1.01 1)"><text><tspan class="pap f74" x="0" y="0">I</tspan><tspan class="ave f60" x="20.97" y="0">x</tspan><tspan class="pap f74" x="35.97" y="0">I</tspan><tspan class="ave f60" x="56.95" y="0">- </tspan><tspan class="ave f74" x="85.87" y="0">Enki</tspan></text></g>
+    <g id="ix000-rose" filter="url(#ix000-rosespec)">
+      <circle r="11" fill="url(#ix000-rose-glow)" opacity=".55"/>
+      <circle r="9.2" fill="none" stroke="url(#ix000-rose-metal)" stroke-width=".6" opacity=".85"/>
+      <g class="ix000rosepulse"><circle r="8.5" fill="url(#ix000-rose-metal)" stroke="#475567" stroke-width=".8"/><circle r="3.2" fill="#3b4756" stroke="none"/><path d="M0 -13 L2.3 -8 L-2.3 -8 Z M0 13 L2.3 8 L-2.3 8 Z M-13 0 L-8 2.3 L-8 -2.3 Z M13 0 L8 2.3 L8 -2.3 Z" fill="url(#ix000-rose-metal)" stroke="none"/></g>
+      <circle r="8.5" fill="none" stroke="#ffffff" stroke-width=".35" opacity=".28"/>
+    </g>
+    <g id="ix000-rose-shadow" opacity=".35" transform="translate(.8 1.2)"><use href="#ix000-rose"/></g>
+  </defs>
+
+  <rect x="220" y="356" width="560" height="165" fill="transparent"/>
+  <rect x="220" y="356" width="560" height="165" fill="url(#ix000-glow)"/>
+
+  <rect x="280" y="366" width="440" height="142" rx="16" fill="url(#ix000-cdk)"/>
+  <rect x="282" y="368" width="436" height="60" rx="14" fill="url(#ix000-cardsheen)" opacity=".22"/>
+
+  <g clip-path="url(#ix000-cclip)">
+    <!-- L1 BlurredGradient -->
+    <g filter="url(#ix000-blur)" opacity=".22">
+      <ellipse cx="380" cy="430" rx="120" ry="72" fill="url(#ix000-bloba)"/>
+      <ellipse cx="580" cy="450" rx="110" ry="68" fill="url(#ix000-blobb)"/>
+    </g>
+    <!-- L2 InfiniteGrid -->
+    <g class="ix000scroll"><rect x="172" y="316" width="700" height="270" fill="url(#ix000-grid)"/></g>
+    <!-- L3 NebulaFlux -->
+    <g filter="url(#ix000-blur)" opacity=".96">
+      <ellipse cx="380" cy="437" rx="148" ry="88" fill="url(#ix000-neb)"><animate attributeName="cx" values="360;560;360" dur="11s" repeatCount="indefinite"/><animate attributeName="cy" values="412;460;412" dur="5.5s" begin="-1.82s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="620" cy="437" rx="148" ry="88" fill="url(#ix000-nebb)"><animate attributeName="cx" values="640;440;640" dur="11s" begin="-5.5s" repeatCount="indefinite"/><animate attributeName="cy" values="460;412;460" dur="11s" begin="-2.75s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="500" cy="430" rx="128" ry="78" fill="url(#ix000-nebc)"><animate attributeName="cy" values="420;452;420" dur="11s" begin="-1.82s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="450" cy="448" rx="92" ry="56" fill="url(#ix000-nebd)"><animate attributeName="cx" values="430;520;430" dur="11s" begin="-3.67s" repeatCount="indefinite"/><animate attributeName="cy" values="458;432;458" dur="11s" begin="-1.82s" repeatCount="indefinite"/></ellipse>
+    </g>
+    <!-- L4 ShootingStars -->
+    <g class="ix000sh1"><line x1="320" y1="386" x2="356" y2="402" stroke="url(#ix000-shoot)" stroke-width="2.2" stroke-linecap="round"/></g>
+    <g class="ix000sh2"><line x1="470" y1="392" x2="506" y2="408" stroke="url(#ix000-shoot)" stroke-width="1.8" stroke-linecap="round"/></g>
+    <g class="ix000sh3"><line x1="590" y1="388" x2="626" y2="404" stroke="url(#ix000-shoot)" stroke-width="1.5" stroke-linecap="round"/></g>
+    <!-- L5 Polish: 6 rising particles -->
+    <g>
+      <circle cx="394.0" cy="487.9" r="1.1" fill="#ffffff" opacity="0"><animate attributeName="cy" values="487.9;461.5" dur="5.5s" begin="-2.75s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="5.5s" begin="-2.75s" repeatCount="indefinite"/></circle>
+      <circle cx="464.2" cy="481.4" r="1.3" fill="#bbcbe4" opacity="0"><animate attributeName="cy" values="481.4;435.6" dur="5.5s" begin="-0.92s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="5.5s" begin="-0.92s" repeatCount="indefinite"/></circle>
+      <circle cx="330.5" cy="451.0" r="1.4" fill="#ccd9ef" opacity="0"><animate attributeName="cy" values="451.0;413.0" dur="5.5s" begin="-3.67s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="5.5s" begin="-3.67s" repeatCount="indefinite"/></circle>
+      <circle cx="499.1" cy="454.2" r="1.2" fill="#ffffff" opacity="0"><animate attributeName="cy" values="454.2;432.5" dur="11s" begin="-4.58s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="11s" begin="-4.58s" repeatCount="indefinite"/></circle>
+      <circle cx="673.1" cy="436.8" r="1.8" fill="#889fba" opacity="0"><animate attributeName="cy" values="436.8;397.8" dur="5.5s" begin="-4.12s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="5.5s" begin="-4.12s" repeatCount="indefinite"/></circle>
+      <circle cx="382.7" cy="400.2" r="1.1" fill="#ffffff" opacity="0"><animate attributeName="cy" values="400.2;356.7" dur="11s" begin="-3.19s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.74;0" dur="11s" begin="-3.19s" repeatCount="indefinite"/></circle>
+    </g>
+    <!-- wash / shimmer / sheen -->
+    <rect class="ix000wash" x="286" y="372" width="428" height="130" fill="url(#ix000-wash)"/>
+    <g class="ix000shim">
+      <rect x="232" y="364" width="112" height="150" fill="url(#ix000-shimg)" filter="url(#ix000-shblur)" transform="skewX(-16)"/>
+      <rect x="258" y="366" width="46" height="146" fill="url(#ix000-shimg2)" transform="skewX(-16)" opacity=".9"/>
+    </g>
+    <rect x="286" y="372" width="428" height="38" fill="url(#ix000-sheen)"/>
+  </g>
+
+  <rect class="ix000edgeglow" x="276" y="362" width="448" height="150" rx="18" fill="none" stroke="#889fba" stroke-width="4" opacity=".12" filter="url(#ix000-edgeshadow)"/>
+  <rect class="ix000edge" x="280" y="366" width="440" height="142" rx="16"/>
+  <rect class="ix000edgehair" x="288" y="374" width="424" height="126" rx="11"/>
+  <rect x="288" y="374" width="424" height="126" rx="11" fill="none" stroke="#889fba" stroke-width="1" opacity=".62"/>
+
+  <g transform="translate(306.5,351) scale(1.8)" filter="url(#ix000-emboss)">
+    <use href="#ix000-txt" class="ix000ink-shadow"/>
+    <use href="#ix000-txt" class="ix000ink-deep"/>
+    <use href="#ix000-txt" class="ix000ink-mid"/>
+    <use href="#ix000-txt" class="ix000ink-warp"/>
+    <use href="#ix000-txt" class="ix000ink"/>
+    <use href="#ix000-txt" class="ix000ink-rim"/>
+    <g clip-path="url(#ix000-shclip)"><use href="#ix000-txt" class="ix000ink-shim"/></g>
+    <use href="#ix000-txt" class="ix000ink-hi"/>
+  </g>
+
+  <use href="#ix000-rose-shadow" x="280" y="437"/>
+  <use href="#ix000-rose" x="280" y="437"/>
+  <use href="#ix000-rose-shadow" x="720" y="437"/>
+  <use href="#ix000-rose" x="720" y="437"/>
+</svg>

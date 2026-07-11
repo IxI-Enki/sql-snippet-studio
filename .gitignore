@@ -67,3 +67,4 @@ test/manifest.test.js
 test/provider_errors.test.js
 test/query_cache.test.js
 test/secret_storage.test.js
+README.pdf
