@@ -4,14 +4,14 @@
 
 $\Large{^{\texttt{Extension for: }}}$
 
-| <div align="center"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div align="center"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div align="center"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
+| <div align="center"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.png" width="18px" height="18px"> VS Code </a> </div> | <div align="center"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.png" width="18px" height="18px"> Cursor</a> </div> | <div align="center"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.png" width="18px" height="18px"> LM Studio</a> </div> |
 | ------ | --------------------------------------------------------------------------------------- | ------ |
 
 <div width="66%" align="center">
   
 $\large{^{\texttt{by}}}$
 
-| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="300px"> </a> </div> |
+| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.png" width="300px"> </a> </div> |
 | --------------------------------------------------------------------------------------- |
 
 </div>
