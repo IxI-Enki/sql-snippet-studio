@@ -135,4 +135,7 @@ Run **SQL: Clear LLM API Token**. LLM requests will remain unavailable until a t
 - [Quick start](quickstart.md)
 - [Complete snippet reference](snippet_reference.md)
 - [Setup guide](setup_guide.md)
+- [LM Studio model recommendations](lm_studio_model_recommendations.md)
+- [LLM task examples](../examples/llm_tasks/)
+- [MERGE task analysis](../examples/llm_tasks/merge_task_analysis.md)
 - [Documentation index](../README.md)

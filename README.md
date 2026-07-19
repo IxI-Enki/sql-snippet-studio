@@ -263,6 +263,9 @@ Set-Location -LiteralPath .\sql-snippet-studio; npm ci; .\_build.ps1
 | Snippet reference | [docs/guides/snippet_reference.md](docs/guides/snippet_reference.md) |
 | Setup and troubleshooting | [docs/guides/setup_guide.md](docs/guides/setup_guide.md) |
 | Local LLM setup | [docs/guides/llm_feature.md](docs/guides/llm_feature.md) |
+| LM Studio model notes | [docs/guides/lm_studio_model_recommendations.md](docs/guides/lm_studio_model_recommendations.md) |
+| LLM task examples | [docs/examples/llm_tasks/](docs/examples/llm_tasks/) |
+| MERGE task analysis | [docs/examples/llm_tasks/merge_task_analysis.md](docs/examples/llm_tasks/merge_task_analysis.md) |
 | Full docs index | [docs/README.md](docs/README.md) |
 
   </small>

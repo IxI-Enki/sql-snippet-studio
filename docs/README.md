@@ -10,6 +10,9 @@ Read in this order:
 2. **[Snippet reference](guides/snippet_reference.md)** - all 67 canonical triggers and descriptions
 3. **[Setup guide](guides/setup_guide.md)** - configuration, optional source build, and troubleshooting
 4. **[LLM feature](guides/llm_feature.md)** - securely enable LM Studio assistance with VS Code SecretStorage
+5. **[LM Studio model recommendations](guides/lm_studio_model_recommendations.md)** - local model notes for LM Studio
+6. **[LLM task examples](examples/llm_tasks/)** - sample `.sql` task files for the optional LLM workflow
+7. **[MERGE task analysis](examples/llm_tasks/merge_task_analysis.md)** - observation notes for the product-catalog MERGE scenario
 
 ## Product overview
 
