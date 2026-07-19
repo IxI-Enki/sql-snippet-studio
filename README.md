@@ -21,6 +21,9 @@
 ### Local LLM Demo (LM Studio)
 
 Slowed for demonstration (real-time speed at the end).
+> SQL Snippet Studio Extension recognizes Tasks and sends them to the LLM-Backend (for example LM Studio).
+> The generated Result is then instantly brought back into the .sql file, where it belongs.
+> For most SQL related daily tasks a small and fast model was more than sufficient. 
 
 <div align="center">
 
