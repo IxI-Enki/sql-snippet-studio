@@ -11,7 +11,7 @@ $\Large{^{\texttt{Extension for: }}}$
   
 $\large{^{\texttt{by}}}$
 
-| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.png" width="300px"> </a> </div> |
+| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="300px"> </a> </div> |
 | --------------------------------------------------------------------------------------- |
 
 </div>
