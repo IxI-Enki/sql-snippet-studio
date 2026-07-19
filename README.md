@@ -1,11 +1,25 @@
 <div align="center">
 
-# ${\Huge{\color{royalblue}{\texttt{SQL Snippet Studio}}}}$ <hr> $\tiny{^{\texttt{Cursor / VS Code extension}}}$
+# ${\Huge{\color{royalblue}{\texttt{SQL Snippet Studio}}}}$
 
-<br><br>
+$\Large{^{\texttt{Extension for: }}}$
+
+| <div align="center"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div align="center"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div align="center"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
+| ------ | --------------------------------------------------------------------------------------- | ------ |
+
+<div width="66%" align="center">
+  
+$\large{^{\texttt{by}}}$
+
+| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="300px"> </a> </div> |
+| --------------------------------------------------------------------------------------- |
+
+</div>
 </div>
 
 > ##### *Offline SQL **snippets** and **IntelliSense** for PostgreSQL and Oracle PL/SQL in **Cursor** and **VS Code**, with **optional local LLM assistance**.*
+
+---
 
 ## Features
 
@@ -44,8 +58,7 @@
 
 ### Settings
 
-<details>
-  <summary><small>show</small> <u>Settings</u> & <u>Token configuration</u></summary>
+<u>Settings</u> & <u>Token configuration</u>
 
 <small>
 
@@ -61,20 +74,17 @@
   <img src="images/settings.png" alt="SQL Snippet Studio settings panel" width="88%">
 </div>
 
-</details>
 
 ### Oracle snippet IntelliSense
 
 Type an Oracle prefix (for example `ora-`) in `.sql` or `.plsql` file to open the snippet picker.
 
-<details>
-  <summary><small>show</small> Oracle snippets <u>dropdown example</u></summary>
+Oracle snippets <u>dropdown example</u>
 
 <div align="center">
   <img src="images/oracle-snippets.png" alt="Oracle PL/SQL snippet autocomplete in the editor" width="66%">
 </div>
 
-</details>
 
 ## Full Snippet catalog <sup><small> ${{\scriptsize\boxed{\texttt{67}}}} $</small></sup>
 
@@ -94,8 +104,7 @@ Type a prefix and press **Tab**.
 
 <div style="text-align: left; margin-left: 5rem;">
 
-<details>
-<summary><small>show</small> All <u>Shared SQL & dimensional modeling</u> snippets</summary>
+  All <u>Shared SQL & dimensional modeling</u> snippets
 
 | Prefix | Description |
 | -----: | ----------- |
@@ -122,12 +131,12 @@ Type a prefix and press **Tab**.
 
 </div>
 
+
 ### PostgreSQL <sup><small> ${{\scriptsize\boxed{\texttt{22}}}} $</small></sup>
 
 <div style="text-align: left; margin-left: 5rem;">
 
-<details>
-<summary><small>show</small> All <u>PostgreSQL</u> snippets</summary>
+  All <u>PostgreSQL</u> snippets</summary>
 
 | Prefix | Description |
 | -----: | ----------- |
@@ -154,15 +163,14 @@ Type a prefix and press **Tab**.
 | `pg-idx-gin` | PostgreSQL GIN index for arrays/JSONB |
 | `pg-partition-range` | PostgreSQL Range partitioned table |
 
-</details>
 </div>
+
 
 ### Oracle PL/SQL <sup><small> ${{\scriptsize\boxed{\texttt{25}}}} $</small></sup>
 
 <div style="text-align: left; margin-left: 5rem;">
 
-<details>
-<summary><small>show</small> All <u>Oracle PL/SQL</u> snippets</summary>
+  All <u>Oracle PL/SQL</u> snippets
 
 | Prefix | Description |
 | -----: | ----------- |
@@ -192,8 +200,8 @@ Type a prefix and press **Tab**.
 | `ora-matview` | Oracle materialized view |
 | `ora-partition-range` | Oracle partitioned table (RANGE) |
 
-</details>
 </div>
+
 
 ---
 
@@ -258,19 +266,4 @@ Set-Location -LiteralPath .\sql-snippet-studio; npm ci; .\_build.ps1
 | Full docs index | [docs/README.md](docs/README.md) |
 
   </small>
-</div>
-
----
-
-### Maintainer
-
-<div width="66%" align="center">
-
-| <div align="center"> <h2><a href="https://github.com/IxI-Enki/sql-snippet-studio" title="SQL Snippet Studio Repository"> SQL Snippet Studio  </h2> </a> </div> |
-| --------------------------------------------------------------------------------------- |
-| <div align="center"><a href="https://github.com/IxI-Enki" title="IxI-Enki on GitHub"> <img src="images/000_ixi_enki_cartouche.svg" width="300px"> </a> </div> |
-
-| <div align="center"><a href="https://code.visualstudio.com/" title="VS Code"> <img src="images/signoff_vscode.svg" width="18px" height="18px"> VS Code </a> </div> | <div align="center"><a href="https://cursor.com/" title="Cursor"> <img src="images/signoff_cursor.svg" width="18px" height="18px"> Cursor</a> </div> | <div align="center"><a href="https://lmstudio.ai/" title="LM Studio"> <img src="images/signoff_lmstudio.svg" width="18px" height="18px"> LM Studio</a> </div> |
-| ------ | --------------------------------------------------------------------------------------- | ------ |
-
 </div>
